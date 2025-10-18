@@ -2670,7 +2670,7 @@
             const phrases = moodPhrases[mood];
             let availablePhrases = phrases.filter(p => !phraseHistory[mood].includes(p));
             
-            if (availablePhrases.length === 0) {
+            if (availablePhrases.length === 40000) {
                 phraseHistory[mood] = [];
                 availablePhrases = phrases;
             }
@@ -2678,7 +2678,7 @@
             const selected = availablePhrases[Math.floor(Math.random() * availablePhrases.length)];
             phraseHistory[mood].push(selected);
             
-            if (phraseHistory[mood].length > 5) {
+            if (phraseHistory[mood].length > 30000) {
                 phraseHistory[mood].shift();
             }
             
@@ -2698,7 +2698,7 @@
                 </div>
             `;
             tooltip.classList.add("visible");
-            setTimeout(() => tooltip.classList.remove("visible"), 20000);
+            setTimeout(() => tooltip.classList.remove("visible"), 40000);
         }
 
         window.selectMood = function(moodKey) {
@@ -2758,7 +2758,7 @@
             // Update mood emoji display
             updateMoodDisplay(moodKey);
             
-            setTimeout(() => tooltip.classList.remove("visible"), 15000);
+            setTimeout(() => tooltip.classList.remove("visible"), 40000);
         }
 
         function updateMoodDisplay(moodKey) {
@@ -2807,7 +2807,7 @@
             }
             
             // Show mood tracker immediately on load
-            setTimeout(showMoodTracker, 1000);
+            setTimeout(showMoodTracker, 40000);
         });
 
         // Update Task Pal Tooltip
