@@ -2603,7 +2603,7 @@
             const message = getRandomPhrase(category);
             tooltip.textContent = message.trim();
             tooltip.classList.add('visible');
-            setTimeout(() => tooltip.classList.remove('visible'), 4000);
+            setTimeout(() => tooltip.classList.remove('visible'), 40000);
         }
 
         function onTaskAdded(category) {
@@ -2678,7 +2678,7 @@
             const selected = availablePhrases[Math.floor(Math.random() * availablePhrases.length)];
             phraseHistory[mood].push(selected);
             
-            if (phraseHistory[mood].length > 30000) {
+            if (phraseHistory[mood].length > 40000) {
                 phraseHistory[mood].shift();
             }
             
