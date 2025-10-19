@@ -3544,38 +3544,66 @@
         }
 
         // Update quick tasks display
-        function updateQuickTasksDisplay() {
-            const quickTasksList = document.getElementById('quickTasksList');
-            if (!quickTasksList) return;
-            
-            const activeTasks = gameState.selectedQuickTasks || [];
-            
-            if (activeTasks.length === 0) {
-                quickTasksList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⚡</div>
-                        <div class="empty-state-text">No quick tasks selected</div>
-                        <div class="empty-state-subtext">Add some quick tasks to boost your productivity</div>
-                    </div>
-                `;
-            } else {
-                quickTasksList.innerHTML = activeTasks.map(task => `
-                    <div class="quick-task-item">
-                        <div class="quick-task-emoji">${task.emoji || '⚡'}</div>
-                        <div class="quick-task-content">
-                            <div class="quick-task-title">${task.title || 'Quick Task'}</div>
-                            <div class="quick-task-category">${task.categoryName || 'General'}</div>
-                        </div>
-                        <div class="quick-task-points">+${task.points || 3} pts</div>
-                        <div class="quick-task-actions">
-                            <button class="action-btn action-complete" onclick="event.stopPropagation(); completeQuickTask('${task.id}')" title="Complete">✓</button>
-                            <button class="action-btn action-remove" onclick="event.stopPropagation(); removeQuickTask('${task.id}')" title="Remove">×</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
+        function completeQuickTask(taskId) {
+    const taskIndex = gameState.selectedQuickTasks.findIndex(t => t.id === taskId);
+    if (taskIndex === -1) return;
+    
+    const task = gameState.selectedQuickTasks[taskIndex];
+    
+    // Track today's completions
+    const today = new Date().toDateString();
+    if (gameState.lastDayTracked !== today) {
+        gameState.completedTasksToday = 0;
+        gameState.lastDayTracked = today;
+    }
+    gameState.completedTasksToday++;
+    
+    // Update streak
+    updateStreak();
+    
+    // Calculate points with streak multiplier
+    const basePoints = task.points || 3;
+    const multipliedPoints = Math.floor(basePoints * gameState.streakMultiplier);
+    
+    // Add points and health
+    gameState.taskPoints += multipliedPoints;
+    gameState.health = Math.min(100, gameState.health + 10);
+    gameState.completedTasks++;
+    
+    // Add XP
+    addJerryXP(basePoints * 2);
+    
+    // Show completion message
+    const streakBonus = gameState.streakMultiplier > 1 ? ` (${gameState.streakMultiplier}x streak bonus!)` : '';
+    showSuccessMessage(`ðŸŽ‰ Quick task completed!${streakBonus} +${multipliedPoints} points!`);
+    
+    // Track completed quick task
+    if (!gameState.completedQuickTasks) {
+        gameState.completedQuickTasks = [];
+    }
+    gameState.completedQuickTasks.push({
+        ...task,
+        completedAt: new Date().toISOString()
+    });
+    
+    // Remove task from pending FIRST
+    gameState.selectedQuickTasks.splice(taskIndex, 1);
+    
+    // Update daily challenge progress
+    updateChallengeProgress(task, true);
+    
+    saveGameState();
+    updateQuickTasksDisplay();  // Update display immediately
+    updateUI();                  // Then update UI
+    
+    // Fire confetti
+    console.log('âš¡ Quick task completed, firing confetti...');
+    if (window.fireConfetti) {
+        window.fireConfetti();
+    } else {
+        console.warn('Confetti function not available');
+    }
+}
         // Update achievements display
         function updateAchievementsDisplay() {
             const achievementsList = document.getElementById('achievementsList');
