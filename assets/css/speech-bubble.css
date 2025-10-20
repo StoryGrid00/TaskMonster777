@@ -11,6 +11,9 @@
     border-radius: 25px;
     padding: 20px 24px;
     max-width: 320px;
+    /* Fix: Use flexbox to ensure content flows horizontally */
+    display: flex;
+    align-items: center;
     min-width: 220px;
     text-align: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);

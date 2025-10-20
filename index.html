@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Daily Quest</title>
+<title>Task Monsters</title>
 <!-- PWA Manifest -->
 <link href="manifest.json?v=1757559779" rel="manifest"/>
 <!-- PWA Meta Tags -->
@@ -14,26 +14,26 @@
 <meta content="Task Rock" name="application-name"/>
 <meta content="#9AE34A" name="msapplication-TileColor"/>
 <!-- Icons for Browser Tabs and Mobile -->
-<link href="assets/icons/icon-16.png" rel="icon" sizes="16x16" type="image/png"/>
-<link href="assets/icons/icon-32.png" rel="icon" sizes="32x32" type="image/png"/>
-<link href="assets/icons/icon-48.png" rel="icon" sizes="48x48" type="image/png"/>
-<link href="assets/icons/icon-96.png" rel="icon" sizes="96x96" type="image/png"/>
-<link href="assets/icons/icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
-<link href="assets/icons/apple-touch-icon-180.png" rel="apple-touch-icon" sizes="180x180"/>
-<link href="assets/icons/icon-32.png" rel="shortcut icon"/>
+<link href="assets/logo/favicon.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="assets/logo/favicon.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="assets/logo/favicon.png" rel="icon" sizes="48x48" type="image/png"/>
+<link href="assets/logo/favicon.png" rel="icon" sizes="96x96" type="image/png"/>
+<link href="assets/logo/favicon.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="assets/logo/favicon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="assets/logo/favicon.png" rel="shortcut icon"/>
 <!-- SEO Meta Tags -->
-<meta content="Daily Quest - An RPG productivity game with Jerry the Rock, your virtual pet companion" name="description"/>
+<meta content="Task Monsters - An RPG productivity game with Jerry the Rock, your virtual pet companion" name="description"/>
 <meta content="task manager, productivity, pet rock, jerry, tasks, todo" name="keywords"/>
 <meta content="Task Rock" name="author"/>
 <!-- Open Graph Meta Tags -->
-<meta content="Daily Quest - RPG Productivity Game" property="og:title"/>
+<meta content="Task Monsters - RPG Productivity Game" property="og:title"/>
 <meta content="A fun task management app with Jerry the Rock, your virtual pet companion" property="og:description"/>
 <meta content="assets/images/icon-512x512.png" property="og:image"/>
 <meta content="https://storygrid00.github.io/Task_Rock" property="og:url"/>
 <meta content="website" property="og:type"/>
 <!-- Twitter Card Meta Tags -->
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="Daily Quest - RPG Productivity Game" name="twitter:title"/>
+<meta content="Task Monsters - RPG Productivity Game" name="twitter:title"/>
 <meta content="A fun task management app with Jerry the Rock, your virtual pet companion" name="twitter:description"/>
 <meta content="assets/images/icon-512x512.png" name="twitter:image"/>
 
@@ -48,6 +48,11 @@
             --daily-card-purple: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             --daily-card-green:  linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
             --daily-card-orange-gradient: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
+            --daily-card-pink: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            --daily-card-blue: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            --daily-card-teal: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%);
+            --daily-card-red: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            --daily-card-yellow: linear-gradient(135deg, #eab308 0%, #facc15 100%);
         
             /* Dark theme colors (default and only) */
             --bg-primary: #f8f9fa;
@@ -71,9 +76,9 @@
             --achievement-locked-text: #999;
             
             /* Modern additions */
-            --accent-primary: #D0FF00;
-            --accent-secondary: #B8E600;
-            --accent-tertiary: #A0CC00;
+            --accent-primary: #6366f1;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #8b5cf6;
             --border-light: #e8eaed;
             --border-medium: #dadce0;
             --border-dark: #c4c7cc;
@@ -107,9 +112,9 @@
             --border-color: #404040;
             --shadow-color: rgba(0, 0, 0, 0.3);
             --modal-overlay: rgba(0, 0, 0, 0.7);
-            --accent-primary: #D0FF00;
-            --accent-secondary: #B8E600;
-            --accent-tertiary: #A0CC00;
+            --accent-primary: #6366f1;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #8b5cf6;
             --border-light: #223127;
             --border-medium: #1b271f;
             --border-dark: #132018;
@@ -428,17 +433,97 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--success);
+            background: #2d2d2d;
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 500;
+            padding: 16px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 16px;
             z-index: 1000;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
             white-space: pre-line;
-            text-align: center;
+            text-align: left;
             max-width: calc(100vw - 40px);
             word-wrap: break-word;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .success-message-emoji {
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+        
+        .success-message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        
+        .success-message-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .success-message-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Responsive adjustments for small screens */
+        @media (max-width: 480px) {
+            .success-message {
+                padding: 14px 16px;
+                gap: 10px;
+                max-width: calc(100vw - 32px);
+                bottom: 16px;
+            }
+            
+            .success-message-emoji {
+                font-size: 36px;
+            }
+            
+            .success-message-title {
+                font-size: 16px;
+            }
+            
+            .success-message-subtitle {
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .success-message {
+                padding: 12px 14px;
+                gap: 8px;
+                max-width: calc(100vw - 24px);
+            }
+            
+            .success-message-emoji {
+                font-size: 32px;
+            }
+            
+            .success-message-title {
+                font-size: 15px;
+            }
+            
+            .success-message-subtitle {
+                font-size: 12px;
+            }
         }
 
         /* Task Rock: Budget-look reskin (scoped) */
@@ -538,6 +623,45 @@
             padding: 20px;
             color: white;
             text-align: center;
+            transition: all 0.4s ease;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .challenge-empty-state {
+            background: var(--daily-card-purple);
+            background-blend-mode: overlay;
+            border-radius: 16px;
+            padding: 40px 24px;
+            color: white;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .challenge-empty-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        
+        .challenge-empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .challenge-empty-desc {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 400;
+            line-height: 1.4;
         }
 
         .challenge-title {
@@ -1192,6 +1316,45 @@
             padding: 20px;
             color: white;
             text-align: center;
+            transition: all 0.4s ease;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .challenge-empty-state {
+            background: var(--daily-card-purple);
+            background-blend-mode: overlay;
+            border-radius: 16px;
+            padding: 40px 24px;
+            color: white;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .challenge-empty-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        
+        .challenge-empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .challenge-empty-desc {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 400;
+            line-height: 1.4;
         }
 
         .challenge-title {
@@ -1761,6 +1924,240 @@
       from { object-position: 0 0; }
       to { object-position: -256px 0; }
     }
+
+    /* Modern Date Picker Styles */
+    .modern-datepicker-wrapper {
+        position: relative;
+    }
+
+    .modern-datepicker {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 8px;
+        background: rgba(30, 30, 35, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 16px;
+        z-index: 1000;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+    }
+
+    .datepicker-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .datepicker-month {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .datepicker-nav {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #fff;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    .datepicker-nav:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+
+    .datepicker-calendar {
+        margin-bottom: 16px;
+    }
+
+    .datepicker-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .datepicker-weekdays div {
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 8px 0;
+    }
+
+    .datepicker-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+    }
+
+    .day-cell {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #fff;
+    }
+
+    .day-cell:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .day-cell.selected {
+        background: #4A9EFF;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .day-cell.today {
+        border: 2px solid #4A9EFF;
+    }
+
+    .day-cell.other-month {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .datepicker-time {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .time-selectors {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .time-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .time-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #fff;
+        width: 40px;
+        height: 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+
+    .time-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .time-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        width: 50px;
+        height: 40px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .time-separator {
+        font-size: 24px;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 4px;
+    }
+
+    .time-toggle {
+        background: #4A9EFF;
+        border: none;
+        color: #fff;
+        width: 50px;
+        height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .time-toggle:hover {
+        background: #3A8EEF;
+        transform: scale(1.05);
+    }
+
+    .datepicker-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .datepicker-btn {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .datepicker-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .datepicker-confirm {
+        background: #4A9EFF !important;
+        font-weight: 600;
+    }
+
+    .datepicker-confirm:hover {
+        background: #3A8EEF !important;
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .modal-footer {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+    }
     
     </style>
 
@@ -1771,9 +2168,9 @@
 
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
-    <img alt="Daily Quest" class="loading-brand" src="assets/logo/loading-logo.png"/>
+    <img alt="Task Monsters" class="loading-brand" src="assets/logo/loading-screen.png"/>
     <div class="loading-spinner"></div>
-    <div class="loading-text">Loading Task Monsters...</div>
+    <div class="loading-text"></div>
 </div>
 
 <div class="app-container">
@@ -2137,12 +2534,50 @@
                 
                 <div class="form-group">
                     <label class="form-label">Due Date (Optional)</label>
-                    <input class="form-input" id="taskDueDate" type="datetime-local"/>
+                    <div class="modern-datepicker-wrapper">
+                        <input class="form-input" id="taskDueDateDisplay" type="text" placeholder="Select date and time" readonly onclick="toggleDatePicker()"/>
+                        <div class="modern-datepicker" id="modernDatePicker" style="display: none;">
+                            <div class="datepicker-header">
+                                <button type="button" class="datepicker-nav" onclick="changeMonth(-1)">◀</button>
+                                <span class="datepicker-month" id="currentMonth">October 2025</span>
+                                <button type="button" class="datepicker-nav" onclick="changeMonth(1)">▶</button>
+                            </div>
+                            <div class="datepicker-calendar">
+                                <div class="datepicker-weekdays">
+                                    <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                                </div>
+                                <div class="datepicker-days" id="calendarDays"></div>
+                            </div>
+                            <div class="datepicker-time">
+                                <div class="time-selectors">
+                                    <div class="time-group">
+                                        <button type="button" class="time-btn" onclick="changeHour(-1)">▲</button>
+                                        <input type="text" id="hourInput" class="time-input" value="09" readonly/>
+                                        <button type="button" class="time-btn" onclick="changeHour(1)">▼</button>
+                                    </div>
+                                    <span class="time-separator">:</span>
+                                    <div class="time-group">
+                                        <button type="button" class="time-btn" onclick="changeMinute(-1)">▲</button>
+                                        <input type="text" id="minuteInput" class="time-input" value="00" readonly/>
+                                        <button type="button" class="time-btn" onclick="changeMinute(1)">▼</button>
+                                    </div>
+                                    <div class="time-group">
+                                        <button type="button" class="time-toggle" id="ampmToggle" onclick="toggleAMPM()">PM</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="datepicker-actions">
+                                <button type="button" class="datepicker-btn" onclick="clearDate()">Clear</button>
+                                <button type="button" class="datepicker-btn datepicker-confirm" onclick="confirmDate()">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn-primary" style="width: 100%;" onclick="createTask()">Create Task</button>
+            <button class="btn-secondary" style="width: 48%;" onclick="closeModal()">Close</button>
+            <button class="btn-primary" style="width: 48%;" onclick="createTask()">Create Task</button>
         </div>
     </div>
 </div>
@@ -2324,16 +2759,41 @@
 
         // Achievements
         const achievements = [
-            { id: 'hot_streak', name: 'Hot Streak', desc: 'Complete tasks for 3 days in a row', icon: '🔥', requirement: 3, type: 'streak' },
-            { id: 'week_warrior', name: 'Week Warrior', desc: 'Complete tasks for 7 days in a row', icon: '🔥', requirement: 7, type: 'streak' },
-            { id: 'month_master', name: 'Month Master', desc: 'Complete tasks for 30 days in a row', icon: '🔥', requirement: 30, type: 'streak' },
-            { id: 'getting_started', name: 'Getting Started', desc: 'Complete 10 tasks', icon: '🎯', requirement: 10, type: 'tasks' },
-            { id: 'task_crusher', name: 'Task Crusher', desc: 'Complete 50 tasks', icon: '🎯', requirement: 50, type: 'tasks' },
-            { id: 'century_club', name: 'Century Club', desc: 'Complete 100 tasks', icon: '🎯', requirement: 100, type: 'tasks' },
-            { id: 'task_legend', name: 'Task Legend', desc: 'Complete 500 tasks', icon: '🎯', requirement: 500, type: 'tasks' },
-            { id: 'rising_star', name: 'Rising Star', desc: 'Reach Level 5 with Jerry', icon: '⭐', requirement: 5, type: 'level' },
-            { id: 'experienced_rock', name: 'Experienced Rock', desc: 'Reach Level 10 with Jerry', icon: '⭐', requirement: 10, type: 'level' },
-            { id: 'ancient_wisdom', name: 'Ancient Wisdom', desc: 'Reach Level 20 with Jerry', icon: '⭐', requirement: 20, type: 'level' }
+            // Starter Tier (💚)
+            { id: 'task_sprout', name: 'Task Sprout', desc: 'Complete your first regular task', icon: '🌱', requirement: 1, type: 'tasks', tier: 'starter' },
+            { id: 'quick_spark', name: 'Quick Spark', desc: 'Complete 3 quick tasks in one day', icon: '⚡', requirement: 3, type: 'quick_daily', tier: 'starter' },
+            { id: 'momentum_builder', name: 'Momentum Builder', desc: 'Complete 5 tasks in one session', icon: '🚀', requirement: 5, type: 'session', tier: 'starter' },
+            { id: 'early_bird', name: 'Early Bird', desc: 'Complete a task before 10 AM', icon: '🌅', requirement: 1, type: 'early_morning', tier: 'starter' },
+            { id: 'weekend_warrior', name: 'Weekend Warrior', desc: 'Complete 2 tasks on a weekend', icon: '🏖️', requirement: 2, type: 'weekend', tier: 'starter' },
+            { id: 'consistency_rookie', name: 'Consistency Rookie', desc: '3-day task streak', icon: '🔥', requirement: 3, type: 'streak', tier: 'starter' },
+            { id: 'zen_mode', name: 'Zen Mode', desc: 'All daily tasks before noon', icon: '🧘', requirement: 1, type: 'before_noon', tier: 'starter' },
+            { id: 'first_flame', name: 'First Flame', desc: 'Earn 100 XP', icon: '✨', requirement: 100, type: 'xp', tier: 'starter' },
+            { id: 'quickfire_pro', name: 'Quickfire Pro', desc: '10 quick tasks total', icon: '⚡', requirement: 10, type: 'quick_total', tier: 'starter' },
+            { id: 'balanced_start', name: 'Balanced Start', desc: 'One quick + one regular task in a day', icon: '⚖️', requirement: 1, type: 'balanced_day', tier: 'starter' },
+            
+            // Intermediate Tier (💙)
+            { id: 'task_commander', name: 'Task Commander', desc: '10 work tasks', icon: '💼', requirement: 10, type: 'tasks', tier: 'intermediate' },
+            { id: 'focus_flow', name: 'Focus Flow', desc: '5 tasks without leaving app', icon: '🎯', requirement: 5, type: 'session', tier: 'intermediate' },
+            { id: 'habit_maker', name: 'Habit Maker', desc: '5-day task streak', icon: '🔥', requirement: 5, type: 'streak', tier: 'intermediate' },
+            { id: 'productivity_pulse', name: 'Productivity Pulse', desc: '50% weekly completion rate', icon: '📊', requirement: 50, type: 'completion_rate', tier: 'intermediate' },
+            { id: 'quick_reflexes', name: 'Quick Reflexes', desc: 'Quick task within 60 seconds', icon: '⏱️', requirement: 1, type: 'quick_fast', tier: 'intermediate' },
+            { id: 'planner_pro', name: 'Planner Pro', desc: '10 tasks in one day', icon: '📋', requirement: 10, type: 'daily_tasks', tier: 'intermediate' },
+            { id: 'no_distractions', name: 'No Distractions', desc: '5 tasks without tab switching', icon: '🎯', requirement: 5, type: 'session', tier: 'intermediate' },
+            { id: 'steady_hands', name: 'Steady Hands', desc: '3-day completion streak', icon: '✋', requirement: 3, type: 'streak', tier: 'intermediate' },
+            { id: 'time_keeper', name: 'Time Keeper', desc: 'Complete a task exactly on time', icon: '⏰', requirement: 1, type: 'on_time', tier: 'intermediate' },
+            { id: 'goal_crusher', name: 'Goal Crusher', desc: 'All tasks done 3 days in a row', icon: '💪', requirement: 3, type: 'all_tasks_streak', tier: 'intermediate' },
+            
+            // Advanced Tier (💛)
+            { id: 'master_balance', name: 'Master of Balance', desc: 'Equal quick + regular tasks in a week', icon: '⚖️', requirement: 1, type: 'balanced_week', tier: 'advanced' },
+            { id: 'daily_challenger', name: 'Daily Challenger', desc: '7 daily challenges', icon: '🏆', requirement: 7, type: 'challenges', tier: 'advanced' },
+            { id: 'midnight_focus', name: 'Midnight Focus', desc: 'Task between 12-3 AM', icon: '🌙', requirement: 1, type: 'midnight', tier: 'advanced' },
+            { id: 'task_marathoner', name: 'Task Marathoner', desc: '50 total tasks', icon: '🏃', requirement: 50, type: 'tasks', tier: 'advanced' },
+            { id: 'quickstorm', name: 'Quickstorm', desc: '25 quick tasks', icon: '⚡', requirement: 25, type: 'quick_total', tier: 'advanced' },
+            { id: 'planner_legend', name: 'Planner Legend', desc: '7-day streak', icon: '🔥', requirement: 7, type: 'streak', tier: 'advanced' },
+            { id: 'efficiency_expert', name: 'Efficiency Expert', desc: '5 high-priority tasks in a day', icon: '⭐', requirement: 5, type: 'high_priority_day', tier: 'advanced' },
+            { id: 'xp_collector', name: 'XP Collector', desc: '1000 XP total', icon: '💎', requirement: 1000, type: 'xp', tier: 'advanced' },
+            { id: 'unstoppable_force', name: 'Unstoppable Force', desc: '100 total tasks', icon: '🚀', requirement: 100, type: 'tasks', tier: 'advanced' },
+            { id: 'legend_of_focus', name: 'Legend of Focus', desc: '30-day streak', icon: '🔥', requirement: 30, type: 'streak', tier: 'advanced' }
         ];
 
         // Load game state from localStorage
@@ -2370,6 +2830,61 @@
             localStorage.setItem('taskRockGameState', JSON.stringify(gameState));
         }
 
+        // Check and update energy based on pending/overdue tasks
+        function checkAndUpdateEnergy() {
+            if (!gameState || !gameState.tasks) return;
+            
+            const now = Date.now();
+            const pendingTasks = gameState.tasks.filter(t => !t.completed && t.dueDate);
+            
+            if (pendingTasks.length === 0) {
+                // No pending tasks with due dates - energy should be at 100
+                if (gameState.health < 100) {
+                    gameState.health = Math.min(100, gameState.health + 1);
+                    saveGameState();
+                }
+                return;
+            }
+            
+            let energyDrain = 0;
+            
+            pendingTasks.forEach(task => {
+                const dueDate = new Date(task.dueDate).getTime();
+                const timeUntilDue = dueDate - now;
+                const hoursUntilDue = timeUntilDue / (1000 * 60 * 60);
+                
+                // Energy drain based on how close the due date is
+                if (timeUntilDue < 0) {
+                    // Overdue - severe drain
+                    const hoursOverdue = Math.abs(hoursUntilDue);
+                    if (hoursOverdue > 24) {
+                        energyDrain += 15; // Very overdue
+                    } else if (hoursOverdue > 12) {
+                        energyDrain += 10; // Quite overdue
+                    } else {
+                        energyDrain += 5; // Recently overdue
+                    }
+                } else if (hoursUntilDue <= 2) {
+                    // Due within 2 hours - high urgency
+                    energyDrain += 8;
+                } else if (hoursUntilDue <= 8) {
+                    // Due within 8 hours - moderate urgency
+                    energyDrain += 5;
+                } else if (hoursUntilDue <= 24) {
+                    // Due within 24 hours - low urgency
+                    energyDrain += 2;
+                }
+            });
+            
+            // Apply energy drain (cap at reasonable amount per check)
+            if (energyDrain > 0) {
+                const maxDrainPerCheck = 30; // Don't drain more than 30 per check
+                energyDrain = Math.min(energyDrain, maxDrainPerCheck);
+                gameState.health = Math.max(0, gameState.health - energyDrain);
+                saveGameState();
+            }
+        }
+
         // Update UI elements
         function updateUI() {
             // Update header info (unified level | name)
@@ -2390,13 +2905,13 @@
             document.getElementById('energyFill').style.width = `${health}%`;
             document.getElementById('energyText').textContent = `${health}/100`;
             
-            // Attack (based on completed tasks)
-            const attack = Math.min(100, 50 + (completedTasks * 2));
+            // Attack (fixed at 100)
+            const attack = 100;
             document.getElementById('attackFill').style.width = `${attack}%`;
             document.getElementById('attackText').textContent = `${attack}/100`;
             
-            // Defense (based on streak)
-            const defense = Math.min(100, 75 + (currentStreak * 5));
+            // Defense (fixed at 100)
+            const defense = 100;
             document.getElementById('defenseFill').style.width = `${defense}%`;
             document.getElementById('defenseText').textContent = `${defense}/100`;
             
@@ -2956,14 +3471,34 @@
                     "Physical activity completed! Your body and I both thank you.",
                     "Nice movement session! Keeping active keeps us both strong.",
                     "Exercise done! I love when you take care of your body.",
-                    "Physical task crushed! You're building strength inside and out."
+                    "Physical task crushed! You're building strength inside and out.",
+                    "Fitness goal achieved! Your dedication to health is amazing.",
+                    "Movement mastered! I feel energized by your activity.",
+                    "Exercise conquered! You're a fitness champion.",
+                    "Physical challenge demolished! Your strength is inspiring.",
+                    "Workout complete! We're both feeling stronger now.",
+                    "Active task finished! Your commitment to fitness rocks.",
+                    "Physical goal smashed! You're unstoppable.",
+                    "Exercise session done! I love your healthy lifestyle.",
+                    "Movement task crushed! Your body thanks you.",
+                    "Fitness achievement unlocked! You're on fire!"
                 ],
                 'Self-Care & Wellness': [
                     "Self-care complete! Taking care of yourself helps me too.",
                     "Wellness task done! You're glowing, [UserName]!",
                     "Great self-care choice! We both feel refreshed now.",
                     "Wellness achieved! Your well-being is my well-being.",
-                    "Self-care success! You deserve all this good energy."
+                    "Self-care success! You deserve all this good energy.",
+                    "Self-love practiced! You're radiating positive energy.",
+                    "Wellness goal reached! Your health is our priority.",
+                    "Self-care mastered! You're treating yourself right.",
+                    "Wellness task conquered! Your glow is undeniable.",
+                    "Self-care champion! You deserve this moment.",
+                    "Wellness achieved! Your self-love inspires me.",
+                    "Self-care complete! You're investing in yourself.",
+                    "Wellness success! Your balance is beautiful.",
+                    "Self-care finished! You're worth every moment.",
+                    "Wellness unlocked! Your health journey is amazing."
                 ],
                 'Learning & Growth': [
                     "Learning task complete! I love growing smarter with you.",
@@ -3005,7 +3540,22 @@
                     "Well done! Every completed task makes us stronger.",
                     "Success! You're building amazing momentum.",
                     "Task finished! I'm proud of your dedication.",
-                    "Great job! Your consistency is paying off."
+                    "Great job! Your consistency is paying off.",
+                    "Awesome work! You're on a roll!",
+                    "Task conquered! Nothing can stop us now.",
+                    "Fantastic! Your progress is incredible.",
+                    "Mission accomplished! Let's keep this energy going.",
+                    "Brilliant! You're crushing your goals.",
+                    "Task demolished! Your determination is inspiring.",
+                    "Outstanding! We make such a great team.",
+                    "Phenomenal work! You're unstoppable.",
+                    "Task mastered! Your skills are leveling up.",
+                    "Incredible! Every task brings us closer to greatness.",
+                    "Superb execution! You're a productivity champion.",
+                    "Task annihilated! Your focus is unmatched.",
+                    "Marvelous! You're building an empire of success.",
+                    "Task obliterated! Nothing stands in your way.",
+                    "Spectacular! Your dedication knows no bounds."
                 ]
             },
             
@@ -3016,21 +3566,51 @@
                     "Morning energy is the best energy! Let's do this!",
                     "Rise and shine! I'm excited for today's adventures.",
                     "Morning, [UserName]! Your early productivity inspires me.",
-                    "Good morning! Starting strong sets the tone for success."
+                    "Good morning! Starting strong sets the tone for success.",
+                    "Early bird gets the worm! Great morning start!",
+                    "Morning magic! You're crushing it before noon.",
+                    "Sunrise productivity! Your morning routine is amazing.",
+                    "Fresh morning energy! Let's conquer this day.",
+                    "Morning champion! You're starting the day right.",
+                    "Dawn warrior! Your early dedication is inspiring.",
+                    "Morning momentum! You're setting the pace perfectly.",
+                    "Bright and early! Your morning hustle is impressive.",
+                    "Morning excellence! You're making today count.",
+                    "Sunrise success! Your morning energy is contagious."
                 ],
                 afternoon: [
                     "Afternoon productivity session! I love your consistency.",
                     "Midday momentum! You're keeping the energy flowing.",
                     "Afternoon tasks are my favorite - steady and focused!",
                     "Great afternoon work, [UserName]! Keep it rolling.",
-                    "Afternoon achievement unlocked! You're on fire today."
+                    "Afternoon achievement unlocked! You're on fire today.",
+                    "Midday mastery! You're maintaining great momentum.",
+                    "Afternoon excellence! Your consistency is remarkable.",
+                    "Lunch time productivity! You're not slowing down.",
+                    "Midday magic! You're powering through beautifully.",
+                    "Afternoon champion! Your dedication never wavers.",
+                    "Peak performance! Afternoon tasks are your strength.",
+                    "Midday success! You're keeping the energy high.",
+                    "Afternoon warrior! Your focus is unwavering.",
+                    "Steady afternoon progress! You're unstoppable.",
+                    "Midday momentum master! You're crushing it."
                 ],
                 evening: [
                     "Evening tasks! Ending the day productively feels great.",
                     "Night owl productivity! I admire your dedication.",
                     "Evening completion! What a satisfying way to wrap up.",
                     "Late day tasks done! You're finishing strong, [UserName].",
-                    "Evening success! Perfect way to close out the day."
+                    "Evening success! Perfect way to close out the day.",
+                    "Sunset productivity! You're ending on a high note.",
+                    "Evening excellence! Your dedication extends all day.",
+                    "Night time hustle! Your commitment is inspiring.",
+                    "Evening warrior! You're finishing what you started.",
+                    "Twilight triumph! Perfect way to end the day.",
+                    "Late day legend! You're closing strong.",
+                    "Evening momentum! You never quit, do you?",
+                    "Night productivity! Your dedication is remarkable.",
+                    "Sunset success! What a productive day closer.",
+                    "Evening champion! You're ending the day right."
                 ]
             },
             
@@ -3314,8 +3894,30 @@
         }
 
         // Get appropriate dialogue based on context
+        // Track last shown dialogue to prevent repeats
+        let lastDialogue = null;
+
+        // Helper function to get random item from array without repeating last
+        function getRandomWithoutRepeat(array) {
+            if (!array || array.length === 0) return '';
+            if (array.length === 1) return array[0];
+            
+            let selected;
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            do {
+                selected = array[Math.floor(Math.random() * array.length)];
+                attempts++;
+            } while (selected === lastDialogue && attempts < maxAttempts);
+            
+            lastDialogue = selected;
+            return selected;
+        }
+
         function getDialogueForContext(context, data = {}) {
             const level = gameState.level || 1;
+            let selectedDialogue = null;
             
             switch (context) {
                 case 'taskComplete':
@@ -3326,26 +3928,30 @@
                     
                     // Mix task completion with time-based responses
                     const taskAllPhrases = [...categoryPhrases, ...timePhrases];
-                    return taskAllPhrases[Math.floor(Math.random() * taskAllPhrases.length)];
+                    return getRandomWithoutRepeat(taskAllPhrases);
                 
                 case 'equipment':
                     const action = data.action; // 'equip' or 'unequip'
                     const itemName = data.itemName;
-                    return DIALOGUE_DATABASE.equipment[action][itemName] || `${action === 'equip' ? 'Thanks for the new look!' : 'Back to my natural self!'}`;
+                    selectedDialogue = DIALOGUE_DATABASE.equipment[action][itemName] || `${action === 'equip' ? 'Thanks for the new look!' : 'Back to my natural self!'}`;
+                    lastDialogue = selectedDialogue;
+                    return selectedDialogue;
                 
                 case 'levelUp':
+                    let levelPhrases;
                     if (level >= 15) {
-                        return DIALOGUE_DATABASE.level15plus[Math.floor(Math.random() * DIALOGUE_DATABASE.level15plus.length)];
+                        levelPhrases = DIALOGUE_DATABASE.level15plus;
                     } else if (level >= 11) {
-                        return DIALOGUE_DATABASE.level11to14[Math.floor(Math.random() * DIALOGUE_DATABASE.level11to14.length)];
+                        levelPhrases = DIALOGUE_DATABASE.level11to14;
                     } else if (level >= 6) {
-                        return DIALOGUE_DATABASE.level6to10[Math.floor(Math.random() * DIALOGUE_DATABASE.level6to10.length)];
+                        levelPhrases = DIALOGUE_DATABASE.level6to10;
                     } else {
-                        return DIALOGUE_DATABASE.level1to5[Math.floor(Math.random() * DIALOGUE_DATABASE.level1to5.length)];
+                        levelPhrases = DIALOGUE_DATABASE.level1to5;
                     }
+                    return getRandomWithoutRepeat(levelPhrases);
                 
                 case 'funFact':
-                    return DIALOGUE_DATABASE.funFacts[Math.floor(Math.random() * DIALOGUE_DATABASE.funFacts.length)];
+                    return getRandomWithoutRepeat(DIALOGUE_DATABASE.funFacts);
                 
                 case 'idle':
                 default:
@@ -3363,7 +3969,7 @@
                     
                     // Mix with idle phrases
                     const allPhrases = [...phrases, ...DIALOGUE_DATABASE.idle];
-                    return allPhrases[Math.floor(Math.random() * allPhrases.length)];
+                    return getRandomWithoutRepeat(allPhrases);
             }
         }
 
@@ -3446,6 +4052,10 @@
         // Initialize the app
         function initializeApp() {
             loadGameState();
+            
+            // Check energy based on pending tasks
+            checkAndUpdateEnergy();
+            
             updateUI();
             updateTasksDisplay();
             updateQuickTasksDisplay();
@@ -3458,6 +4068,12 @@
             
             // Start dialogue system
             startDialogueSystem();
+            
+            // Set up periodic energy check (every 60 seconds)
+            setInterval(() => {
+                checkAndUpdateEnergy();
+                updateUI();
+            }, 60000);
             
             // Welcome message after a short delay
             setTimeout(() => {
@@ -3543,67 +4159,87 @@
             }
         }
 
+        // Challenge Progress Tracking System
+        function updateChallengeProgress(task, isQuickTask = false) {
+            if (!gameState.dailyChallenge || gameState.dailyChallengeCompleted) {
+                return;
+            }
+
+            const challenge = gameState.dailyChallenge;
+            
+            // For the new 100-challenge system, increment progress on any task completion
+            // Since challenges are self-directed text descriptions, users complete them manually
+            challenge.progress++;
+            
+            // Check if challenge is completed
+            if (challenge.progress >= challenge.target && !gameState.dailyChallengeCompleted) {
+                gameState.dailyChallengeCompleted = true;
+                gameState.taskPoints += challenge.reward;
+                
+                // Fire confetti first
+                if (window.fireConfetti) {
+                    window.fireConfetti();
+                }
+                
+                // Show motivational tooltip message
+                const motivationalMessages = [
+                    `🔥 You're on fire today! +${challenge.reward} points earned.`,
+                    `🌟 Amazing work! +${challenge.reward} points earned.`,
+                    `💪 Crushing it! +${challenge.reward} points earned.`,
+                    `✨ Fantastic! +${challenge.reward} points earned.`,
+                    `🏆 You're unstoppable! +${challenge.reward} points earned.`
+                ];
+                const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                
+                // Show completion message with tooltip
+                showSuccessMessage('🎉 Daily Challenge Complete!', `+${challenge.reward} points earned!`);
+                
+                // Show motivational tooltip after a short delay
+                setTimeout(() => {
+                    if (typeof showTooltip === 'function') {
+                        showTooltip(randomMessage);
+                    }
+                }, 800);
+            }
+            
+            // Update display
+            updateDailyChallengeDisplay();
+            saveGameState();
+        }
+
         // Update quick tasks display
-        function completeQuickTask(taskId) {
-    const taskIndex = gameState.selectedQuickTasks.findIndex(t => t.id === taskId);
-    if (taskIndex === -1) return;
-    
-    const task = gameState.selectedQuickTasks[taskIndex];
-    
-    // Track today's completions
-    const today = new Date().toDateString();
-    if (gameState.lastDayTracked !== today) {
-        gameState.completedTasksToday = 0;
-        gameState.lastDayTracked = today;
-    }
-    gameState.completedTasksToday++;
-    
-    // Update streak
-    updateStreak();
-    
-    // Calculate points with streak multiplier
-    const basePoints = task.points || 3;
-    const multipliedPoints = Math.floor(basePoints * gameState.streakMultiplier);
-    
-    // Add points and health
-    gameState.taskPoints += multipliedPoints;
-    gameState.health = Math.min(100, gameState.health + 10);
-    gameState.completedTasks++;
-    
-    // Add XP
-    addJerryXP(basePoints * 2);
-    
-    // Show completion message
-    const streakBonus = gameState.streakMultiplier > 1 ? ` (${gameState.streakMultiplier}x streak bonus!)` : '';
-    showSuccessMessage(`ðŸŽ‰ Quick task completed!${streakBonus} +${multipliedPoints} points!`);
-    
-    // Track completed quick task
-    if (!gameState.completedQuickTasks) {
-        gameState.completedQuickTasks = [];
-    }
-    gameState.completedQuickTasks.push({
-        ...task,
-        completedAt: new Date().toISOString()
-    });
-    
-    // Remove task from pending FIRST
-    gameState.selectedQuickTasks.splice(taskIndex, 1);
-    
-    // Update daily challenge progress
-    updateChallengeProgress(task, true);
-    
-    saveGameState();
-    updateQuickTasksDisplay();  // Update display immediately
-    updateUI();                  // Then update UI
-    
-    // Fire confetti
-    console.log('âš¡ Quick task completed, firing confetti...');
-    if (window.fireConfetti) {
-        window.fireConfetti();
-    } else {
-        console.warn('Confetti function not available');
-    }
-}
+        function updateQuickTasksDisplay() {
+            const quickTasksList = document.getElementById('quickTasksList');
+            if (!quickTasksList) return;
+            
+            const activeTasks = gameState.selectedQuickTasks || [];
+            
+            if (activeTasks.length === 0) {
+                quickTasksList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚡</div>
+                        <div class="empty-state-text">No quick tasks selected</div>
+                        <div class="empty-state-subtext">Add some quick tasks to boost your productivity</div>
+                    </div>
+                `;
+            } else {
+                quickTasksList.innerHTML = activeTasks.map(task => `
+                    <div class="quick-task-item">
+                        <div class="quick-task-emoji">${task.emoji || '⚡'}</div>
+                        <div class="quick-task-content">
+                            <div class="quick-task-title">${task.title || 'Quick Task'}</div>
+                            <div class="quick-task-category">${task.categoryName || 'General'}</div>
+                        </div>
+                        <div class="quick-task-points">+${task.points || 3} pts</div>
+                        <div class="quick-task-actions">
+                            <button class="action-btn action-complete" onclick="event.stopPropagation(); completeQuickTask('${task.id}')" title="Complete">✓</button>
+                            <button class="action-btn action-remove" onclick="event.stopPropagation(); removeQuickTask('${task.id}')" title="Remove">×</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
         // Update achievements display
         function updateAchievementsDisplay() {
             const achievementsList = document.getElementById('achievementsList');
@@ -3707,27 +4343,199 @@
         }
 
         // Daily Challenge System
+        // Daily Challenge System - 100 Challenges
+        const DAILY_CHALLENGES = [
+            "Complete 3 work tasks today",
+            "Finish all quick tasks before lunch",
+            "Add a new task with a deadline",
+            "Complete 2 personal tasks",
+            "Check off one high-priority task",
+            "Add one 'Wellness' task and complete it",
+            "Finish a task that's been pending for over a day",
+            "Complete one creative or hobby task",
+            "Do one Quick Task before 10 AM",
+            "Reach a 2-day streak!",
+            "Complete 4 quick tasks today",
+            "Finish one task marked as 'hard'",
+            "Add a new 'Work' task and complete it today",
+            "Do one cleanup or organization task",
+            "Finish all due tasks for today",
+            "Add 2 new tasks for tomorrow",
+            "Complete one 'Learning' category task",
+            "Finish a medium-priority task",
+            "End the day with no pending tasks",
+            "Check off a task before 9 AM",
+            "Create a new Quick Task and complete it instantly",
+            "Reach 5 completed tasks today",
+            "Complete one 'Home' category task",
+            "Take on a wellness challenge—stretch or meditate",
+            "Earn 50 XP today",
+            "Add a fun task and complete it",
+            "Finish a task that helps your future self",
+            "Create a task reminder for tomorrow",
+            "Complete at least one group or teamwork task",
+            "Clear all low-priority tasks",
+            "Add a new task with a positive emoji",
+            "Do one creative Quick Task",
+            "Complete all overdue tasks",
+            "Add a goal for the week",
+            "Complete 2 tasks in under an hour",
+            "Log your best streak today",
+            "Add and finish one learning-related task",
+            "Complete all 'Medium' difficulty tasks",
+            "Finish a 'Wellness' and 'Work' task combo",
+            "Do one reflective journaling task",
+            "Complete a long task without breaks",
+            "Add a new 'Personal Growth' task",
+            "Finish 3 tasks of any type",
+            "Do one high-priority and one easy task",
+            "Add a new Quick Task list",
+            "Earn 100 XP in one day",
+            "Finish a task after your usual work hours",
+            "Try completing 5 small Quick Tasks",
+            "Add and complete one 'Errand' task",
+            "Finish one creative or design task",
+            "Take 10 minutes to plan tomorrow's tasks",
+            "Add a motivational Quick Task",
+            "Complete 2 'Work' and 1 'Wellness' task",
+            "Add a task with an emoji title",
+            "Create a recurring daily task",
+            "Finish one of your oldest tasks",
+            "Clear all Quick Tasks from the list",
+            "Add one 'Focus' task and complete it",
+            "Do one hard Quick Task",
+            "Earn a new achievement badge",
+            "Add a high-difficulty task",
+            "Create a 'challenge yourself' task",
+            "Complete all tasks in one category",
+            "Check off 3 tasks back-to-back",
+            "Complete a task using the fab (+) button",
+            "Create and finish a new goal today",
+            "Finish a creative task before 5 PM",
+            "Hit a personal best streak",
+            "Complete all Quick Tasks before noon",
+            "Earn XP twice in one session",
+            "Add one 'Mindfulness' task",
+            "Complete 4 small tasks in a row",
+            "Create and complete a task from every category",
+            "Add a daily habit task",
+            "Finish one hard and one easy task",
+            "Clear all 'Pending' tasks",
+            "Add and finish 3 Quick Tasks",
+            "Earn 75 XP or more today",
+            "Add a 'Fun' category task",
+            "Complete all tasks with emoji icons",
+            "Start a new 3-day streak",
+            "Complete 1 work and 1 personal task",
+            "Add 5 new Quick Tasks",
+            "Finish everything on your list today",
+            "Complete 2 high-priority tasks",
+            "Add a new achievement-worthy task",
+            "Create and complete a learning challenge",
+            "Finish a long-term goal",
+            "Do all Quick Tasks within 30 minutes",
+            "End your day with no pending tasks",
+            "Complete a task you've delayed most",
+            "Add one 'Fitness' task",
+            "Create a short gratitude task",
+            "Complete a new Quick Task before 8 AM",
+            "Earn a new level today",
+            "Add and complete one 'Focus' task",
+            "Hit 10 total completed tasks today",
+            "Create one task that improves your space",
+            "Check off every due task today",
+            "Rest! No tasks today—reward yourself"
+        ];
+
+        const CARD_COLORS = [
+            'var(--daily-card-purple)',
+            'var(--daily-card-green)',
+            'var(--daily-card-orange-gradient)',
+            'var(--daily-card-pink)',
+            'var(--daily-card-blue)',
+            'var(--daily-card-teal)',
+            'var(--daily-card-red)',
+            'var(--daily-card-yellow)'
+        ];
+
         function generateDailyChallenge() {
-            const quicks = Array.isArray(gameState.selectedQuickTasks) ? gameState.selectedQuickTasks : [];
-
-            const candidates = [
-                { id: 'qt_complete_3', name: 'Quick Blitz', desc: 'Complete 3 quick tasks today', target: 3, progress: 0, reward: 50 },
-                { id: 'qt_morning', name: 'Early Spark', desc: 'Complete a quick task before 10 AM', target: 1, progress: 0, reward: 40 },
-                { id: 'qt_evening', name: 'Night Owl', desc: 'Complete a quick task after 6 PM', target: 1, progress: 0, reward: 40 }
-            ];
-
             const today = new Date().toDateString();
-            if (gameState.lastDailyChallengeDate !== today) {
-                const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-                gameState.dailyChallenge = chosen;
+            
+            // Initialize localStorage keys if they don't exist
+            let challengeIndex = parseInt(localStorage.getItem('dailyChallengeIndex')) || 0;
+            let lastDate = localStorage.getItem('dailyChallengeDate') || '';
+            let usedChallenges = JSON.parse(localStorage.getItem('usedChallenges') || '[]');
+            let cardColorIndex = parseInt(localStorage.getItem('dailyCardColorIndex')) || 0;
+            
+            // Check if it's a new day
+            if (lastDate !== today) {
+                // If all challenges have been used, reset the cycle
+                if (usedChallenges.length >= DAILY_CHALLENGES.length) {
+                    usedChallenges = [];
+                }
+                
+                // Find next unused challenge
+                let availableChallenges = [];
+                for (let i = 0; i < DAILY_CHALLENGES.length; i++) {
+                    if (!usedChallenges.includes(i)) {
+                        availableChallenges.push(i);
+                    }
+                }
+                
+                // Pick random from available
+                challengeIndex = availableChallenges[Math.floor(Math.random() * availableChallenges.length)];
+                usedChallenges.push(challengeIndex);
+                
+                // Cycle to next color
+                cardColorIndex = (cardColorIndex + 1) % CARD_COLORS.length;
+                
+                // Save to localStorage
+                localStorage.setItem('dailyChallengeIndex', challengeIndex);
+                localStorage.setItem('dailyChallengeDate', today);
+                localStorage.setItem('usedChallenges', JSON.stringify(usedChallenges));
+                localStorage.setItem('dailyCardColorIndex', cardColorIndex);
+                
+                // Update game state
+                gameState.dailyChallenge = {
+                    id: 'daily_' + challengeIndex,
+                    name: 'Daily Challenge',
+                    desc: DAILY_CHALLENGES[challengeIndex],
+                    target: 1,
+                    progress: 0,
+                    reward: 50,
+                    color: CARD_COLORS[cardColorIndex]
+                };
                 gameState.dailyChallengeCompleted = false;
                 gameState.lastDailyChallengeDate = today;
+            } else if (!gameState.dailyChallenge) {
+                // Load existing challenge from localStorage
+                gameState.dailyChallenge = {
+                    id: 'daily_' + challengeIndex,
+                    name: 'Daily Challenge',
+                    desc: DAILY_CHALLENGES[challengeIndex],
+                    target: 1,
+                    progress: 0,
+                    reward: 50,
+                    color: CARD_COLORS[cardColorIndex]
+                };
             }
         }
 
         function updateDailyChallengeDisplay() {
             const challengeDisplay = document.getElementById('dailyChallengeDisplay');
             if (!challengeDisplay) return;
+
+            // Show empty state if challenge is completed
+            if (gameState.dailyChallengeCompleted) {
+                challengeDisplay.innerHTML = `
+                    <div class="challenge-empty-state">
+                        <div class="challenge-empty-icon">🎉</div>
+                        <div class="challenge-empty-title">Great job! You've completed today's challenge.</div>
+                        <div class="challenge-empty-desc">Come back tomorrow for a new one!</div>
+                    </div>
+                `;
+                return;
+            }
 
             if (!gameState.dailyChallenge) {
                 challengeDisplay.innerHTML = `
@@ -3748,16 +4556,16 @@
 
             const challenge = gameState.dailyChallenge;
             const progressPercent = Math.min(100, (challenge.progress / challenge.target) * 100);
-            const isCompleted = gameState.dailyChallengeCompleted;
+            const cardColor = challenge.color || 'var(--daily-card-purple)';
 
             challengeDisplay.innerHTML = `
-                <div class="daily-challenge-card ${isCompleted ? 'challenge-completed' : ''}">
+                <div class="daily-challenge-card" style="background: ${cardColor};">
                     <div class="challenge-title">📅 ${challenge.name}</div>
                     <div class="challenge-desc">${challenge.desc}</div>
                     <div class="challenge-progress-container">
                         <div class="challenge-progress-label">Progress: ${challenge.progress}/${challenge.target}</div>
                         <div class="challenge-progress-bar">
-                            <div class="challenge-progress-fill" style="width: ${isCompleted ? 100 : progressPercent}%"></div>
+                            <div class="challenge-progress-fill" style="width: ${progressPercent}%"></div>
                         </div>
                     </div>
                     <div class="challenge-reward">🎁 Reward: ${challenge.reward} points</div>
@@ -3947,12 +4755,178 @@
             selectedPriority = null;
             editingTaskIndex = null;
             document.querySelector('.modal-title').textContent = 'Create Task';
+            // Reset datepicker
+            document.getElementById('taskDueDateDisplay').value = '';
+            selectedDate = null;
+            document.getElementById('modernDatePicker').style.display = 'none';
+        }
+
+        // Modern DatePicker Variables
+        let selectedDate = null;
+        let currentPickerMonth = new Date().getMonth();
+        let currentPickerYear = new Date().getFullYear();
+        let pickerHour = 9;
+        let pickerMinute = 0;
+        let pickerAMPM = 'PM';
+
+        function toggleDatePicker() {
+            const picker = document.getElementById('modernDatePicker');
+            if (picker.style.display === 'none') {
+                picker.style.display = 'block';
+                renderCalendar();
+            } else {
+                picker.style.display = 'none';
+            }
+        }
+
+        function renderCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('currentMonth').textContent = `${monthNames[currentPickerMonth]} ${currentPickerYear}`;
+            
+            const daysContainer = document.getElementById('calendarDays');
+            daysContainer.innerHTML = '';
+            
+            const firstDay = new Date(currentPickerYear, currentPickerMonth, 1).getDay();
+            const daysInMonth = new Date(currentPickerYear, currentPickerMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            // Previous month days
+            const prevMonthDays = new Date(currentPickerYear, currentPickerMonth, 0).getDate();
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell other-month';
+                dayCell.textContent = prevMonthDays - i;
+                daysContainer.appendChild(dayCell);
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell';
+                dayCell.textContent = day;
+                
+                const cellDate = new Date(currentPickerYear, currentPickerMonth, day);
+                if (cellDate.toDateString() === today.toDateString()) {
+                    dayCell.classList.add('today');
+                }
+                
+                if (selectedDate && cellDate.toDateString() === selectedDate.toDateString()) {
+                    dayCell.classList.add('selected');
+                }
+                
+                dayCell.onclick = () => selectDay(day);
+                daysContainer.appendChild(dayCell);
+            }
+            
+            // Next month days
+            const totalCells = daysContainer.children.length;
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell other-month';
+                dayCell.textContent = i;
+                daysContainer.appendChild(dayCell);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentPickerMonth += delta;
+            if (currentPickerMonth > 11) {
+                currentPickerMonth = 0;
+                currentPickerYear++;
+            } else if (currentPickerMonth < 0) {
+                currentPickerMonth = 11;
+                currentPickerYear--;
+            }
+            renderCalendar();
+        }
+
+        function selectDay(day) {
+            selectedDate = new Date(currentPickerYear, currentPickerMonth, day);
+            renderCalendar();
+            updateDisplayValue();
+        }
+
+        function changeHour(delta) {
+            pickerHour += delta;
+            if (pickerHour > 12) pickerHour = 1;
+            if (pickerHour < 1) pickerHour = 12;
+            document.getElementById('hourInput').value = String(pickerHour).padStart(2, '0');
+            updateDisplayValue();
+        }
+
+        function changeMinute(delta) {
+            pickerMinute += delta;
+            if (pickerMinute > 59) pickerMinute = 0;
+            if (pickerMinute < 0) pickerMinute = 59;
+            document.getElementById('minuteInput').value = String(pickerMinute).padStart(2, '0');
+            updateDisplayValue();
+        }
+
+        function toggleAMPM() {
+            pickerAMPM = pickerAMPM === 'AM' ? 'PM' : 'AM';
+            document.getElementById('ampmToggle').textContent = pickerAMPM;
+            updateDisplayValue();
+        }
+
+        function updateDisplayValue() {
+            if (!selectedDate) return;
+            
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const year = selectedDate.getFullYear();
+            const hour = String(pickerHour).padStart(2, '0');
+            const minute = String(pickerMinute).padStart(2, '0');
+            
+            document.getElementById('taskDueDateDisplay').value = `${month}/${day}/${year}, ${hour}:${minute} ${pickerAMPM}`;
+        }
+
+        function clearDate() {
+            selectedDate = null;
+            document.getElementById('taskDueDateDisplay').value = '';
+            document.getElementById('modernDatePicker').style.display = 'none';
+        }
+
+        function setToday() {
+            const now = new Date();
+            selectedDate = now;
+            currentPickerMonth = now.getMonth();
+            currentPickerYear = now.getFullYear();
+            pickerHour = now.getHours() % 12 || 12;
+            pickerMinute = now.getMinutes();
+            pickerAMPM = now.getHours() >= 12 ? 'PM' : 'AM';
+            
+            document.getElementById('hourInput').value = String(pickerHour).padStart(2, '0');
+            document.getElementById('minuteInput').value = String(pickerMinute).padStart(2, '0');
+            document.getElementById('ampmToggle').textContent = pickerAMPM;
+            
+            renderCalendar();
+            updateDisplayValue();
+        }
+
+        function confirmDate() {
+            if (selectedDate) {
+                updateDisplayValue();
+                document.getElementById('modernDatePicker').style.display = 'none';
+            } else {
+                alert('Please select a date first');
+            }
         }
 
         function createTask() {
             const title = document.getElementById('taskTitle').value.trim();
             const description = document.getElementById('taskDescription').value.trim();
-            const dueDate = document.getElementById('taskDueDate').value;
+            
+            // Convert custom datepicker value to ISO format
+            let dueDate = null;
+            if (selectedDate) {
+                let hour24 = pickerHour;
+                if (pickerAMPM === 'PM' && hour24 !== 12) hour24 += 12;
+                if (pickerAMPM === 'AM' && hour24 === 12) hour24 = 0;
+                
+                selectedDate.setHours(hour24, pickerMinute, 0, 0);
+                dueDate = selectedDate.toISOString();
+            }
             
             if (!title) {
                 alert('Please enter a task title');
@@ -3996,12 +4970,15 @@
                 gameState.tasks.push(task);
                 gameState.totalTasksCreated += 1;
                 console.log('📝 New task created:', task);
-                console.log("📝 Total tasks now:", gameState.tasks.length);
-                showSuccessMessage("Task created successfully!");
-                onTaskAdded(selectedCategory);
+                console.log('📝 Total tasks now:', gameState.tasks.length);
+                showSuccessMessage('Task created successfully!');
             }
             
             saveGameState();
+            
+            // Check energy after creating task
+            checkAndUpdateEnergy();
+            
             updateUI();
             updateTasksDisplay();
             closeModal();
@@ -4037,17 +5014,22 @@
             // Add XP
             addJerryXP(basePoints * 2);
             
-            // Trigger category-aware tooltip
-            onTaskCompleted(task.category);
-            
             // Remove task
             gameState.tasks.splice(index, 1);
             
-            // Show completion message
-            const streakBonus = gameState.streakMultiplier > 1 ? ` (${gameState.streakMultiplier}x streak bonus!)` : '';
-            showSuccessMessage(`🎉 Task completed!${streakBonus} +${multipliedPoints} points!`);
+            // Update daily challenge progress
+            updateChallengeProgress(task, false);
+            
+            // Show completion message with random variation
+            const randomMsg = getRandomCompletionMessage(false);
+            const streakBonus = gameState.streakMultiplier > 1 ? `${gameState.streakMultiplier}x streak! ` : '';
+            showSuccessMessage(`${randomMsg.emoji} ${randomMsg.message}`, `${streakBonus}+${multipliedPoints} points earned!`);
             
             saveGameState();
+            
+            // Check energy after completing task (should increase since task is done)
+            checkAndUpdateEnergy();
+            
             updateUI();
             updateTasksDisplay();
             updateQuickTasksDisplay();
@@ -4124,8 +5106,7 @@
             const quickTask = {
                 ...task,
                 categoryName: category.name,
-                categoryEmoji: category.emoji,
-                categoryKey: categoryKey
+                categoryEmoji: category.emoji
             };
             
             gameState.selectedQuickTasks.push(quickTask);
@@ -4135,9 +5116,6 @@
             updateQuickTasksDisplay();
             closeQuickTaskModal();
             showSuccessMessage(`Added "${task.title}" to quick tasks!`);
-            
-            // Trigger category-aware tooltip
-            onTaskAdded(categoryKey);
         }
 
         function completeQuickTask(taskId) {
@@ -4169,9 +5147,10 @@
             // Add XP
             addJerryXP(basePoints * 2);
             
-            // Show completion message
-            const streakBonus = gameState.streakMultiplier > 1 ? ` (${gameState.streakMultiplier}x streak bonus!)` : '';
-            showSuccessMessage(`🎉 Quick task completed!${streakBonus} +${multipliedPoints} points!`);
+            // Show completion message with random variation
+            const randomMsg = getRandomCompletionMessage(true);
+            const streakBonus = gameState.streakMultiplier > 1 ? `${gameState.streakMultiplier}x streak! ` : '';
+            showSuccessMessage(`${randomMsg.emoji} ${randomMsg.message}`, `${streakBonus}+${multipliedPoints} points earned!`);
             
             // Track completed quick task
             if (!gameState.completedQuickTasks) {
@@ -4189,6 +5168,10 @@
             updateChallengeProgress(task, true);
             
             saveGameState();
+            
+            // Check energy after completing task (should increase since task is done)
+            checkAndUpdateEnergy();
+            
             updateUI();
             updateTasksDisplay();
             updateQuickTasksDisplay();
@@ -4268,7 +5251,7 @@
             
             gameState.jerryXPToNext = Math.floor(100 * Math.pow(1.2, gameState.jerryLevel - 1));
             
-            showSuccessMessage(`🎉 ${gameState.rockName} leveled up! Now Level ${gameState.jerryLevel}!`);
+            showSuccessMessage(`🎉 ${gameState.rockName} leveled up!`, `Now Level ${gameState.jerryLevel}!`);
             
             if (window.fireConfetti) {
                 window.fireConfetti();
@@ -4456,10 +5439,75 @@
 
 
         // Success message
-        function showSuccessMessage(message) {
+        // Get random completion message
+        function getRandomCompletionMessage(isQuickTask = false) {
+            const quickTaskMessages = [
+                { emoji: '⚡', message: 'Lightning fast!', subtitle: 'Quick task crushed!' },
+                { emoji: '🚀', message: 'Boom! Done!', subtitle: 'Quick task completed!' },
+                { emoji: '💨', message: 'Speed demon!', subtitle: 'That was quick!' },
+                { emoji: '✨', message: 'Nailed it!', subtitle: 'Quick win secured!' },
+                { emoji: '🔥', message: 'On fire!', subtitle: 'Quick task done!' },
+                { emoji: '💪', message: 'Crushing it!', subtitle: 'Quick task finished!' },
+                { emoji: '🎯', message: 'Bullseye!', subtitle: 'Quick task complete!' },
+                { emoji: '⭐', message: 'Star performance!', subtitle: 'Quick task knocked out!' },
+                { emoji: '🌟', message: 'Brilliant!', subtitle: 'Quick task accomplished!' },
+                { emoji: '💫', message: 'Stellar work!', subtitle: 'Quick task wrapped up!' },
+                { emoji: '🎊', message: 'Fantastic!', subtitle: 'Quick task conquered!' },
+                { emoji: '🏆', message: 'Champion move!', subtitle: 'Quick task demolished!' },
+                { emoji: '💥', message: 'Pow!', subtitle: 'Quick task obliterated!' },
+                { emoji: '🎪', message: 'Show stopper!', subtitle: 'Quick task handled!' },
+                { emoji: '🌈', message: 'Amazing!', subtitle: 'Quick task mastered!' }
+            ];
+            
+            const regularTaskMessages = [
+                { emoji: '🎉', message: 'Task completed!', subtitle: 'Great work!' },
+                { emoji: '✅', message: 'Mission accomplished!', subtitle: 'Task done!' },
+                { emoji: '🏆', message: 'Victory!', subtitle: 'Task conquered!' },
+                { emoji: '💪', message: 'Crushed it!', subtitle: 'Task finished!' },
+                { emoji: '🌟', message: 'Outstanding!', subtitle: 'Task complete!' },
+                { emoji: '🎯', message: 'Target hit!', subtitle: 'Task achieved!' },
+                { emoji: '🚀', message: 'Launched to success!', subtitle: 'Task accomplished!' },
+                { emoji: '⭐', message: 'Superb!', subtitle: 'Task wrapped up!' },
+                { emoji: '💫', message: 'Excellent work!', subtitle: 'Task finished!' },
+                { emoji: '🔥', message: 'Blazing through!', subtitle: 'Task demolished!' },
+                { emoji: '✨', message: 'Magnificent!', subtitle: 'Task completed!' },
+                { emoji: '🎊', message: 'Celebration time!', subtitle: 'Task done!' },
+                { emoji: '🌈', message: 'Wonderful!', subtitle: 'Task nailed!' },
+                { emoji: '💥', message: 'Boom!', subtitle: 'Task crushed!' },
+                { emoji: '🎪', message: 'Spectacular!', subtitle: 'Task mastered!' },
+                { emoji: '🏅', message: 'Medal worthy!', subtitle: 'Task completed!' },
+                { emoji: '🎖️', message: 'Heroic effort!', subtitle: 'Task conquered!' },
+                { emoji: '👏', message: 'Bravo!', subtitle: 'Task accomplished!' },
+                { emoji: '🙌', message: 'Hands up!', subtitle: 'Task finished!' },
+                { emoji: '💯', message: 'Perfect!', subtitle: 'Task done!' }
+            ];
+            
+            const messages = isQuickTask ? quickTaskMessages : regularTaskMessages;
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        function showSuccessMessage(message, subtitle = '') {
             const successDiv = document.createElement('div');
             successDiv.className = 'success-message';
-            successDiv.textContent = message;
+            
+            // Extract emoji from message if present
+            const emojiMatch = message.match(/^([\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}])\s*/u);
+            let emoji = '🎉';
+            let mainMessage = message;
+            
+            if (emojiMatch) {
+                emoji = emojiMatch[1];
+                mainMessage = message.replace(emojiMatch[0], '').trim();
+            }
+            
+            successDiv.innerHTML = `
+                <div class="success-message-emoji">${emoji}</div>
+                <div class="success-message-content">
+                    <div class="success-message-title">${mainMessage}</div>
+                    ${subtitle ? `<div class="success-message-subtitle">${subtitle}</div>` : ''}
+                </div>
+            `;
+            
             document.body.appendChild(successDiv);
             
             setTimeout(() => {
@@ -4590,19 +5638,65 @@
                 if (loadingScreen) {
                     loadingScreen.classList.add('hidden');
                 }
-            }, 5000);
+            }, 3000);
         });
+
+        // --- Tooltip Function ---
+        function showTooltip(message) {
+          const tooltip = document.getElementById('taskPalTooltip');
+          if (!tooltip) return;
+          tooltip.textContent = message;
+          tooltip.classList.add('visible');
+          clearTimeout(window.tooltipTimer);
+          window.tooltipTimer = setTimeout(() => {
+            tooltip.classList.remove('visible');
+          }, 50000); // 50 seconds
+        }
+
+        // --- Inject 🫤 Mood and Update Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+          const moodTracker = document.getElementById('moodTracker');
+          if (moodTracker && !moodTracker.dataset.enhanced) {
+            const moods = ['😊', '😢', '😡', '🫤'];
+            const container = document.createElement('div');
+            container.className = 'mood-options';
+            moods.forEach(mood => {
+              const btn = document.createElement('button');
+              btn.textContent = mood;
+              btn.className = 'mood-btn';
+              btn.onclick = () => handleMoodSelection(mood);
+              container.appendChild(btn);
+            });
+            moodTracker.innerHTML = '<p style="text-align:center;font-weight:600;margin-bottom:8px;">How are you feeling?</p>';
+            moodTracker.appendChild(container);
+            moodTracker.dataset.enhanced = 'true';
+          }
+        });
+
+        // --- Handle Mood Selection ---
+        function handleMoodSelection(mood) {
+          const moodTracker = document.getElementById('moodTracker');
+          if (moodTracker) moodTracker.style.display = 'none';
+
+          let message = '';
+          switch (mood) {
+            case '😊': message = 'Glad to see you happy!'; break;
+            case '😢': message = 'It\'s okay to feel down sometimes. You got this!'; break;
+            case '😡': message = 'Take a deep breath. You\'re doing fine.'; break;
+            case '🫤': message = 'Hang in there — neutral days still count!'; break;
+            default: message = 'Keep going!';
+          }
+          showTooltip(message);
+        }
 </script>
 
 
-    <!-- Daily Quest Game Modules -->
+    <!-- Task Monsters Game Modules -->
     <script type="module" src="js/main.js"></script>
     
     <!-- Game Message Display -->
     <div id="gameMessage" class="hidden"></div>
     
-    <!-- Loading Message -->
-    <div id="loadingMessage">Loading Task Monsters...</div>
     
     <!-- Dark Theme CSS -->
     <link rel="stylesheet" href="css/dark-theme.css">
@@ -4618,7 +5712,7 @@
                 if (loadingScreen) {
                     loadingScreen.classList.add('hidden');
                 }
-            }, 5000);
+            }, 3000);
         });
     </script>
 
