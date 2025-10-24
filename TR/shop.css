@@ -1,9 +1,0 @@
-/* TR Rock Shop overlay */
-:root { --tr-hat-top:-22%; --tr-hat-width:60%; }
-[data-pet-rock], #petRockWrapper, .creature-container { position:relative; }
-.tr-equipment-layer { position:absolute; inset:0; pointer-events:none; z-index:3; }
-.tr-equip { position:absolute; left:50%; transform:translateX(-50%); pointer-events:none; user-select:none; -webkit-user-drag:none; image-rendering:-webkit-optimize-contrast; image-rendering:crisp-edges; }
-.tr-equip.tr-hat { top:var(--tr-hat-top,-22%); width:var(--tr-hat-width,60%); max-width:420px; }
-.tr-locked,[data-item-id][data-cost][aria-disabled="true"]{opacity:.45;filter:grayscale(.35);cursor:not-allowed!important;}
-.tr-owned-badge{display:none;}
-.tr-equipped{}
