@@ -3049,7 +3049,7 @@
             <div style="width: 140px; height: 140px; margin: 50px auto 0; overflow: visible; position: relative; display: flex; align-items: center; justify-content: center;">
                 <!-- Task Pal Tooltip -->
                 <div id="taskPalTooltip" class="task-pal-tooltip"></div>
-                <img alt="Hero" id="mainHeroSprite" src="assets/heroes/Pink_Monster_Idle_4.png" style="width: 32px; height: 32px; image-rendering: pixelated; object-fit: none; object-position: 0 0; transform: scale(4); transform-origin: center center; animation: hero-idle-anim 0.8s steps(4) infinite;"/>
+                <img alt="Hero" id="mainHeroSprite" src="assets/heroes/Pink_Monster_Idle_4.png" style="width: 32px; height: 32px; image-rendering: pixelated; object-fit: none; object-position: 0 0; transform: scale(4); transform-origin: center center; animation: hero-idle-anim 0.8s steps(4) infinite; opacity: 0; transition: opacity 0.3s ease;"/>
             </div>
             
             <!-- RPG Stat Gauges -->
@@ -3750,6 +3750,14 @@
                 const mainHeroSprite = document.getElementById('mainHeroSprite');
                 if (mainHeroSprite) {
                     mainHeroSprite.src = `assets/heroes/${spritePrefix}_Idle_4.png`;
+                    // Show sprite after correct image is loaded
+                    mainHeroSprite.style.opacity = '1';
+                }
+            } else {
+                // If no sprite selected yet, show default (Pink Monster)
+                const mainHeroSprite = document.getElementById('mainHeroSprite');
+                if (mainHeroSprite) {
+                    mainHeroSprite.style.opacity = '1';
                 }
             }
         }
@@ -5158,22 +5166,23 @@
                     shouldIncrement = true;
                 }
             }
-            // Generic "complete tasks" challenges (count any task)
-            else if (challengeDesc.includes('complete') && !challengeDesc.includes('quick task') && 
-                     !challengeDesc.includes('work') && !challengeDesc.includes('personal')) {
-                shouldIncrement = true;
-            }
             // Streak-based challenges (always count)
             else if (challengeDesc.includes('streak')) {
                 shouldIncrement = true;
             }
             // XP-based challenges (always count since any task gives XP)
-            else if (challengeDesc.includes('xp') || challengeDesc.includes('earn')) {
+            else if (challengeDesc.includes('xp') || challengeDesc.includes('earn') || challengeDesc.includes('point')) {
                 shouldIncrement = true;
             }
-            // Default: for ambiguous challenges, count any task
-            else if (!challengeDesc.includes('quick task')) {
-                shouldIncrement = true;
+            // Generic "complete X tasks" challenges (count any task, but be specific)
+            else if ((challengeDesc.includes('complete') && challengeDesc.match(/complete \d+ task/)) ||
+                     (challengeDesc.includes('finish') && challengeDesc.match(/finish \d+ task/))) {
+                // Only count if it's a generic "complete X tasks" without specific category
+                if (!challengeDesc.includes('work') && !challengeDesc.includes('personal') && 
+                    !challengeDesc.includes('home') && !challengeDesc.includes('learning') &&
+                    !challengeDesc.includes('quick task')) {
+                    shouldIncrement = true;
+                }
             }
             
             // Only increment if criteria is met
@@ -6929,6 +6938,12 @@
                         const mainHeroSprite = document.getElementById('mainHeroSprite');
                         if (mainHeroSprite) {
                             mainHeroSprite.src = `assets/heroes/${spritePrefix}_Idle_4.png`;
+                            mainHeroSprite.style.opacity = '1';
+                        }
+                    } else {
+                        const mainHeroSprite = document.getElementById('mainHeroSprite');
+                        if (mainHeroSprite) {
+                            mainHeroSprite.style.opacity = '1';
                         }
                     }
                 }, 100);
@@ -7242,6 +7257,7 @@
             const mainHeroSprite = document.getElementById('mainHeroSprite');
             if (mainHeroSprite) {
                 mainHeroSprite.src = `assets/heroes/${spritePrefix}_Idle_4.png`;
+                mainHeroSprite.style.opacity = '1';
             }
             
             const heroSprite = document.getElementById('heroSprite');
