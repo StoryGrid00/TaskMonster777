@@ -1,0 +1,533 @@
+/* Battle System Styles */
+
+/* Battle Arena Container */
+.battle-arena {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.battle-arena.hidden {
+    display: none;
+}
+
+/* Battle Container */
+.battle-container {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 3rem;
+    border-radius: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background variants */
+.battle-container.bg-forest {
+    background-image: url('../assets/battle-backgrounds/forest_path.png');
+}
+
+.battle-container.bg-city {
+    background-image: url('../assets/battle-backgrounds/city_sunset.png');
+}
+
+.battle-container.bg-night-town {
+    background-image: url('../assets/battle-backgrounds/night_town.png');
+}
+
+/* Dark overlay for better sprite visibility */
+.battle-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+/* Ensure sprites are above overlay */
+.battle-container > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Sprite Containers */
+.sprite-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sprite-wrapper {
+    width: 128px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sprite {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    transform: scale(4);
+    transform-origin: center;
+}
+
+/* Enemy sprite animations - 9 frames for bat sprites */
+#enemySprite.idle {
+    animation: batIdle 0.9s steps(9) infinite;
+}
+
+#enemySprite.attack {
+    animation: batAttack 0.6s steps(9) forwards;
+}
+
+#enemySprite.hurt {
+    animation: batHurt 0.3s steps(9) forwards;
+}
+
+@keyframes batIdle {
+    from { background-position: 0 0; }
+    to { background-position: -288px 0; } /* 32px * 9 frames */
+}
+
+@keyframes batAttack {
+    from { background-position: 0 0; }
+    to { background-position: -288px 0; }
+}
+
+@keyframes batHurt {
+    from { background-position: 0 0; }
+    to { background-position: -288px 0; }
+}
+
+/* Hero (Pink Monster) sprite animations */
+#heroSprite.idle {
+    background-size: 128px 32px;
+    animation: heroIdle 0.4s steps(4) infinite;
+}
+
+#heroSprite.attack1 {
+    background-size: 128px 32px;
+    animation: heroAttack1 0.6s steps(4) forwards;
+}
+
+#heroSprite.walk-attack {
+    background-size: 192px 32px;
+    animation: heroWalkAttack 0.8s steps(6) forwards;
+}
+
+#heroSprite.throw {
+    background-size: 128px 32px;
+    animation: heroThrow 0.8s steps(4) forwards;
+}
+
+#heroSprite.jump {
+    background-size: 256px 32px;
+    animation: heroJump 0.8s steps(8) forwards;
+}
+
+#heroSprite.hurt {
+    background-size: 128px 32px;
+    animation: heroHurt 0.5s steps(4) infinite;
+}
+
+/* Hero animation keyframes */
+@keyframes heroIdle {
+    from { background-position: 0 0; }
+    to { background-position: -128px 0; } /* 32px * 4 frames */
+}
+
+@keyframes heroWalkAttack {
+    from { background-position: 0 0; }
+    to { background-position: -192px 0; } /* 32px * 6 frames */
+}
+
+@keyframes heroThrow {
+    from { background-position: 0 0; }
+    to { background-position: -128px 0; } /* 32px * 4 frames */
+}
+
+@keyframes heroJump {
+    from { background-position: 0 0; }
+    to { background-position: -256px 0; } /* 32px * 8 frames */
+}
+
+@keyframes heroHurt {
+    from { background-position: 0 0; }
+    to { background-position: -128px 0; } /* 32px * 4 frames */
+}
+
+@keyframes heroAttack1 {
+    from { background-position: 0 0; }
+    to { background-position: -128px 0; } /* 32px * 4 frames */
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(-20px); opacity: 0.7; }
+}
+
+/* HP Bars */
+.hp-bar-container {
+    width: 150px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.hp-label {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.hp-bar-bg {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.hp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+    transition: width 0.3s ease;
+}
+
+/* Hero HP bar - green/blue gradient */
+#heroHPBar {
+    background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+}
+
+/* Gauge Container */
+.gauge-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.gauge {
+    width: 300px;
+}
+
+.gauge-label {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.gauge-bar-bg {
+    height: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.gauge-bar-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.attack-gauge-fill {
+    background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.defense-gauge-fill {
+    background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.btn-action, .btn-flee {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.btn-action:hover:not(:disabled):not(.locked),
+.btn-flee:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.btn-action:disabled,
+.btn-action.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.btn-flee {
+    background: rgba(255, 100, 100, 0.2);
+    border-color: rgba(255, 100, 100, 0.5);
+}
+
+/* Item Count Badge on Buttons */
+.item-count {
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+/* Battle Log */
+.battle-log {
+    width: 90%;
+    max-width: 600px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-y: auto;
+    color: white;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* Fireball Projectile Animation */
+.fireball-projectile {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.fireball-projectile.hidden {
+    display: none;
+}
+
+/* Explosion Effect Animation */
+.explosion-effect {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10001;
+}
+
+.explosion-effect.hidden {
+    display: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .battle-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .sprite-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .gauge-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-action, .btn-flee {
+        width: 100%;
+    }
+}
+
+/* Sprite Animations */
+.sprite.idle {
+    animation: sprite-idle 0.8s steps(4) infinite;
+}
+
+@keyframes sprite-idle {
+    0% { background-position: 0 0; }
+    25% { background-position: -32px 0; }
+    50% { background-position: -64px 0; }
+    75% { background-position: -96px 0; }
+}
+
+.sprite.attack {
+    animation: sprite-attack 0.5s steps(4) forwards;
+}
+
+@keyframes sprite-attack {
+    0% { background-position: 0 0; }
+    25% { background-position: -32px 0; }
+    50% { background-position: -64px 0; }
+    75% { background-position: -96px 0; }
+}
+
+.sprite.hurt {
+    animation: sprite-hurt 0.4s steps(4) forwards;
+}
+
+@keyframes sprite-hurt {
+    0% { background-position: 0 0; }
+    25% { background-position: -32px 0; }
+    50% { background-position: -64px 0; }
+    75% { background-position: -96px 0; }
+}
+
+.sprite.death {
+    animation: sprite-death 1s steps(8) forwards;
+}
+
+@keyframes sprite-death {
+    0% { background-position: 0 0; }
+    12.5% { background-position: -32px 0; }
+    25% { background-position: -64px 0; }
+    37.5% { background-position: -96px 0; }
+    50% { background-position: -128px 0; }
+    62.5% { background-position: -160px 0; }
+    75% { background-position: -192px 0; }
+    87.5% { background-position: -224px 0; }
+}
+
+/* Shop and Inventory Styles */
+.shop-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.shop-item-icon {
+    font-size: 2rem;
+}
+
+.shop-item-info {
+    flex: 1;
+}
+
+.shop-item-name {
+    font-weight: bold;
+    color: white;
+}
+
+.shop-item-cost {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.shop-buy-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shop-buy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Inventory Grid Layout */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.inventory-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.inventory-slot:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.inventory-slot-icon {
+    font-size: 2.5rem;
+}
+
+.inventory-slot-name {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.inventory-slot-count {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
