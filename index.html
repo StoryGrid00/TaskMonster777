@@ -4999,76 +4999,78 @@
             const challenge = gameState.dailyChallenge;
             const challengeDesc = (challenge.desc || '').toLowerCase();
             
+            // Special case: Rest day challenge (no tasks required)
+            if (challengeDesc.includes('take a break') || challengeDesc.includes('no tasks required')) {
+                // This challenge is auto-completed at generation
+                return;
+            }
+            
             // Check if the completed task matches the challenge criteria
             let shouldIncrement = false;
             
-            // Quick Task specific challenges
+            // 1. Quick Task challenges
             if (challengeDesc.includes('quick task') && isQuickTask) {
                 shouldIncrement = true;
             }
-            // Regular task specific challenges (not quick tasks)
-            else if ((challengeDesc.includes('work task') || challengeDesc.includes('personal task') || 
-                      challengeDesc.includes('home') || challengeDesc.includes('learning') ||
-                      challengeDesc.includes('wellness') || challengeDesc.includes('errand') ||
-                      challengeDesc.includes('creative') || challengeDesc.includes('focus')) && !isQuickTask) {
-                // Check if task category matches
-                if (task && task.category) {
-                    const taskCategory = task.category.toLowerCase();
-                    if (challengeDesc.includes(taskCategory) || 
-                        (challengeDesc.includes('work') && taskCategory.includes('work')) ||
-                        (challengeDesc.includes('personal') && taskCategory.includes('personal')) ||
-                        (challengeDesc.includes('home') && taskCategory.includes('home')) ||
-                        (challengeDesc.includes('learning') && taskCategory.includes('learning')) ||
-                        (challengeDesc.includes('wellness') && taskCategory.includes('wellness')) ||
-                        (challengeDesc.includes('creative') && taskCategory.includes('creative'))) {
-                        shouldIncrement = true;
-                    }
-                } else {
-                    // If no category specified on task, count it for category-specific challenges
+            // 2. Category-specific challenges (work, personal, home, learning, wellness, creative)
+            else if (!isQuickTask && task && task.category) {
+                const taskCategory = task.category.toLowerCase();
+                
+                // Check for specific category mentions
+                if ((challengeDesc.includes('work') && taskCategory.includes('work')) ||
+                    (challengeDesc.includes('personal') && taskCategory.includes('personal')) ||
+                    (challengeDesc.includes('home') && taskCategory.includes('home')) ||
+                    (challengeDesc.includes('learning') && taskCategory.includes('learning')) ||
+                    (challengeDesc.includes('wellness') && taskCategory.includes('wellness')) ||
+                    (challengeDesc.includes('creative') && taskCategory.includes('creative'))) {
                     shouldIncrement = true;
                 }
             }
-            // Difficulty-based challenges
-            else if (challengeDesc.includes('hard') && task && task.difficulty === 'hard') {
-                shouldIncrement = true;
-            }
-            else if (challengeDesc.includes('medium') && task && task.difficulty === 'medium') {
-                shouldIncrement = true;
-            }
-            else if (challengeDesc.includes('easy') && task && task.difficulty === 'easy') {
-                shouldIncrement = true;
-            }
-            // Priority-based challenges
-            else if (challengeDesc.includes('high-priority') && task && task.priority === 'high') {
-                shouldIncrement = true;
-            }
-            else if (challengeDesc.includes('low-priority') && task && task.priority === 'low') {
-                shouldIncrement = true;
-            }
-            // Long-term goal challenges
-            else if (challengeDesc.includes('long-term goal') || challengeDesc.includes('finish a goal')) {
-                // Only count non-quick tasks as long-term goals
-                if (!isQuickTask) {
+            // 3. Difficulty-based challenges (easy, medium, hard)
+            else if (!isQuickTask && task && task.difficulty) {
+                const taskDifficulty = task.difficulty.toLowerCase();
+                
+                if ((challengeDesc.includes('easy') && taskDifficulty === 'easy') ||
+                    (challengeDesc.includes('medium') && taskDifficulty === 'medium') ||
+                    (challengeDesc.includes('hard') && taskDifficulty === 'hard')) {
                     shouldIncrement = true;
                 }
             }
-            // Streak-based challenges (always count)
+            // 4. Priority-based challenges (high-priority, low-priority)
+            else if (!isQuickTask && task && task.priority) {
+                const taskPriority = task.priority.toLowerCase();
+                
+                if ((challengeDesc.includes('high-priority') && taskPriority === 'high') ||
+                    (challengeDesc.includes('low-priority') && taskPriority === 'low')) {
+                    shouldIncrement = true;
+                }
+            }
+            // 5. Streak-based challenges (handled separately, but count any task)
             else if (challengeDesc.includes('streak')) {
+                // Streak challenges are verified by checking gameState.streakDays
+                // Any task completion counts toward maintaining the streak
                 shouldIncrement = true;
             }
-            // XP-based challenges (always count since any task gives XP)
-            else if (challengeDesc.includes('xp') || challengeDesc.includes('earn') || challengeDesc.includes('point')) {
+            // 6. XP-based challenges (count any task since all tasks give XP)
+            else if (challengeDesc.includes('xp') || challengeDesc.includes('earn')) {
                 shouldIncrement = true;
             }
-            // Generic "complete X tasks" challenges (count any task, but be specific)
-            else if ((challengeDesc.includes('complete') && challengeDesc.match(/complete \d+ task/)) ||
-                     (challengeDesc.includes('finish') && challengeDesc.match(/finish \d+ task/))) {
-                // Only count if it's a generic "complete X tasks" without specific category
-                if (!challengeDesc.includes('work') && !challengeDesc.includes('personal') && 
-                    !challengeDesc.includes('home') && !challengeDesc.includes('learning') &&
-                    !challengeDesc.includes('quick task')) {
-                    shouldIncrement = true;
-                }
+            // 7. Generic "complete X tasks" challenges (count any task)
+            else if (challengeDesc.match(/complete \d+ task/) && 
+                     !challengeDesc.includes('work') && 
+                     !challengeDesc.includes('personal') && 
+                     !challengeDesc.includes('home') && 
+                     !challengeDesc.includes('learning') &&
+                     !challengeDesc.includes('wellness') &&
+                     !challengeDesc.includes('creative') &&
+                     !challengeDesc.includes('quick') &&
+                     !challengeDesc.includes('high-priority') &&
+                     !challengeDesc.includes('low-priority') &&
+                     !challengeDesc.includes('easy') &&
+                     !challengeDesc.includes('medium') &&
+                     !challengeDesc.includes('hard')) {
+                // Generic task completion - count any task
+                shouldIncrement = true;
             }
             
             // Only increment if criteria is met
@@ -5248,107 +5250,96 @@
         }
 
         // Daily Challenge System
-        // Daily Challenge System - 100 Challenges
+        // Daily Challenge System - Simplified & Trackable
+        // All challenges have clear, automatically verifiable acceptance criteria
         const DAILY_CHALLENGES = [
-            "Complete 3 work tasks today",
-            "Finish all quick tasks before lunch",
-            "Add a new task with a deadline",
+            // Basic Task Completion (Any Type)
+            "Complete 1 task today",
+            "Complete 2 tasks today",
+            "Complete 3 tasks today",
+            "Complete 4 tasks today",
+            "Complete 5 tasks today",
+            "Complete 6 tasks today",
+            "Complete 7 tasks today",
+            "Complete 8 tasks today",
+            "Complete 10 tasks today",
+            
+            // Work Category
+            "Complete 1 work task",
+            "Complete 2 work tasks",
+            "Complete 3 work tasks",
+            "Complete 4 work tasks",
+            
+            // Personal Category
+            "Complete 1 personal task",
             "Complete 2 personal tasks",
-            "Check off one high-priority task",
-            "Add one 'Wellness' task and complete it",
-            "Finish a task that's been pending for over a day",
-            "Complete one creative or hobby task",
-            "Do one Quick Task before 10 AM",
-            "Reach a 2-day streak!",
-            "Complete 4 quick tasks today",
-            "Finish one task marked as 'hard'",
-            "Add a new 'Work' task and complete it today",
-            "Do one cleanup or organization task",
-            "Finish all due tasks for today",
-            "Add 2 new tasks for tomorrow",
-            "Complete one 'Learning' category task",
-            "Finish a medium-priority task",
-            "End the day with no pending tasks",
-            "Check off a task before 9 AM",
-            "Create a new Quick Task and complete it instantly",
-            "Reach 5 completed tasks today",
-            "Complete one 'Home' category task",
-            "Take on a wellness challenge—stretch or meditate",
-            "Earn 50 XP today",
-            "Add a fun task and complete it",
-            "Complete a task that will benefit you tomorrow (e.g., meal prep, planning)",
-            "Create a task reminder for tomorrow",
-            "Complete at least one group or teamwork task",
-            "Clear all low-priority tasks",
-            "Add a new task with a positive emoji",
-            "Do one creative Quick Task",
-            "Complete all overdue tasks",
-            "Add a goal for the week",
-            "Complete 2 tasks in under an hour",
-            "Maintain or beat your current task completion streak",
-            "Add and finish one learning-related task",
-            "Complete all 'Medium' difficulty tasks",
-            "Finish a 'Wellness' and 'Work' task combo",
-            "Do one reflective journaling task",
-            "Complete a long task without breaks",
-            "Add a new 'Personal Growth' task",
-            "Finish 3 tasks of any type",
-            "Do one high-priority and one easy task",
-            "Add a new Quick Task list",
-            "Earn 100 XP in one day",
-            "Finish a task after your usual work hours",
-            "Try completing 5 small Quick Tasks",
-            "Add and complete one 'Errand' task",
-            "Finish one creative or design task",
-            "Take 10 minutes to plan tomorrow's tasks",
-            "Create a Quick Task with an encouraging or motivational title",
-            "Complete 2 'Work' and 1 'Wellness' task",
-            "Add a task with an emoji title",
-            "Add a task you plan to do every day (e.g., exercise, reading)",
-            "Finish one of your oldest tasks",
-            "Clear all Quick Tasks from the list",
-            "Add one 'Focus' task and complete it",
-            "Do one hard Quick Task",
-            "Complete tasks to unlock a new achievement (check Achievements tab)",
-            "Add a high-difficulty task",
-            "Add a difficult task that pushes you outside your comfort zone",
-            "Complete all tasks in one category",
-            "Check off 3 tasks back-to-back",
-            "Use the purple + button to create and complete a new task",
-            "Add a task for a personal goal and complete it today",
-            "Finish a creative task before 5 PM",
-            "Achieve your longest task completion streak ever",
-            "Complete all Quick Tasks before noon",
-            "Complete at least 2 tasks to earn XP multiple times",
-            "Create a task for meditation, breathing exercises, or mindfulness practice",
-            "Complete 4 small tasks in a row",
-            "Complete at least one task from each category (Work, Personal, Home, etc.)",
-            "Create a task for a habit you want to build (e.g., drink water, journal)",
-            "Finish one hard and one easy task",
-            "Clear all 'Pending' tasks",
-            "Add and finish 3 Quick Tasks",
-            "Earn 75 XP or more today",
-            "Create a task for something enjoyable (e.g., watch a movie, play a game)",
-            "Complete every task that has an emoji in its title or category",
-            "Start a new 3-day streak",
-            "Complete 1 work and 1 personal task",
-            "Add 5 new Quick Tasks",
-            "Finish everything on your list today",
+            "Complete 3 personal tasks",
+            
+            // Home Category
+            "Complete 1 home task",
+            "Complete 2 home tasks",
+            "Complete 3 home tasks",
+            
+            // Learning Category
+            "Complete 1 learning task",
+            "Complete 2 learning tasks",
+            
+            // Wellness Category
+            "Complete 1 wellness task",
+            "Complete 2 wellness tasks",
+            
+            // Creative Category
+            "Complete 1 creative task",
+            "Complete 2 creative tasks",
+            
+            // Quick Tasks
+            "Complete 1 quick task",
+            "Complete 2 quick tasks",
+            "Complete 3 quick tasks",
+            "Complete 4 quick tasks",
+            "Complete 5 quick tasks",
+            "Complete 6 quick tasks",
+            "Complete 8 quick tasks",
+            "Complete 10 quick tasks",
+            
+            // Priority-Based
+            "Complete 1 high-priority task",
             "Complete 2 high-priority tasks",
-            "Create a challenging task that will help you earn an achievement",
-            "Add a task to learn something new (e.g., tutorial, course, article)",
-            "Complete a task that contributes to a bigger goal or project",
-            "Do all Quick Tasks within 30 minutes",
-            "End your day with no pending tasks",
-            "Complete a task you've delayed most",
-            "Add one 'Fitness' task",
-            "Add a task to write down 3 things you're grateful for",
-            "Complete a new Quick Task before 8 AM",
-            "Complete enough tasks to gain enough XP to level up",
-            "Add and complete one 'Focus' task",
-            "Hit 10 total completed tasks today",
-            "Add a task to organize, clean, or improve your living/work space",
-            "Check off every due task today",
+            "Complete 3 high-priority tasks",
+            "Complete 1 low-priority task",
+            "Complete 2 low-priority tasks",
+            
+            // Difficulty-Based
+            "Complete 1 easy task",
+            "Complete 2 easy tasks",
+            "Complete 3 easy tasks",
+            "Complete 1 medium task",
+            "Complete 2 medium tasks",
+            "Complete 1 hard task",
+            "Complete 2 hard tasks",
+            
+            // Mixed Combinations
+            "Complete 1 work and 1 personal task",
+            "Complete 1 work and 1 wellness task",
+            "Complete 2 work and 1 wellness task",
+            "Complete 1 hard and 1 easy task",
+            "Complete 1 high-priority and 1 low-priority task",
+            
+            // XP-Based (tracks XP accumulation)
+            "Earn 50 XP today",
+            "Earn 75 XP today",
+            "Earn 100 XP today",
+            "Earn 150 XP today",
+            "Earn 200 XP today",
+            
+            // Streak-Based (tracks streak days)
+            "Reach a 2-day streak",
+            "Reach a 3-day streak",
+            "Reach a 4-day streak",
+            "Reach a 5-day streak",
+            "Reach a 7-day streak",
+            
+            // Rest Day
             "Take a break! No tasks required today—you've earned it"
         ];
 
@@ -5387,8 +5378,18 @@
                 /(\d+) quick/,
                 /(\d+) work/,
                 /(\d+) personal/,
+                /(\d+) home/,
+                /(\d+) learning/,
+                /(\d+) wellness/,
+                /(\d+) creative/,
+                /(\d+) easy/,
+                /(\d+) medium/,
+                /(\d+) hard/,
+                /(\d+) high-priority/,
+                /(\d+) low-priority/,
                 /(\d+) small/,
                 /(\d+) high/,
+                /(\d+) low/,
                 /(\d+) new/
             ];
             
@@ -5399,7 +5400,8 @@
                     const num = parseInt(match[1]);
                     // For XP challenges, the number is the XP amount, not the task count
                     // So we keep target as 1 for XP challenges
-                    if (desc.includes('xp') || desc.includes('earn')) {
+                    // Use word boundary to avoid matching 'learning' as 'earn'
+                    if (desc.includes('xp') || /\bearn\b/.test(desc)) {
                         return 1;
                     }
                     return num;
