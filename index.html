@@ -3446,6 +3446,9 @@
             unlockedBattleItems: ['health_potion', 'attack_refill', 'defense_refill'], // Track which items have ever been unlocked (fireball requires level 10)
             xp: 0
         };
+        
+        // Expose gameState to window for external scripts
+        window.gameState = gameState;
 
         // Task creation variables
         let selectedCategory = null;
@@ -3597,6 +3600,7 @@
             if (saved) {
                 const parsedState = JSON.parse(saved);
                 gameState = { ...gameState, ...parsedState };
+                window.gameState = gameState; // Update window reference
                 
                 // Ensure selectedQuickTasks exists
                 if (!gameState.selectedQuickTasks) {
@@ -5793,8 +5797,8 @@
             // Allow potion to be used outside of battle to heal monster
             if (itemId === 'health_potion') {
                 // Check if monster needs healing
-                const maxHP = 50 + (gameState.jerryLevel * 5);
-                const currentHP = gameState.jerryHP || maxHP;
+                const maxHP = 100; // Monster's max HP
+                const currentHP = gameState.health || maxHP;
                 
                 if (currentHP >= maxHP) {
                     alert('💚 Your monster is already at full health!');
@@ -5804,14 +5808,14 @@
                 // Use potion
                 gameState.battleInventory.health_potion--;
                 const healAmount = 30;
-                gameState.jerryHP = Math.min(maxHP, currentHP + healAmount);
+                gameState.health = Math.min(maxHP, currentHP + healAmount);
                 
                 // Save and update
                 saveGameState();
                 updateOwnedItemsDisplay();
                 updateUI();
                 
-                alert(`🧪 Potion used! Healed ${healAmount} HP.\n\nCurrent HP: ${gameState.jerryHP}/${maxHP}`);
+                alert(`🧪 Potion used! Healed ${healAmount} HP.\n\nCurrent HP: ${gameState.health}/${maxHP}`);
             } else {
                 alert(`🎮 ${item.name} will be available in your next battle!\n\nComplete a task to trigger a battle.`);
             }

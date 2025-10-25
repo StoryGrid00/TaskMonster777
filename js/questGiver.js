@@ -283,20 +283,50 @@ class QuestGiver {
         const isCorrect = selectedIndex === this.activeQuest.correct;
         
         if (isCorrect) {
-            // Award XP
-            if (window.gameState) {
-                window.gameState.jerryXP = (window.gameState.jerryXP || 0) + this.activeQuest.xpReward;
-                if (typeof saveGameState === 'function') saveGameState();
-                if (typeof updateUI === 'function') updateUI();
+            // Award XP using the proper function
+            if (!window.gameState) {
+                console.error('window.gameState not found!');
+                alert('⚠️ Error: Game not fully loaded. Please try again.');
+                this.close();
+                return;
+            }
+            
+            if (typeof window.addJerryXP === 'function') {
+                window.addJerryXP(this.activeQuest.xpReward);
+                console.log(`Quiz correct! Added ${this.activeQuest.xpReward} XP. Total: ${window.gameState.jerryXP}`);
+                
+                if (typeof window.saveGameState === 'function') {
+                    window.saveGameState();
+                }
+                
+                if (typeof window.updateUI === 'function') {
+                    window.updateUI();
+                }
+            } else {
+                console.error('addJerryXP function not found');
             }
             alert(`✅ Correct! +${this.activeQuest.xpReward} XP`);
         } else {
             // Deduct XP
-            if (window.gameState) {
-                window.gameState.jerryXP = Math.max(0, (window.gameState.jerryXP || 0) - this.activeQuest.xpPenalty);
-                if (typeof saveGameState === 'function') saveGameState();
-                if (typeof updateUI === 'function') updateUI();
+            if (!window.gameState) {
+                console.error('window.gameState not found!');
+                alert('⚠️ Error: Game not fully loaded. Please try again.');
+                this.close();
+                return;
             }
+            
+            const oldXP = window.gameState.jerryXP || 0;
+            window.gameState.jerryXP = Math.max(0, oldXP - this.activeQuest.xpPenalty);
+            console.log(`Quiz wrong! Deducted ${this.activeQuest.xpPenalty} XP. Total: ${window.gameState.jerryXP}`);
+            
+            if (typeof window.saveGameState === 'function') {
+                window.saveGameState();
+            }
+            
+            if (typeof window.updateUI === 'function') {
+                window.updateUI();
+            }
+            
             const correctAnswer = this.activeQuest.options[this.activeQuest.correct];
             alert(`❌ Wrong! The correct answer was: ${correctAnswer}. -${this.activeQuest.xpPenalty} XP`);
         }
@@ -407,7 +437,10 @@ function checkExpiredQuests() {
 
     expiredQuests.forEach(quest => {
         // Deduct XP penalty
-        window.gameState.jerryXP = Math.max(0, (window.gameState.jerryXP || 0) - quest.questPenalty);
+        if (window.gameState) {
+            window.gameState.jerryXP = Math.max(0, (window.gameState.jerryXP || 0) - quest.questPenalty);
+            console.log(`Quest expired! Deducted ${quest.questPenalty} XP`);
+        }
         
         // Remove quest from tasks
         const index = window.gameState.tasks.indexOf(quest);
