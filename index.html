@@ -1179,8 +1179,9 @@
 
         .task-actions {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             margin-top: 12px;
+            justify-content: flex-end;
         }
 
         /* Edit Button - Purple Pill in Top-Right Corner */
@@ -3523,10 +3524,11 @@
                 name: 'Mindfulness & Mental Health',
                 emoji: '🧠',
                 tasks: [
-                    { id: 'deep_breaths', title: 'Take 5 deep breaths', emoji: '🫁🏾', points: 2 },
+                    { id: 'deep_breaths', title: 'Take 5 deep breaths', emoji: '🫁', points: 2 },
                     { id: 'gratitude', title: 'Think of 3 things grateful for', emoji: '🙏🏿', points: 3 },
                     { id: 'compliment_self', title: 'Give myself a compliment', emoji: '💝', points: 3 },
-                    { id: 'mindful_moment', title: 'Have a mindful moment', emoji: '🧘🏽', points: 4 }
+                    { id: 'mindful_moment', title: 'Have a mindful moment', emoji: '🧘🏽', points: 4 },
+                    { id: 'phone_before_bed', title: 'Stay off of phone an hour before bed', emoji: '📵', points: 5 }
                 ]
             }
         };
@@ -4975,8 +4977,8 @@
                             </div>
                             ${task.description ? `<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">${task.description}</div>` : ''}
                             <div class="task-actions">
-                                <button class="task-complete-button" onclick="completeTask(${gameState.tasks.indexOf(task)})">Complete</button>
-                                <button class="task-delete-button" onclick="deleteTask(${gameState.tasks.indexOf(task)})">Delete</button>
+                                <button class="action-btn action-complete" onclick="completeTask(${gameState.tasks.indexOf(task)})" title="Complete">✓</button>
+                                <button class="action-btn action-remove" onclick="deleteTask(${gameState.tasks.indexOf(task)})" title="Delete">×</button>
                             </div>
                         </div>
                     `;
