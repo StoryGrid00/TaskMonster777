@@ -1,6 +1,6 @@
 {
-  "name": "Daily Quest",
-  "short_name": "Daily Quest",
+  "name": "Task Monster",
+  "short_name": "Task Monster",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#111111",
