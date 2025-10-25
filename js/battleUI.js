@@ -108,6 +108,22 @@ function updateActionButtons(hero) {
         fireballCountSpan.textContent = `(${fireballCount})`;
     }
     btnFireball.disabled = battleManager.attackGauge < 20 || fireballCount === 0;
+    
+    // Spark requires 25 attack gauge AND inventory (unlocked at level 7)
+    const btnSpark = document.getElementById('btnSpark');
+    if (btnSpark) {
+        if (hero.level >= 7) {
+            btnSpark.style.display = '';
+            const sparkCount = gameState.battleInventory?.spark || 0;
+            const sparkCountSpan = btnSpark.querySelector('.item-count');
+            if (sparkCountSpan) {
+                sparkCountSpan.textContent = `(${sparkCount})`;
+            }
+            btnSpark.disabled = battleManager.attackGauge < 25 || sparkCount === 0;
+        } else {
+            btnSpark.style.display = 'none';
+        }
+    }
 
     // Potion requires inventory
     const potionCount = gameState.battleInventory?.health_potion || 0;
@@ -206,6 +222,98 @@ async function playFireballAnimation(startElement, targetElement) {
 
                 // Play explosion
                 playExplosionAnimation(targetRect).then(resolve);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    });
+}
+
+// Waveform Projectile Animation (Ghost enemy attack)
+async function playWaveformAnimation(startElement, targetElement) {
+    const projectile = document.createElement('div');
+    projectile.className = 'waveform-projectile';
+    document.body.appendChild(projectile);
+
+    // Get positions
+    const startRect = startElement.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+    
+    // Position projectile at start
+    projectile.style.left = startRect.left + startRect.width / 2 - 16 + 'px';
+    projectile.style.top = startRect.top + startRect.height / 2 - 16 + 'px';
+
+    // Animate projectile movement
+    const duration = 700;
+    const startTime = Date.now();
+
+    return new Promise((resolve) => {
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Easing function (ease-out)
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            // Calculate position
+            const currentX = startRect.left + (targetRect.left - startRect.left) * eased + targetRect.width / 2 - 16;
+            const currentY = startRect.top + (targetRect.top - startRect.top) * eased + targetRect.height / 2 - 16;
+
+            projectile.style.left = currentX + 'px';
+            projectile.style.top = currentY + 'px';
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Remove projectile
+                projectile.remove();
+                resolve();
+            }
+        }
+
+        requestAnimationFrame(animate);
+    });
+}
+
+// Spark Projectile Animation (Player level 7+ attack)
+async function playSparkAnimation(startElement, targetElement) {
+    const projectile = document.createElement('div');
+    projectile.className = 'spark-projectile';
+    document.body.appendChild(projectile);
+
+    // Get positions
+    const startRect = startElement.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+    
+    // Position projectile at start
+    projectile.style.left = startRect.left + startRect.width / 2 - 16 + 'px';
+    projectile.style.top = startRect.top + startRect.height / 2 - 16 + 'px';
+
+    // Animate projectile movement
+    const duration = 600;
+    const startTime = Date.now();
+
+    return new Promise((resolve) => {
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Easing function (ease-out)
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            // Calculate position
+            const currentX = startRect.left + (targetRect.left - startRect.left) * eased + targetRect.width / 2 - 16;
+            const currentY = startRect.top + (targetRect.top - startRect.top) * eased + targetRect.height / 2 - 16;
+
+            projectile.style.left = currentX + 'px';
+            projectile.style.top = currentY + 'px';
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Remove projectile
+                projectile.remove();
+                resolve();
             }
         }
 
@@ -315,6 +423,9 @@ window.updateGauges = updateGauges;
 window.hideBattle = hideBattle;
 window.addBattleLog = addBattleLog;
 window.animateFireball = animateFireball;
+window.playFireballAnimation = playFireballAnimation;
+window.playWaveformAnimation = playWaveformAnimation;
+window.playSparkAnimation = playSparkAnimation;
 window.updateBattleButtons = updateBattleButtons;
 window.updateBattleShopDisplay = updateBattleShopDisplay;
 window.updateBattleInventoryDisplay = updateBattleInventoryDisplay;

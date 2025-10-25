@@ -39,7 +39,7 @@ function startHeroAnimation(animationType = 'idle') {
     heroSprite.style.backgroundSize = `${anim.width}px 32px`;
     heroSprite.style.width = '32px';
     heroSprite.style.height = '32px';
-    heroSprite.style.transform = 'scale(4)';
+    heroSprite.style.transform = 'scale(2.5)';
     heroSprite.style.imageRendering = 'pixelated';
     
     // Animate frames
@@ -126,5 +126,43 @@ function attachBattleButton() {
             console.error('Start Battle button not found');
         }
     }, 1000);
+}
+
+
+
+
+// ===================================
+// DYNAMIC BATTLE SCALING FOR MOBILE
+// ===================================
+
+function adjustBattleScale() {
+    const battle = document.querySelector(".battle-container");
+    if (!battle) return;
+    
+    const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    
+    // Keep within safe area for very small screens
+    if (vw < 375) {
+        const scale = vw / 420;
+        battle.style.transform = `scale(${scale})`;
+        battle.style.transformOrigin = "top center";
+    } else {
+        battle.style.transform = "scale(1)";
+    }
+}
+
+// Initialize scaling on load and resize
+window.addEventListener("resize", adjustBattleScale);
+window.addEventListener("load", adjustBattleScale);
+
+// Also call when battle starts
+const originalStartBattle = window.battleManager?.startBattle;
+if (originalStartBattle && window.battleManager) {
+    window.battleManager.startBattle = function(...args) {
+        const result = originalStartBattle.apply(this, args);
+        setTimeout(adjustBattleScale, 100);
+        return result;
+    };
 }
 

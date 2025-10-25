@@ -489,7 +489,8 @@
             .success-message {
                 padding: 14px 16px;
                 gap: 10px;
-                max-width: calc(100vw - 32px);
+                max-width: calc(100vw - 24px); /* Wider on mobile */
+                min-width: calc(100vw - 24px); /* Force wider */
                 bottom: 16px;
             }
             
@@ -510,7 +511,8 @@
             .success-message {
                 padding: 12px 14px;
                 gap: 8px;
-                max-width: calc(100vw - 24px);
+                max-width: calc(100vw - 20px); /* Even wider on very small screens */
+                min-width: calc(100vw - 20px); /* Force wider */
             }
             
             .success-message-emoji {
@@ -1055,20 +1057,22 @@
 
         /* Task Cards */
         .task-card {
-            background: var(--task-item-bg);
-            border-radius: var(--radius-lg);
+            /* Apply Quest Card styling structure with current colors */
+            background: linear-gradient(135deg, #0a0f0d 0%, #101712 100%);
+            border: 2px solid #374151;
+            border-radius: 12px;
             padding: 16px;
             margin-bottom: 12px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-light);
-            transition: all var(--transition-fast);
+            box-shadow: 0 2px 8px rgba(55, 65, 81, 0.2);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
         .task-card:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(55, 65, 81, 0.4);
+            border-color: #4b5563;
         }
 
         .task-header {
@@ -1118,63 +1122,137 @@
             display: inline-flex;
             align-items: center;
             gap: 3px;
-            background: #E3F2FD;
-            color: #007AFF;
-            padding: 3px 6px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 10px;
             font-size: 10px;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
         }
 
         .task-due-date.warning {
-            background: transparent;
-            color: #FF3B30;
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #fff;
             border: none;
         }
 
         .task-badge {
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
             font-size: 10px;
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
             white-space: nowrap;
         }
 
         .task-badge.priority-high {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #fff;
         }
 
         .task-badge.priority-medium {
-            background: rgba(251, 191, 36, 0.1);
-            color: #D97706;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #1a1410;
         }
 
         .task-badge.priority-low {
-            background: rgba(52, 211, 153, 0.1);
-            color: var(--success);
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+            color: #fff;
         }
 
         .task-badge.difficulty-hard {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #fff;
         }
 
         .task-badge.difficulty-medium {
-            background: rgba(251, 191, 36, 0.1);
-            color: #D97706;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #1a1410;
         }
 
         .task-badge.difficulty-easy {
-            background: rgba(52, 211, 153, 0.1);
-            color: var(--success);
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+            color: #fff;
         }
 
         .task-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
+        }
+
+        /* Edit Button - Purple Pill in Top-Right Corner */
+        .task-edit-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+            font-size: 16px;
+        }
+
+        .task-edit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(124, 58, 237, 0.5);
+        }
+
+        .task-edit-button::before {
+            content: '✏️';
+        }
+
+        /* Delete Button - Style like "Abandon Quest" */
+        .task-delete-button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .task-delete-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+        }
+
+        .task-delete-button::before {
+            content: '🗑️';
+        }
+
+        /* Complete Button - Keep at Bottom with Gradient */
+        .task-complete-button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4c1d95 0%, #6366f1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .task-complete-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
 
         .btn-primary {
@@ -1924,216 +2002,7 @@
       to { object-position: -256px 0; }
     }
 
-    /* Modern Date Picker Styles */
-    .modern-datepicker-wrapper {
-        position: relative;
-    }
-
-    .modern-datepicker {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        margin-top: 8px;
-        background: rgba(30, 30, 35, 0.98);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 16px;
-        z-index: 1000;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-    }
-
-    .datepicker-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .datepicker-month {
-        font-size: 16px;
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .datepicker-nav {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: #fff;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.2s;
-    }
-
-    .datepicker-nav:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: scale(1.05);
-    }
-
-    .datepicker-calendar {
-        margin-bottom: 16px;
-    }
-
-    .datepicker-weekdays {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-        margin-bottom: 8px;
-    }
-
-    .datepicker-weekdays div {
-        text-align: center;
-        font-size: 12px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.5);
-        padding: 8px 0;
-    }
-
-    .datepicker-days {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-    }
-
-    .day-cell {
-        aspect-ratio: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #fff;
-    }
-
-    .day-cell:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .day-cell.selected {
-        background: #4A9EFF;
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .day-cell.today {
-        border: 2px solid #4A9EFF;
-    }
-
-    .day-cell.other-month {
-        color: rgba(255, 255, 255, 0.3);
-    }
-
-    .datepicker-time {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 16px;
-        margin-bottom: 16px;
-    }
-
-    .time-selectors {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .time-group {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .time-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: #fff;
-        width: 40px;
-        height: 24px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 12px;
-        transition: all 0.2s;
-    }
-
-    .time-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .time-input {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
-        width: 50px;
-        height: 40px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: 600;
-        border-radius: 8px;
-    }
-
-    .time-separator {
-        font-size: 24px;
-        font-weight: 600;
-        color: #fff;
-        margin: 0 4px;
-    }
-
-    .time-toggle {
-        background: #4A9EFF;
-        border: none;
-        color: #fff;
-        width: 50px;
-        height: 40px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        transition: all 0.2s;
-    }
-
-    .time-toggle:hover {
-        background: #3A8EEF;
-        transform: scale(1.05);
-    }
-
-    .datepicker-actions {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-    }
-
-    .datepicker-btn {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: #fff;
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-
-    .datepicker-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .datepicker-confirm {
-        background: #4A9EFF !important;
-        font-weight: 600;
-    }
-
-    .datepicker-confirm:hover {
-        background: #3A8EEF !important;
-        transform: scale(1.05);
-    }
+    /* Native datetime-local input styling is handled by browser */
 
     .btn-secondary {
         background: rgba(255, 255, 255, 0.1);
@@ -3013,6 +2882,9 @@
         <button id="btnFireball" class="btn-action" onclick="battleManager.playerFireball()">
             🔥 Fireball <span class="item-count" id="fireballCount">(0)</span>
         </button>
+        <button id="btnSpark" class="btn-action" onclick="battleManager.playerSpark()" style="display: none;">
+            ⚡ Spark <span class="item-count" id="sparkCount">(0)</span>
+        </button>
         <button id="btnPotion" class="btn-action" onclick="battleManager.playerPotion()">
             🧪 Potion <span class="item-count" id="potionCount">(2)</span>
         </button>
@@ -3033,6 +2905,38 @@
 
 <!-- Explosion Effect -->
 <div id="explosionEffect" class="explosion-effect hidden"></div>
+
+<!-- Quest Giver UI -->
+<div id="questGiverUI" class="quest-giver-overlay hidden">
+    <!-- Forest Scene with Monster and Bird -->
+    <div class="quest-scene">
+        <div id="questHeroSprite" class="quest-hero-sprite"></div>
+        <div id="questCrowSprite" class="quest-crow-sprite"></div>
+    </div>
+    
+    <!-- Dialogue Container -->
+    <div class="quest-dialogue-container">
+        <div class="quest-dialogue-header">
+            <span class="quest-dialogue-label">Merlin</span>
+        </div>
+        <div id="questDialogue" class="quest-dialogue-text">
+            <!-- Wise dialogue will be inserted here -->
+        </div>
+    </div>
+    
+    <!-- Quest Actions (Accept/Decline) -->
+    <div id="questActions" class="quest-actions hidden">
+        <button class="quest-btn quest-btn-accept" onclick="questGiver.acceptQuest()">✨ Accept Quest</button>
+        <button class="quest-btn quest-btn-decline" onclick="questGiver.declineQuest()">Pass</button>
+    </div>
+    
+    <!-- Quiz Actions -->
+    <div id="quizActions" class="quest-actions hidden">
+        <div id="quizOptions">
+            <!-- Quiz options will be inserted here -->
+        </div>
+    </div>
+</div>
 
 <!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
@@ -3214,6 +3118,17 @@
                     <div id="dailyChallengeDisplay">
                         <!-- Daily challenge will be populated here -->
                     </div>
+                </div>
+            </div>
+
+            <!-- Quest Tasks -->
+            <div class="card quest-tasks-card" id="questTasksCard" style="display: none;">
+                <div class="card-header quest-tasks-header">
+                    <div class="card-title">🏆 Quest Tasks</div>
+                    <div class="quest-tasks-subtitle">Special quests from Merlin</div>
+                </div>
+                <div id="questTasksList">
+                    <!-- Quest tasks will be populated here -->
                 </div>
             </div>
 
@@ -3440,44 +3355,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Due Date (Optional)</label>
-                    <div class="modern-datepicker-wrapper">
-                        <input class="form-input" id="taskDueDateDisplay" type="text" placeholder="Select date and time" readonly onclick="toggleDatePicker()"/>
-                        <div class="modern-datepicker" id="modernDatePicker" style="display: none;">
-                            <div class="datepicker-header">
-                                <button type="button" class="datepicker-nav" onclick="changeMonth(-1)">◀</button>
-                                <span class="datepicker-month" id="currentMonth">October 2025</span>
-                                <button type="button" class="datepicker-nav" onclick="changeMonth(1)">▶</button>
-                            </div>
-                            <div class="datepicker-calendar">
-                                <div class="datepicker-weekdays">
-                                    <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-                                </div>
-                                <div class="datepicker-days" id="calendarDays"></div>
-                            </div>
-                            <div class="datepicker-time">
-                                <div class="time-selectors">
-                                    <div class="time-group">
-                                        <button type="button" class="time-btn" onclick="changeHour(-1)">▲</button>
-                                        <input type="text" id="hourInput" class="time-input" value="09" readonly/>
-                                        <button type="button" class="time-btn" onclick="changeHour(1)">▼</button>
-                                    </div>
-                                    <span class="time-separator">:</span>
-                                    <div class="time-group">
-                                        <button type="button" class="time-btn" onclick="changeMinute(-1)">▲</button>
-                                        <input type="text" id="minuteInput" class="time-input" value="00" readonly/>
-                                        <button type="button" class="time-btn" onclick="changeMinute(1)">▼</button>
-                                    </div>
-                                    <div class="time-group">
-                                        <button type="button" class="time-toggle" id="ampmToggle" onclick="toggleAMPM()">PM</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="datepicker-actions">
-                                <button type="button" class="datepicker-btn" onclick="clearDate()">Clear</button>
-                                <button type="button" class="datepicker-btn datepicker-confirm" onclick="confirmDate()">Confirm</button>
-                            </div>
-                        </div>
-                    </div>
+                    <input class="form-input" id="taskDueDate" type="datetime-local" placeholder="Select date and time"/>
                 </div>
             </form>
         </div>
@@ -3559,6 +3437,7 @@
             },
             battleInventory: {
                 fireball: 0, // Locked until level 10
+                spark: 0, // Locked until level 7
                 health_potion: 2,
                 attack_refill: 2,
                 defense_refill: 2
@@ -5080,6 +4959,8 @@
                     
                     return `
                         <div class="task-card">
+                            <button class="task-edit-button" onclick="editTask(${gameState.tasks.indexOf(task)})" title="Edit task"></button>
+                            
                             <div class="task-header">
                                 <div class="task-emoji">${categoryInfo.emoji}</div>
                                 <div class="task-content">
@@ -5094,9 +4975,8 @@
                             </div>
                             ${task.description ? `<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">${task.description}</div>` : ''}
                             <div class="task-actions">
-                                <button class="btn-primary" onclick="completeTask(${gameState.tasks.indexOf(task)})">Complete</button>
-                                <button class="btn-secondary" onclick="editTask(${gameState.tasks.indexOf(task)})">Edit</button>
-                                <button class="btn-secondary" onclick="deleteTask(${gameState.tasks.indexOf(task)})">Delete</button>
+                                <button class="task-complete-button" onclick="completeTask(${gameState.tasks.indexOf(task)})">Complete</button>
+                                <button class="task-delete-button" onclick="deleteTask(${gameState.tasks.indexOf(task)})">Delete</button>
                             </div>
                         </div>
                     `;
@@ -5390,7 +5270,7 @@
             "Take on a wellness challenge—stretch or meditate",
             "Earn 50 XP today",
             "Add a fun task and complete it",
-            "Finish a task that helps your future self",
+            "Complete a task that will benefit you tomorrow (e.g., meal prep, planning)",
             "Create a task reminder for tomorrow",
             "Complete at least one group or teamwork task",
             "Clear all low-priority tasks",
@@ -5399,7 +5279,7 @@
             "Complete all overdue tasks",
             "Add a goal for the week",
             "Complete 2 tasks in under an hour",
-            "Log your best streak today",
+            "Maintain or beat your current task completion streak",
             "Add and finish one learning-related task",
             "Complete all 'Medium' difficulty tasks",
             "Finish a 'Wellness' and 'Work' task combo",
@@ -5415,55 +5295,55 @@
             "Add and complete one 'Errand' task",
             "Finish one creative or design task",
             "Take 10 minutes to plan tomorrow's tasks",
-            "Add a motivational Quick Task",
+            "Create a Quick Task with an encouraging or motivational title",
             "Complete 2 'Work' and 1 'Wellness' task",
             "Add a task with an emoji title",
-            "Create a recurring daily task",
+            "Add a task you plan to do every day (e.g., exercise, reading)",
             "Finish one of your oldest tasks",
             "Clear all Quick Tasks from the list",
             "Add one 'Focus' task and complete it",
             "Do one hard Quick Task",
-            "Earn a new achievement badge",
+            "Complete tasks to unlock a new achievement (check Achievements tab)",
             "Add a high-difficulty task",
-            "Create a 'challenge yourself' task",
+            "Add a difficult task that pushes you outside your comfort zone",
             "Complete all tasks in one category",
             "Check off 3 tasks back-to-back",
-            "Complete a task using the fab (+) button",
-            "Create and finish a new goal today",
+            "Use the purple + button to create and complete a new task",
+            "Add a task for a personal goal and complete it today",
             "Finish a creative task before 5 PM",
-            "Hit a personal best streak",
+            "Achieve your longest task completion streak ever",
             "Complete all Quick Tasks before noon",
-            "Earn XP twice in one session",
-            "Add one 'Mindfulness' task",
+            "Complete at least 2 tasks to earn XP multiple times",
+            "Create a task for meditation, breathing exercises, or mindfulness practice",
             "Complete 4 small tasks in a row",
-            "Create and complete a task from every category",
-            "Add a daily habit task",
+            "Complete at least one task from each category (Work, Personal, Home, etc.)",
+            "Create a task for a habit you want to build (e.g., drink water, journal)",
             "Finish one hard and one easy task",
             "Clear all 'Pending' tasks",
             "Add and finish 3 Quick Tasks",
             "Earn 75 XP or more today",
-            "Add a 'Fun' category task",
-            "Complete all tasks with emoji icons",
+            "Create a task for something enjoyable (e.g., watch a movie, play a game)",
+            "Complete every task that has an emoji in its title or category",
             "Start a new 3-day streak",
             "Complete 1 work and 1 personal task",
             "Add 5 new Quick Tasks",
             "Finish everything on your list today",
             "Complete 2 high-priority tasks",
-            "Add a new achievement-worthy task",
-            "Create and complete a learning challenge",
-            "Finish a long-term goal",
+            "Create a challenging task that will help you earn an achievement",
+            "Add a task to learn something new (e.g., tutorial, course, article)",
+            "Complete a task that contributes to a bigger goal or project",
             "Do all Quick Tasks within 30 minutes",
             "End your day with no pending tasks",
             "Complete a task you've delayed most",
             "Add one 'Fitness' task",
-            "Create a short gratitude task",
+            "Add a task to write down 3 things you're grateful for",
             "Complete a new Quick Task before 8 AM",
-            "Earn a new level today",
+            "Complete enough tasks to gain enough XP to level up",
             "Add and complete one 'Focus' task",
             "Hit 10 total completed tasks today",
-            "Create one task that improves your space",
+            "Add a task to organize, clean, or improve your living/work space",
             "Check off every due task today",
-            "Rest! No tasks today—reward yourself"
+            "Take a break! No tasks required today—you've earned it"
         ];
 
         const CARD_COLORS = [
@@ -5704,6 +5584,17 @@
                 levelRequired: 10,
                 maxQuantity: 10
             },
+            spark: {
+                id: 'spark',
+                name: 'Spark',
+                emoji: '⚡',
+                description: 'Electric ranged attack, slightly weaker than fireball (Max: 10)',
+                cost: 80,
+                effect: 'attack',
+                value: 25,
+                levelRequired: 7,
+                maxQuantity: 10
+            },
             health_potion: {
                 id: 'health_potion',
                 name: 'Potion',
@@ -5897,7 +5788,31 @@
                 return;
             }
             
-            alert(`🎮 ${item.name} will be available in your next battle!\n\nComplete a task to trigger a battle.`);
+            // Allow potion to be used outside of battle to heal monster
+            if (itemId === 'health_potion') {
+                // Check if monster needs healing
+                const maxHP = 50 + (gameState.jerryLevel * 5);
+                const currentHP = gameState.jerryHP || maxHP;
+                
+                if (currentHP >= maxHP) {
+                    alert('💚 Your monster is already at full health!');
+                    return;
+                }
+                
+                // Use potion
+                gameState.battleInventory.health_potion--;
+                const healAmount = 30;
+                gameState.jerryHP = Math.min(maxHP, currentHP + healAmount);
+                
+                // Save and update
+                saveGameState();
+                updateOwnedItemsDisplay();
+                updateUI();
+                
+                alert(`🧪 Potion used! Healed ${healAmount} HP.\n\nCurrent HP: ${gameState.jerryHP}/${maxHP}`);
+            } else {
+                alert(`🎮 ${item.name} will be available in your next battle!\n\nComplete a task to trigger a battle.`);
+            }
         }
 
         // Modal functions
@@ -5997,20 +5912,29 @@
         // Task management functions
         function selectCategory(category) {
             document.querySelectorAll('[data-category]').forEach(el => el.classList.remove('selected'));
-            document.querySelector(`[data-category="${category}"]`).classList.add('selected');
-            selectedCategory = category;
+            const element = document.querySelector(`[data-category="${category}"]`);
+            if (element) {
+                element.classList.add('selected');
+                selectedCategory = category;
+            }
         }
 
         function selectDifficulty(difficulty) {
             document.querySelectorAll('[data-difficulty]').forEach(el => el.classList.remove('selected'));
-            document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('selected');
-            selectedDifficulty = difficulty;
+            const element = document.querySelector(`[data-difficulty="${difficulty}"]`);
+            if (element) {
+                element.classList.add('selected');
+                selectedDifficulty = difficulty;
+            }
         }
 
         function selectPriority(priority) {
             document.querySelectorAll('[data-priority]').forEach(el => el.classList.remove('selected'));
-            document.querySelector(`[data-priority="${priority}"]`).classList.add('selected');
-            selectedPriority = priority;
+            const element = document.querySelector(`[data-priority="${priority}"]`);
+            if (element) {
+                element.classList.add('selected');
+                selectedPriority = priority;
+            }
         }
 
         function resetForm() {
@@ -6021,177 +5945,21 @@
             selectedPriority = null;
             editingTaskIndex = null;
             document.querySelector('.modal-title').textContent = 'Create Task';
-            // Reset datepicker
-            document.getElementById('taskDueDateDisplay').value = '';
-            selectedDate = null;
-            document.getElementById('modernDatePicker').style.display = 'none';
+            // Reset native datetime-local input
+            document.getElementById('taskDueDate').value = '';
         }
 
-        // Modern DatePicker Variables
-        let selectedDate = null;
-        let currentPickerMonth = new Date().getMonth();
-        let currentPickerYear = new Date().getFullYear();
-        let pickerHour = 9;
-        let pickerMinute = 0;
-        let pickerAMPM = 'PM';
-
-        function toggleDatePicker() {
-            const picker = document.getElementById('modernDatePicker');
-            if (picker.style.display === 'none') {
-                picker.style.display = 'block';
-                renderCalendar();
-            } else {
-                picker.style.display = 'none';
-            }
-        }
-
-        function renderCalendar() {
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('currentMonth').textContent = `${monthNames[currentPickerMonth]} ${currentPickerYear}`;
-            
-            const daysContainer = document.getElementById('calendarDays');
-            daysContainer.innerHTML = '';
-            
-            const firstDay = new Date(currentPickerYear, currentPickerMonth, 1).getDay();
-            const daysInMonth = new Date(currentPickerYear, currentPickerMonth + 1, 0).getDate();
-            const today = new Date();
-            
-            // Previous month days
-            const prevMonthDays = new Date(currentPickerYear, currentPickerMonth, 0).getDate();
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day-cell other-month';
-                dayCell.textContent = prevMonthDays - i;
-                daysContainer.appendChild(dayCell);
-            }
-            
-            // Current month days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day-cell';
-                dayCell.textContent = day;
-                
-                const cellDate = new Date(currentPickerYear, currentPickerMonth, day);
-                if (cellDate.toDateString() === today.toDateString()) {
-                    dayCell.classList.add('today');
-                }
-                
-                if (selectedDate && cellDate.toDateString() === selectedDate.toDateString()) {
-                    dayCell.classList.add('selected');
-                }
-                
-                dayCell.onclick = () => selectDay(day);
-                daysContainer.appendChild(dayCell);
-            }
-            
-            // Next month days
-            const totalCells = daysContainer.children.length;
-            const remainingCells = 42 - totalCells;
-            for (let i = 1; i <= remainingCells; i++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day-cell other-month';
-                dayCell.textContent = i;
-                daysContainer.appendChild(dayCell);
-            }
-        }
-
-        function changeMonth(delta) {
-            currentPickerMonth += delta;
-            if (currentPickerMonth > 11) {
-                currentPickerMonth = 0;
-                currentPickerYear++;
-            } else if (currentPickerMonth < 0) {
-                currentPickerMonth = 11;
-                currentPickerYear--;
-            }
-            renderCalendar();
-        }
-
-        function selectDay(day) {
-            selectedDate = new Date(currentPickerYear, currentPickerMonth, day);
-            renderCalendar();
-            updateDisplayValue();
-        }
-
-        function changeHour(delta) {
-            pickerHour += delta;
-            if (pickerHour > 12) pickerHour = 1;
-            if (pickerHour < 1) pickerHour = 12;
-            document.getElementById('hourInput').value = String(pickerHour).padStart(2, '0');
-            updateDisplayValue();
-        }
-
-        function changeMinute(delta) {
-            pickerMinute += delta;
-            if (pickerMinute > 59) pickerMinute = 0;
-            if (pickerMinute < 0) pickerMinute = 59;
-            document.getElementById('minuteInput').value = String(pickerMinute).padStart(2, '0');
-            updateDisplayValue();
-        }
-
-        function toggleAMPM() {
-            pickerAMPM = pickerAMPM === 'AM' ? 'PM' : 'AM';
-            document.getElementById('ampmToggle').textContent = pickerAMPM;
-            updateDisplayValue();
-        }
-
-        function updateDisplayValue() {
-            if (!selectedDate) return;
-            
-            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-            const day = String(selectedDate.getDate()).padStart(2, '0');
-            const year = selectedDate.getFullYear();
-            const hour = String(pickerHour).padStart(2, '0');
-            const minute = String(pickerMinute).padStart(2, '0');
-            
-            document.getElementById('taskDueDateDisplay').value = `${month}/${day}/${year}, ${hour}:${minute} ${pickerAMPM}`;
-        }
-
-        function clearDate() {
-            selectedDate = null;
-            document.getElementById('taskDueDateDisplay').value = '';
-            document.getElementById('modernDatePicker').style.display = 'none';
-        }
-
-        function setToday() {
-            const now = new Date();
-            selectedDate = now;
-            currentPickerMonth = now.getMonth();
-            currentPickerYear = now.getFullYear();
-            pickerHour = now.getHours() % 12 || 12;
-            pickerMinute = now.getMinutes();
-            pickerAMPM = now.getHours() >= 12 ? 'PM' : 'AM';
-            
-            document.getElementById('hourInput').value = String(pickerHour).padStart(2, '0');
-            document.getElementById('minuteInput').value = String(pickerMinute).padStart(2, '0');
-            document.getElementById('ampmToggle').textContent = pickerAMPM;
-            
-            renderCalendar();
-            updateDisplayValue();
-        }
-
-        function confirmDate() {
-            if (selectedDate) {
-                updateDisplayValue();
-                document.getElementById('modernDatePicker').style.display = 'none';
-            } else {
-                alert('Please select a date first');
-            }
-        }
+        // Date picker now uses native HTML5 datetime-local input
 
         function createTask() {
             const title = document.getElementById('taskTitle').value.trim();
             const description = document.getElementById('taskDescription').value.trim();
+            const dueDateInput = document.getElementById('taskDueDate').value;
             
-            // Convert custom datepicker value to ISO format
+            // Convert native datetime-local value to ISO format
             let dueDate = null;
-            if (selectedDate) {
-                let hour24 = pickerHour;
-                if (pickerAMPM === 'PM' && hour24 !== 12) hour24 += 12;
-                if (pickerAMPM === 'AM' && hour24 === 12) hour24 = 0;
-                
-                selectedDate.setHours(hour24, pickerMinute, 0, 0);
-                dueDate = selectedDate.toISOString();
+            if (dueDateInput) {
+                dueDate = new Date(dueDateInput).toISOString();
             }
             
             if (!title) {
@@ -6308,8 +6076,8 @@
                 console.warn('Confetti function not available');
             }
             
-            // 40% chance to trigger battle
-            if (Math.random() < 0.4) {
+            // 30% chance to trigger battle
+            if (Math.random() < 0.3) {
                 setTimeout(() => {
                     if (typeof window.startTestBattle === 'function') {
                         console.log('⚔️ Battle triggered after task completion!');
@@ -6348,7 +6116,19 @@
             // Populate form
             document.getElementById('taskTitle').value = task.title || '';
             document.getElementById('taskDescription').value = task.description || '';
-            document.getElementById('taskDueDate').value = task.dueDate || '';
+            
+            // Format dueDate for datetime-local input (requires YYYY-MM-DDTHH:MM format)
+            if (task.dueDate) {
+                const date = new Date(task.dueDate);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                document.getElementById('taskDueDate').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            } else {
+                document.getElementById('taskDueDate').value = '';
+            }
             
             // Select options
             if (task.category) selectCategory(task.category);
@@ -6466,8 +6246,8 @@
                 console.warn('Confetti function not available');
             }
             
-            // 40% chance to trigger battle
-            if (Math.random() < 0.4) {
+            // 30% chance to trigger battle
+            if (Math.random() < 0.3) {
                 setTimeout(() => {
                     if (typeof window.startTestBattle === 'function') {
                         console.log('⚔️ Battle triggered after quick task completion!');
@@ -7018,19 +6798,28 @@
     
     
     <!-- Dark Theme CSS -->
-    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/dark-theme.css?v=2">
     
     <!-- Battle System CSS -->
-    <link rel="stylesheet" href="css/battle.css">
+    <link rel="stylesheet" href="css/battle.css?v=2">
+    
+    <!-- Quest Giver CSS -->
+    <link rel="stylesheet" href="css/questGiver.css?v=1">
+    
+    <!-- Quest Tasks CSS -->
+    <link rel="stylesheet" href="css/questTasks.css">
     
     <!-- Background Manager for time-based backgrounds -->
     <script src="js/backgroundManager.js"></script>
     
     <!-- Battle System Modules -->
     <script src="js/enemy.js"></script>
+    <script src="js/enemy-init.js"></script>
     <script src="js/battleUI.js"></script>
     <script src="js/battleManager.js"></script>
     <script src="js/battleInit.js"></script>
+    <script src="js/questTaskManager.js"></script>
+    <script src="js/questGiver.js?v=2"></script>
     
     <!-- Hide loading screen after page loads -->
     <script>

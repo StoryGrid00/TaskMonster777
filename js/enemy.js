@@ -58,6 +58,28 @@ const LAZY_BAT_DATA = {
     }
 };
 
+// Ghost Task Stopper enemy data (appears at level 7+)
+const GHOST_TASK_STOPPER_DATA = {
+    name: 'Ghost Task Stopper',
+    baseHP: 50,
+    baseAttack: 15,
+    baseDefense: 10,
+    minLevel: 7,
+    canEvade: true,
+    evasionChance: 0.25, // 25% chance to evade attacks
+    projectileType: 'waveform',
+    sprites: {
+        idle: 'assets/enemies/ghost/ghost-idle.png',
+        attack1: 'assets/enemies/ghost/ghost-idle.png',
+        attack2: 'assets/enemies/ghost/ghost-idle.png',
+        hurt: 'assets/enemies/ghost/ghost-idle.png',
+        die: 'assets/enemies/ghost/ghost-idle.png',
+        run: 'assets/enemies/ghost/ghost-idle.png',
+        sleep: 'assets/enemies/ghost/ghost-idle.png',
+        wakeup: 'assets/enemies/ghost/ghost-idle.png'
+    }
+};
+
 // Lazy Eye enemy data (appears at level 12+)
 const LAZY_EYE_DATA = {
     name: 'Lazy Eye',
@@ -78,7 +100,7 @@ const LAZY_EYE_DATA = {
     }
 };
 
-const ENEMY_TYPES = [LAZY_BAT_DATA, LAZY_EYE_DATA];
+const ENEMY_TYPES = [LAZY_BAT_DATA, GHOST_TASK_STOPPER_DATA, LAZY_EYE_DATA];
 
 // Create a scaled enemy for battle
 function createRandomEnemy(playerLevel) {
@@ -100,6 +122,13 @@ function createRandomEnemy(playerLevel) {
     if (enemyData.canSleep) {
         enemy.canSleep = true;
     }
+    if (enemyData.canEvade) {
+        enemy.canEvade = true;
+        enemy.evasionChance = enemyData.evasionChance;
+    }
+    if (enemyData.projectileType) {
+        enemy.projectileType = enemyData.projectileType;
+    }
 
     enemy.scaleToLevel(playerLevel);
     return enemy;
@@ -115,22 +144,37 @@ function playEnemyAnimation(enemy, animationKey, duration = 500) {
         spriteElement.style.backgroundImage = `url('${enemy.currentSprite}')`;
         
         // Remove all animation classes
-        spriteElement.classList.remove('idle', 'attack', 'hurt');
+        spriteElement.classList.remove('bat-idle', 'bat-attack', 'bat-hurt', 'eye-idle');
         
-        // Add appropriate animation class
+        // Add appropriate animation class based on enemy type
+        const isBat = enemy.name === 'Lazy Bat';
+        const isEye = enemy.name === 'Flying Eye Demon' || enemy.name === 'Lazy Eye';
+        const isGhost = enemy.name === 'Ghost Task Stopper';
+        
         if (animationKey === 'attack1' || animationKey === 'attack2') {
-            spriteElement.classList.add('attack');
+            if (isBat) spriteElement.classList.add('bat-attack');
+            else if (isGhost) spriteElement.classList.add('ghost-idle');
         } else if (animationKey === 'hurt') {
-            spriteElement.classList.add('hurt');
+            if (isBat) spriteElement.classList.add('bat-hurt');
+            else if (isGhost) spriteElement.classList.add('ghost-idle');
         } else {
-            spriteElement.classList.add('idle');
+            if (isBat) spriteElement.classList.add('bat-idle');
+            else if (isEye) spriteElement.classList.add('eye-idle');
+            else if (isGhost) spriteElement.classList.add('ghost-idle');
         }
 
         setTimeout(() => {
             enemy.setSprite('idle');
             spriteElement.style.backgroundImage = `url('${enemy.currentSprite}')`;
-            spriteElement.classList.remove('attack', 'hurt');
-            spriteElement.classList.add('idle');
+            spriteElement.classList.remove('bat-attack', 'bat-hurt', 'eye-idle', 'ghost-idle');
+            
+            const isBat = enemy.name === 'Lazy Bat';
+            const isEye = enemy.name === 'Flying Eye Demon' || enemy.name === 'Lazy Eye';
+            const isGhost = enemy.name === 'Ghost Task Stopper';
+            if (isBat) spriteElement.classList.add('bat-idle');
+            else if (isEye) spriteElement.classList.add('eye-idle');
+            else if (isGhost) spriteElement.classList.add('ghost-idle');
+            
             resolve();
         }, duration);
     });
@@ -139,11 +183,14 @@ function playEnemyAnimation(enemy, animationKey, duration = 500) {
 // Wake up animation sequence (battle start)
 async function playWakeUpSequence(enemy) {
     const spriteElement = document.getElementById('enemySprite');
+    const isBat = enemy.name === 'Lazy Bat';
+    const isEye = enemy.name === 'Flying Eye Demon' || enemy.name === 'Lazy Eye';
+    const isGhost = enemy.name === 'Ghost Task Stopper';
 
     // Start with sleep
     enemy.setSprite('sleep');
     spriteElement.style.backgroundImage = `url('${enemy.currentSprite}')`;
-    spriteElement.classList.remove('idle', 'attack', 'hurt');
+    spriteElement.classList.remove('bat-idle', 'bat-attack', 'bat-hurt', 'eye-idle', 'ghost-idle');
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Wake up
@@ -154,7 +201,9 @@ async function playWakeUpSequence(enemy) {
     // Transition to idle
     enemy.setSprite('idle');
     spriteElement.style.backgroundImage = `url('${enemy.currentSprite}')`;
-    spriteElement.classList.add('idle');
+    if (isBat) spriteElement.classList.add('bat-idle');
+    else if (isEye) spriteElement.classList.add('eye-idle');
+    else if (isGhost) spriteElement.classList.add('ghost-idle');
 }
 
 

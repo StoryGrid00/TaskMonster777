@@ -1,4 +1,7 @@
-/* Battle System Styles */
+/* ===================================
+   BATTLE MODE - MOBILE-RESPONSIVE RPG LAYOUT
+   Optimized for iPhone 8 (375×667) and all mobile devices
+   =================================== */
 
 /* Battle Arena Container */
 .battle-arena {
@@ -12,29 +15,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    justify-content: flex-start;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .battle-arena.hidden {
     display: none;
 }
 
-/* Battle Container */
+/* Battle Container - Main Game Frame */
 .battle-container {
-    display: flex;
-    gap: 3rem;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 16 / 9;
+    margin: 1rem auto 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    padding: 3rem;
-    border-radius: 16px;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-    overflow: hidden;
 }
 
 /* Background variants */
@@ -68,150 +71,106 @@
     z-index: 1;
 }
 
+/* ===================================
+   SPRITE POSITIONING (ABSOLUTE)
+   =================================== */
+
 /* Sprite Containers */
 .sprite-container {
+    position: absolute;
+    width: 45%;
+    top: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+}
+
+/* Hero (left side) */
+.sprite-container:first-child {
+    left: 3%;
+}
+
+/* Enemy (right side) */
+.sprite-container:last-child {
+    right: 3%;
 }
 
 .sprite-wrapper {
-    width: 128px;
-    height: 128px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.sprite {
+/* Hero sprites (32x32 base) */
+.sprite.hero-sprite {
     width: 32px;
     height: 32px;
     image-rendering: pixelated;
-    background-size: auto 100%;
+    background-size: auto 32px;
     background-repeat: no-repeat;
     background-position: 0 0;
-    transform: scale(4);
+    transform: scale(2.5);
     transform-origin: center;
 }
 
-/* Enemy sprite animations - 9 frames for bat sprites */
-#enemySprite.idle {
-    animation: batIdle 0.9s steps(9) infinite;
+/* Enemy sprites (64x64 base for bats) */
+.sprite.enemy-sprite-large {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    background-size: auto 64px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    transform: scale(2);
+    transform-origin: center;
 }
 
-#enemySprite.attack {
-    animation: batAttack 0.6s steps(9) forwards;
+/* Enemy sprites (48x48 base for flying eye) */
+.sprite.enemy-sprite-medium {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+    background-size: auto 48px;
+    background-repeat: no-repeat;
 }
 
-#enemySprite.hurt {
-    animation: batHurt 0.3s steps(9) forwards;
+/* Enemy sprites (32x32 base for ghost) */
+.sprite.enemy-sprite-small {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    background-size: auto 32px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    transform: scaleX(-1) scale(2.2); /* Flip horizontally to face left toward hero */
+    transform-origin: center;
 }
 
-@keyframes batIdle {
-    from { background-position: 0 0; }
-    to { background-position: -288px 0; } /* 32px * 9 frames */
-}
+/* ===================================
+   HP BARS
+   =================================== */
 
-@keyframes batAttack {
-    from { background-position: 0 0; }
-    to { background-position: -288px 0; }
-}
-
-@keyframes batHurt {
-    from { background-position: 0 0; }
-    to { background-position: -288px 0; }
-}
-
-/* Hero (Pink Monster) sprite animations */
-#heroSprite.idle {
-    background-size: 128px 32px;
-    animation: heroIdle 0.4s steps(4) infinite;
-}
-
-#heroSprite.attack1 {
-    background-size: 128px 32px;
-    animation: heroAttack1 0.6s steps(4) forwards;
-}
-
-#heroSprite.walk-attack {
-    background-size: 192px 32px;
-    animation: heroWalkAttack 0.8s steps(6) forwards;
-}
-
-#heroSprite.throw {
-    background-size: 128px 32px;
-    animation: heroThrow 0.8s steps(4) forwards;
-}
-
-#heroSprite.jump {
-    background-size: 256px 32px;
-    animation: heroJump 0.8s steps(8) forwards;
-}
-
-#heroSprite.hurt {
-    background-size: 128px 32px;
-    animation: heroHurt 0.5s steps(4) infinite;
-}
-
-/* Hero animation keyframes */
-@keyframes heroIdle {
-    from { background-position: 0 0; }
-    to { background-position: -128px 0; } /* 32px * 4 frames */
-}
-
-@keyframes heroWalkAttack {
-    from { background-position: 0 0; }
-    to { background-position: -192px 0; } /* 32px * 6 frames */
-}
-
-@keyframes heroThrow {
-    from { background-position: 0 0; }
-    to { background-position: -128px 0; } /* 32px * 4 frames */
-}
-
-@keyframes heroJump {
-    from { background-position: 0 0; }
-    to { background-position: -256px 0; } /* 32px * 8 frames */
-}
-
-@keyframes heroHurt {
-    from { background-position: 0 0; }
-    to { background-position: -128px 0; } /* 32px * 4 frames */
-}
-
-@keyframes heroAttack1 {
-    from { background-position: 0 0; }
-    to { background-position: -128px 0; } /* 32px * 4 frames */
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(-20px); opacity: 0.7; }
-}
-
-/* HP Bars */
 .hp-bar-container {
-    width: 150px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 0.5rem;
+    width: 100%;
+    max-width: 150px;
 }
 
 .hp-label {
     display: flex;
     justify-content: space-between;
     color: white;
-    font-size: 0.9rem;
+    font-size: clamp(10px, 2.2vw, 14px);
     font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
 .hp-bar-bg {
-    height: 12px;
+    height: 8px;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -226,32 +185,60 @@
     background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
 }
 
-/* Gauge Container */
+/* ===================================
+   BATTLE LOG
+   =================================== */
+
+.battle-log {
+    width: 90%;
+    max-width: 400px;
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: clamp(11px, 3vw, 14px);
+    max-height: 100px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.battle-log p {
+    margin: 0.25rem 0;
+}
+
+/* ===================================
+   GAUGES
+   =================================== */
+
 .gauge-container {
+    width: 90%;
+    max-width: 380px;
+    margin: 0.5rem auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 0.5rem;
 }
 
 .gauge {
-    width: 300px;
+    width: 100%;
 }
 
 .gauge-label {
     display: flex;
     justify-content: space-between;
     color: white;
-    font-size: 0.9rem;
+    font-size: clamp(10px, 2.5vw, 14px);
     font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
 .gauge-bar-bg {
-    height: 16px;
+    height: 10px;
     background: rgba(0, 0, 0, 0.5);
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
@@ -268,18 +255,26 @@
     background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
 }
 
-/* Action Buttons */
+/* ===================================
+   ACTION BUTTONS
+   =================================== */
+
 .action-buttons {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 0.6rem;
     justify-content: center;
-    margin-bottom: 1rem;
+    padding: 0.5rem;
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto 1rem;
 }
 
 .btn-action, .btn-flee {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    flex: 1 1 45%;
+    max-width: 160px;
+    padding: 0.7rem 0.5rem;
+    font-size: clamp(12px, 3.5vw, 16px);
     font-weight: bold;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
@@ -299,151 +294,31 @@
 
 .btn-action:disabled,
 .btn-action.locked {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
 .btn-flee {
-    background: rgba(255, 100, 100, 0.2);
-    border-color: rgba(255, 100, 100, 0.5);
+    flex: 1 1 100%;
+    max-width: 100%;
+    background: rgba(220, 38, 38, 0.3);
+    border-color: rgba(220, 38, 38, 0.5);
 }
 
-/* Item Count Badge on Buttons */
+.btn-flee:hover:not(:disabled) {
+    background: rgba(220, 38, 38, 0.5);
+}
+
 .item-count {
-    font-size: 0.8em;
+    font-size: 0.85em;
     opacity: 0.8;
 }
 
-/* Battle Log */
-.battle-log {
-    width: 90%;
-    max-width: 600px;
-    height: 100px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    overflow-y: auto;
-    color: white;
-    font-family: monospace;
-    font-size: 0.9rem;
-}
+/* ===================================
+   SPRITE ANIMATIONS
+   =================================== */
 
-/* Fireball Projectile Animation */
-.fireball-projectile {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    image-rendering: pixelated;
-    pointer-events: none;
-    z-index: 10000;
-}
-
-.fireball-projectile.hidden {
-    display: none;
-}
-
-/* Explosion Effect Animation */
-.explosion-effect {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    image-rendering: pixelated;
-    pointer-events: none;
-    z-index: 10001;
-}
-
-.explosion-effect.hidden {
-    display: none;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .battle-arena {
-        padding: 0.5rem;
-    }
-    
-    .battle-container {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .sprite-container {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .sprite-wrapper {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .sprite {
-        transform: scale(2.5);
-    }
-    
-    .hp-bar-container {
-        width: 100%;
-        max-width: 200px;
-    }
-
-    .gauge-container {
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-    
-    .gauge {
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    .gauge-label {
-        font-size: 0.8rem;
-    }
-    
-    .gauge-bar-bg {
-        height: 12px;
-    }
-
-    /* Grid layout for action buttons on mobile - 3 columns */
-    .action-buttons {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .btn-action, .btn-flee {
-        width: 100%;
-        padding: 0.6rem 0.5rem;
-        font-size: 0.85rem;
-    }
-    
-    /* Make Flee button span full width at bottom */
-    .btn-flee {
-        grid-column: 1 / -1;
-    }
-    
-    /* Battle log */
-    #battleLog {
-        font-size: 0.85rem;
-        max-height: 80px;
-        padding: 0.5rem;
-    }
-}
-
-/* Sprite Animations */
+/* Hero sprite animations */
 .sprite.idle {
     animation: sprite-idle 0.8s steps(4) infinite;
 }
@@ -456,7 +331,7 @@
 }
 
 .sprite.attack {
-    animation: sprite-attack 0.5s steps(4) forwards;
+    animation: sprite-attack 0.6s steps(4) forwards;
 }
 
 @keyframes sprite-attack {
@@ -477,110 +352,198 @@
     75% { background-position: -96px 0; }
 }
 
-.sprite.death {
-    animation: sprite-death 1s steps(8) forwards;
+/* Lazy Bat animations - 64x64 sprites, 9 frames */
+#enemySprite.bat-idle {
+    animation: batIdle 0.9s steps(9) infinite;
 }
 
-@keyframes sprite-death {
-    0% { background-position: 0 0; }
-    12.5% { background-position: -32px 0; }
-    25% { background-position: -64px 0; }
-    37.5% { background-position: -96px 0; }
-    50% { background-position: -128px 0; }
-    62.5% { background-position: -160px 0; }
-    75% { background-position: -192px 0; }
-    87.5% { background-position: -224px 0; }
+@keyframes batIdle {
+    from { background-position: 0 0; }
+    to { background-position: -576px 0; } /* 9 frames × 64px = 576px */
 }
 
-/* Shop and Inventory Styles */
-.shop-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
+#enemySprite.bat-attack {
+    animation: batAttack 0.6s steps(8) forwards;
 }
 
-.shop-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+@keyframes batAttack {
+    from { background-position: 0 0; }
+    to { background-position: -512px 0; } /* 8 frames × 64px = 512px */
 }
 
-.shop-item-icon {
-    font-size: 2rem;
+#enemySprite.bat-hurt {
+    animation: batHurt 0.4s steps(5) forwards;
 }
 
-.shop-item-info {
-    flex: 1;
+@keyframes batHurt {
+    from { background-position: 0 0; }
+    to { background-position: -320px 0; } /* 5 frames × 64px = 320px */
 }
 
-.shop-item-name {
-    font-weight: bold;
-    color: white;
+/* Flying Eye Demon animations - 48x48 sprites, 8 frames */
+#enemySprite.eye-idle {
+    animation: eyeIdle 0.8s steps(8) infinite;
 }
 
-.shop-item-cost {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+@keyframes eyeIdle {
+    from { background-position: 0 0; }
+    to { background-position: -384px 0; } /* 8 frames × 48px = 384px */
 }
 
-.shop-buy-btn {
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* Ghost Task Stopper animations - 32x32 sprites, 6 frames */
+#enemySprite.ghost-idle {
+    animation: ghostIdle 0.6s steps(6) infinite;
 }
 
-.shop-buy-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+@keyframes ghostIdle {
+    from { background-position: 0 0; }
+    to { background-position: -192px 0; } /* 6 frames × 32px = 192px */
 }
 
-/* Inventory Grid Layout */
-.inventory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
+/* ===================================
+   FIREBALL & EXPLOSION EFFECTS
+   =================================== */
+
+.fireball-projectile {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url('../assets/effects/fireball.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10000;
 }
 
-.inventory-slot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    transition: all 0.2s ease;
+.fireball-projectile.hidden {
+    display: none;
 }
 
-.inventory-slot:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+/* Waveform projectile (Ghost enemy attack) - 4 frames */
+.waveform-projectile {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url('../assets/projectiles/waveform/waveform-spritesheet.png');
+    background-size: 128px 32px; /* 4 frames × 32px = 128px */
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10000;
+    animation: waveformAnim 0.4s steps(4) infinite;
 }
 
-.inventory-slot-icon {
-    font-size: 2.5rem;
+@keyframes waveformAnim {
+    from { background-position: 0 0; }
+    to { background-position: -128px 0; }
 }
 
-.inventory-slot-name {
-    color: white;
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-align: center;
+.waveform-projectile.hidden {
+    display: none;
 }
 
-.inventory-slot-count {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.2rem;
-    font-weight: bold;
+/* Spark projectile (Player level 7+ attack) - 5 frames */
+.spark-projectile {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url('../assets/projectiles/spark/spark-spritesheet.png');
+    background-size: 160px 32px; /* 5 frames × 32px = 160px */
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10000;
+    animation: sparkAnim 0.5s steps(5) infinite;
+}
+
+@keyframes sparkAnim {
+    from { background-position: 0 0; }
+    to { background-position: -160px 0; }
+}
+
+.spark-projectile.hidden {
+    display: none;
+}
+
+.explosion-effect {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    pointer-events: none;
+    z-index: 10001;
+}
+
+.explosion-effect.hidden {
+    display: none;
+}
+
+/* ===================================
+   MOBILE RESPONSIVENESS
+   =================================== */
+
+/* Very small screens (iPhone SE, etc.) */
+@media (max-width: 400px) {
+    .battle-container {
+        max-width: 95%;
+        margin: 0.5rem auto;
+    }
+    
+    .action-buttons button {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    
+    .sprite {
+        transform: scale(2);
+    }
+    
+    .sprite-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .battle-arena {
+        justify-content: flex-start;
+        padding: 0.5rem;
+    }
+    
+    .battle-container {
+        margin: 0.25rem auto;
+        max-width: 300px;
+    }
+    
+    .gauge-container {
+        margin: 0.25rem auto;
+    }
+    
+    .action-buttons {
+        margin: 0.25rem auto;
+    }
+}
+
+/* Dynamic scaling for very small screens */
+@media (max-width: 375px) {
+    .battle-container {
+        transform: scale(0.95);
+        transform-origin: top center;
+    }
+}
+
+@media (max-width: 320px) {
+    .battle-container {
+        transform: scale(0.85);
+        transform-origin: top center;
+    }
 }
 

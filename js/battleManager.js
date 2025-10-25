@@ -42,6 +42,11 @@ class BattleManager {
         // Show battle arena
         showBattle(this.hero, this.enemy);
 
+        // Initialize enemy sprite with correct size class
+        if (typeof initEnemySprite === 'function') {
+            initEnemySprite(this.enemy);
+        }
+
         // Play wake up sequence
         addBattleLog(`💤 A ${this.enemy.name} appears!`);
         await playWakeUpSequence(this.enemy);
@@ -91,6 +96,19 @@ class BattleManager {
             await new Promise(resolve => setTimeout(resolve, 600)); // 4 frames * 150ms
         }
 
+        // Check if enemy evades (Ghost ability)
+        if (this.enemy.canEvade && Math.random() < this.enemy.evasionChance) {
+            addBattleLog(`👻 ${this.enemy.name} evaded your attack!`);
+            updateBattleUI(this.hero, this.enemy);
+            
+            // Reset hero sprite to idle
+            startHeroAnimation('idle');
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await this.enemyTurn();
+            return;
+        }
+        
         // Calculate damage
         const damage = Math.max(3, Math.floor(this.hero.attack - this.enemy.defense / 2));
         const isDead = this.enemy.takeDamage(damage);
@@ -100,6 +118,73 @@ class BattleManager {
         
         addBattleLog(`💥 You dealt ${damage} damage!`);
         updateBattleUI(this.hero, this.enemy);
+
+        // Reset hero sprite to idle
+        startHeroAnimation('idle');
+
+        if (isDead) {
+            this.state = BattleState.VICTORY;
+            await this.endBattle('victory');
+        } else {
+            await new Promise(resolve => setTimeout(resolve, 800));
+            await this.enemyTurn();
+        }
+    }
+
+    // Player uses spark (unlocked at level 7)
+    async playerSpark() {
+        if (this.state !== BattleState.PLAYER_TURN) return;
+        if (this.attackGauge < 25) {
+            addBattleLog('❌ Need 25 attack gauge for spark!');
+            return;
+        }
+
+        const sparkCount = gameState.battleInventory?.spark || 0;
+        if (sparkCount <= 0) {
+            addBattleLog('❌ No sparks left!');
+            return;
+        }
+
+        this.state = BattleState.ANIMATING;
+        this.attackGauge -= 25;  // Spark costs 25 attack gauge
+        gameState.battleInventory.spark--;
+        updateBattleUI(this.hero, this.enemy);
+        updateActionButtons(this.hero);
+
+        // Play hero throw animation for spark
+        startHeroAnimation('throw');
+        await new Promise(resolve => setTimeout(resolve, 600)); // 4 frames * 150ms
+
+        // Play spark animation
+        const heroSprite = document.getElementById('heroSprite');
+        const enemySprite = document.getElementById('enemySprite');
+        await playSparkAnimation(heroSprite, enemySprite);
+
+        // Check if enemy evades (Ghost ability)
+        if (this.enemy.canEvade && Math.random() < this.enemy.evasionChance) {
+            addBattleLog(`👻 ${this.enemy.name} evaded your spark!`);
+            updateBattleUI(this.hero, this.enemy);
+            
+            // Reset hero sprite to idle
+            startHeroAnimation('idle');
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await this.enemyTurn();
+            return;
+        }
+
+        // Calculate damage (slightly less than fireball)
+        const damage = Math.floor((this.hero.attack * 2.2) - (this.enemy.defense / 3));
+        const isDead = this.enemy.takeDamage(damage);
+
+        // Play enemy hurt animation
+        await playEnemyAnimation(this.enemy, 'hurt', 300);
+        
+        addBattleLog(`⚡ Spark dealt ${damage} damage!`);
+        updateBattleUI(this.hero, this.enemy);
+
+        // Save game state
+        saveGameState();
 
         // Reset hero sprite to idle
         startHeroAnimation('idle');
@@ -316,6 +401,13 @@ class BattleManager {
         
         // Normal attack
         await playEnemyAnimation(this.enemy, 'attack1', 600);
+        
+        // If ghost enemy, shoot waveform projectile
+        if (this.enemy.projectileType === 'waveform') {
+            const enemySprite = document.getElementById('enemySprite');
+            const heroSprite = document.getElementById('heroSprite');
+            await playWaveformAnimation(enemySprite, heroSprite);
+        }
 
         // Calculate damage
         const damage = Math.max(3, Math.floor(this.enemy.attack - this.hero.defense / 2));
