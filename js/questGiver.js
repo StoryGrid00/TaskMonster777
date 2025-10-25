@@ -158,7 +158,6 @@ class QuestGiver {
         }
 
         // Initialize sprite animations
-        this.updateHeroSprite();
         this.initCrowSprite();
 
         questGiverUI.classList.remove('hidden');
@@ -195,9 +194,6 @@ class QuestGiver {
 
         questActions.classList.remove('hidden');
         quizActions.classList.add('hidden');
-        
-        // Update hero sprite to use selected monster
-        this.updateHeroSprite();
     }
 
     // Show quiz UI
@@ -242,9 +238,6 @@ class QuestGiver {
 
         questActions.classList.add('hidden');
         quizActions.classList.remove('hidden');
-        
-        // Update hero sprite to use selected monster
-        this.updateHeroSprite();
     }
 
     // Accept quest

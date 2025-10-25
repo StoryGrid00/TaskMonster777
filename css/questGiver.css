@@ -61,11 +61,11 @@
 }
 
 .quest-crow-sprite {
-    right: 8%;
+    left: 50%;
     bottom: 15%; /* Lower to ground level, slightly higher than hero */
     width: 48px; /* Single frame width */
     height: 48px; /* Single frame height */
-    transform: scale(2); /* Scale for visibility */
+    transform: translateX(-50%) scale(3); /* Center horizontally and increase size by 1.5x (2 * 1.5 = 3) */
     transform-origin: bottom center;
     image-rendering: pixelated;
     background-repeat: no-repeat;
@@ -81,8 +81,8 @@
 }
 
 @keyframes questCrowBob {
-    0%, 100% { transform: scale(2) translateY(0); }
-    50% { transform: scale(2) translateY(-10px); }
+    0%, 100% { transform: translateX(-50%) scale(3) translateY(0); }
+    50% { transform: translateX(-50%) scale(3) translateY(-10px); }
 }
 
 /* Dialogue Container */
@@ -322,7 +322,7 @@
 
     .quest-crow-sprite {
         height: 25%;
-        right: 5%;
+        left: 50%;
         bottom: 12%; /* Lower to ground level on mobile */
     }
 
