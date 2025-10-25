@@ -5363,6 +5363,65 @@
             'var(--daily-card-yellow)'
         ];
 
+        // Parse the target number from challenge description
+        function parseChallengeTarget(challengeDesc) {
+            // Convert to lowercase for easier matching
+            const desc = challengeDesc.toLowerCase();
+            
+            // Look for numeric patterns in the description
+            // Patterns: "complete 3", "finish 2", "reach 5", "earn 50", "add 2", etc.
+            const patterns = [
+                /complete (\d+)/,
+                /finish (\d+)/,
+                /reach (\d+)/,
+                /earn (\d+)/,
+                /add (\d+)/,
+                /do (\d+)/,
+                /check off (\d+)/,
+                /clear (\d+)/,
+                /create (\d+)/,
+                /hit (\d+)/,
+                /(\d+)[- ]day/,  // for "2-day streak" or "3 day streak"
+                /at least (\d+)/,
+                /(\d+) tasks?/,
+                /(\d+) quick/,
+                /(\d+) work/,
+                /(\d+) personal/,
+                /(\d+) small/,
+                /(\d+) high/,
+                /(\d+) new/
+            ];
+            
+            // Try each pattern
+            for (const pattern of patterns) {
+                const match = desc.match(pattern);
+                if (match && match[1]) {
+                    const num = parseInt(match[1]);
+                    // For XP challenges, the number is the XP amount, not the task count
+                    // So we keep target as 1 for XP challenges
+                    if (desc.includes('xp') || desc.includes('earn')) {
+                        return 1;
+                    }
+                    return num;
+                }
+            }
+            
+            // Special cases
+            if (desc.includes('all quick tasks') || desc.includes('every quick task')) {
+                // This requires completing all selected quick tasks
+                // We'll set a reasonable default, but the logic should check against actual count
+                return 1;  // Will be handled specially in the progress tracking
+            }
+            
+            if (desc.includes('all tasks') || desc.includes('every task') || desc.includes('everything')) {
+                // Similar to above - requires all tasks to be completed
+                return 1;  // Will be handled specially
+            }
+            
+            // Default to 1 if no number found
+            return 1;
+        }
+
         function generateDailyChallenge() {
             const today = new Date().toDateString();
             
@@ -5401,11 +5460,12 @@
                 localStorage.setItem('dailyCardColorIndex', cardColorIndex);
                 
                 // Update game state
+                const challengeDesc = DAILY_CHALLENGES[challengeIndex];
                 gameState.dailyChallenge = {
                     id: 'daily_' + challengeIndex,
                     name: 'Daily Challenge',
-                    desc: DAILY_CHALLENGES[challengeIndex],
-                    target: 1,
+                    desc: challengeDesc,
+                    target: parseChallengeTarget(challengeDesc),
                     progress: 0,
                     reward: 50,
                     color: CARD_COLORS[cardColorIndex]
@@ -5414,11 +5474,12 @@
                 gameState.lastDailyChallengeDate = today;
             } else if (!gameState.dailyChallenge) {
                 // Load existing challenge from localStorage
+                const challengeDesc = DAILY_CHALLENGES[challengeIndex];
                 gameState.dailyChallenge = {
                     id: 'daily_' + challengeIndex,
                     name: 'Daily Challenge',
-                    desc: DAILY_CHALLENGES[challengeIndex],
-                    target: 1,
+                    desc: challengeDesc,
+                    target: parseChallengeTarget(challengeDesc),
                     progress: 0,
                     reward: 50,
                     color: CARD_COLORS[cardColorIndex]
