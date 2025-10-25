@@ -56,7 +56,7 @@ class QuestTaskManager {
 
         // Award XP
         if (window.gameState) {
-            window.gameState.xp = (window.gameState.xp || 0) + task.xp;
+            window.gameState.jerryXP = (window.gameState.jerryXP || 0) + task.xp;
             
             // Check for level up
             if (typeof checkLevelUp === 'function') {

@@ -47,7 +47,7 @@
 
 .quest-hero-sprite {
     left: 8%;
-    bottom: 20%; /* Adjusted to be more eye level with crow */
+    bottom: 12%; /* Lower to ground level */
     width: 32px; /* Single frame width */
     height: 32px; /* Single frame height */
     transform: scale(2.5); /* Scale for visibility */
@@ -62,7 +62,7 @@
 
 .quest-crow-sprite {
     right: 8%;
-    bottom: 20%; /* Match hero eye level */
+    bottom: 15%; /* Lower to ground level, slightly higher than hero */
     width: 48px; /* Single frame width */
     height: 48px; /* Single frame height */
     transform: scale(2); /* Scale for visibility */
@@ -317,13 +317,13 @@
     .quest-hero-sprite {
         height: 30%;
         left: 5%;
-        bottom: 20%; /* Keep eye level on mobile */
+        bottom: 8%; /* Lower to ground level on mobile */
     }
 
     .quest-crow-sprite {
         height: 25%;
         right: 5%;
-        bottom: 20%; /* Match hero eye level on mobile */
+        bottom: 12%; /* Lower to ground level on mobile */
     }
 
     .quest-dialogue-container {

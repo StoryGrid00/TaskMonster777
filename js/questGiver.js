@@ -407,7 +407,7 @@ function checkExpiredQuests() {
 
     expiredQuests.forEach(quest => {
         // Deduct XP penalty
-        window.gameState.xp = Math.max(0, (window.gameState.xp || 0) - quest.questPenalty);
+        window.gameState.jerryXP = Math.max(0, (window.gameState.jerryXP || 0) - quest.questPenalty);
         
         // Remove quest from tasks
         const index = window.gameState.tasks.indexOf(quest);
