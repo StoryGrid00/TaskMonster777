@@ -457,10 +457,26 @@ class BattleManager {
         if (result === 'victory') {
             addBattleLog(`🎉 VICTORY! You defeated the ${this.enemy.name}!`);
             
+            // Track battle win
+            if (window.gameState) {
+                window.gameState.battlesWon = (window.gameState.battlesWon || 0) + 1;
+                if (typeof saveGameState === 'function') {
+                    saveGameState();
+                }
+            }
+            
             // Play enemy die animation
             await playEnemyAnimation(this.enemy, 'die', 1000);
         } else if (result === 'defeat') {
             addBattleLog('💫 DEFEAT! You were defeated...');
+            
+            // Track battle loss
+            if (window.gameState) {
+                window.gameState.battlesLost = (window.gameState.battlesLost || 0) + 1;
+                if (typeof saveGameState === 'function') {
+                    saveGameState();
+                }
+            }
             
             // Play hero death animation
             startHeroAnimation('death');

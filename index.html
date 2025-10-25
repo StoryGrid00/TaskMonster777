@@ -2884,7 +2884,7 @@
             🔥 Fireball <span class="item-count" id="fireballCount">(0)</span>
         </button>
         <button id="btnSpark" class="btn-action" onclick="battleManager.playerSpark()" style="display: none;">
-            💥 Spark <span class="item-count" id="sparkCount">(0)</span>
+            ⚡ Spark <span class="item-count" id="sparkCount">(0)</span>
         </button>
         <button id="btnPotion" class="btn-action" onclick="battleManager.playerPotion()">
             🧪 Potion <span class="item-count" id="potionCount">(2)</span>
@@ -3092,6 +3092,31 @@
                     <div class="stat-icon">🥇</div>
                     <div class="stat-value" id="achievementsDisplay">0/10</div>
                     <div class="stat-label">Achievements</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-icon">⚔️</div>
+                    <div class="stat-value" id="battlesWonDisplay">0</div>
+                    <div class="stat-label">Battles Won</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-icon">💥</div>
+                    <div class="stat-value" id="battlesLostDisplay">0</div>
+                    <div class="stat-label">Battles Lost</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-value" id="quizPassedDisplay">0</div>
+                    <div class="stat-label">Quizzes Passed</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-value" id="quizFailedDisplay">0</div>
+                    <div class="stat-label">Quizzes Failed</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="questAcceptanceDisplay">0%</div>
+                    <div class="stat-label">Quest Acceptance</div>
                 </div>
             </div>
         </div>
@@ -3429,6 +3454,14 @@
             revivalPoints: 0,
             ownedItems: [],
             funFactsUnlocked: false,
+            // Battle stats
+            battlesWon: 0,
+            battlesLost: 0,
+            // Quest stats
+            questQuizzesPassed: 0,
+            questQuizzesFailed: 0,
+            questTasksAccepted: 0,
+            questTasksOffered: 0,
             currentOutfit: {
                 hat: null,
                 glasses: null,
@@ -3558,7 +3591,7 @@
         const achievements = [
             // Starter Tier (💚)
             { id: 'task_sprout', name: 'Task Sprout', desc: 'Complete your first regular task', icon: '🌱', requirement: 1, type: 'tasks', tier: 'starter' },
-            { id: 'quick_spark', name: 'Quick Spark', desc: 'Complete 3 quick tasks in one day', icon: '💥', requirement: 3, type: 'quick_daily', tier: 'starter' },
+            { id: 'quick_spark', name: 'Quick Spark', desc: 'Complete 3 quick tasks in one day', icon: '⚡', requirement: 3, type: 'quick_daily', tier: 'starter' },
             { id: 'momentum_builder', name: 'Momentum Builder', desc: 'Complete 5 tasks in one session', icon: '🚀', requirement: 5, type: 'session', tier: 'starter' },
             { id: 'early_bird', name: 'Early Bird', desc: 'Complete a task before 10 AM', icon: '🌅', requirement: 1, type: 'early_morning', tier: 'starter' },
             { id: 'weekend_warrior', name: 'Weekend Warrior', desc: 'Complete 2 tasks on a weekend', icon: '🏖️', requirement: 2, type: 'weekend', tier: 'starter' },
@@ -3619,6 +3652,26 @@
                 // Ensure totalTasksCreated is never less than completedTasks
                 if (gameState.totalTasksCreated < gameState.completedTasks) {
                     gameState.totalTasksCreated = gameState.completedTasks;
+                }
+                
+                // Migration: Initialize new stats for existing users
+                if (typeof gameState.battlesWon === 'undefined') {
+                    gameState.battlesWon = 0;
+                }
+                if (typeof gameState.battlesLost === 'undefined') {
+                    gameState.battlesLost = 0;
+                }
+                if (typeof gameState.questQuizzesPassed === 'undefined') {
+                    gameState.questQuizzesPassed = 0;
+                }
+                if (typeof gameState.questQuizzesFailed === 'undefined') {
+                    gameState.questQuizzesFailed = 0;
+                }
+                if (typeof gameState.questTasksAccepted === 'undefined') {
+                    gameState.questTasksAccepted = 0;
+                }
+                if (typeof gameState.questTasksOffered === 'undefined') {
+                    gameState.questTasksOffered = 0;
                 }
             }
             
@@ -3816,6 +3869,24 @@
             if (rockLevelEl) rockLevelEl.textContent = rockLevel;
             if (experienceEl) experienceEl.textContent = `${currentXP}/${nextLevelXP} XP`;
             if (achievementsEl) achievementsEl.textContent = `${unlockedAchievements}/${achievements.length}`;
+            
+            // Update new battle and quest stats
+            const battlesWonEl = document.getElementById('battlesWonDisplay');
+            const battlesLostEl = document.getElementById('battlesLostDisplay');
+            const quizPassedEl = document.getElementById('quizPassedDisplay');
+            const quizFailedEl = document.getElementById('quizFailedDisplay');
+            const questAcceptanceEl = document.getElementById('questAcceptanceDisplay');
+            
+            if (battlesWonEl) battlesWonEl.textContent = gameState.battlesWon || 0;
+            if (battlesLostEl) battlesLostEl.textContent = gameState.battlesLost || 0;
+            if (quizPassedEl) quizPassedEl.textContent = gameState.questQuizzesPassed || 0;
+            if (quizFailedEl) quizFailedEl.textContent = gameState.questQuizzesFailed || 0;
+            if (questAcceptanceEl) {
+                const offered = gameState.questTasksOffered || 0;
+                const accepted = gameState.questTasksAccepted || 0;
+                const acceptanceRate = offered > 0 ? Math.round((accepted / offered) * 100) : 0;
+                questAcceptanceEl.textContent = `${acceptanceRate}%`;
+            }
             
             // Update creature image based on equipped items
             updateCreatureImage();
@@ -5655,7 +5726,7 @@
             spark: {
                 id: 'spark',
                 name: 'Spark',
-                emoji: '💥',
+                emoji: '⚡',
                 description: 'Electric ranged attack, slightly weaker than fireball (Max: 10)',
                 cost: 80,
                 effect: 'attack',
@@ -6081,6 +6152,12 @@
             // Check energy after creating task
             checkAndUpdateEnergy();
             
+            // Schedule notifications for the new/updated task
+            if (window.notificationManager && task.dueDate) {
+                const taskIndex = editingTaskIndex !== null ? editingTaskIndex : gameState.tasks.length - 1;
+                window.notificationManager.scheduleTaskNotifications(task, taskIndex);
+            }
+            
             updateUI();
             updateTasksDisplay();
             closeModal();
@@ -6089,6 +6166,11 @@
         function completeTask(index) {
             const task = gameState.tasks[index];
             if (!task) return;
+            
+            // Clear notifications for this task
+            if (window.notificationManager) {
+                window.notificationManager.clearTaskNotifications(index);
+            }
             
             // Store old level for level up detection
             const oldLevel = gameState.level;
@@ -6212,6 +6294,11 @@
 
         function deleteTask(index) {
             if (confirm('Are you sure you want to delete this task?')) {
+                // Clear notifications for this task
+                if (window.notificationManager) {
+                    window.notificationManager.clearTaskNotifications(index);
+                }
+                
                 gameState.tasks.splice(index, 1);
                 saveGameState();
                 updateUI();
@@ -6534,8 +6621,30 @@
             updateSettingsDisplay();
         }
 
-        function toggleNotifications() {
+        async function toggleNotifications() {
             gameState.notifications = !gameState.notifications;
+            
+            if (gameState.notifications) {
+                // Request permission when enabling
+                if (window.notificationManager) {
+                    const granted = await window.notificationManager.requestPermission();
+                    if (!granted) {
+                        gameState.notifications = false;
+                        showSuccessMessage('Notification permission denied. Please enable in browser settings.');
+                        saveGameState();
+                        updateSettingsDisplay();
+                        return;
+                    }
+                    // Reschedule all notifications
+                    window.notificationManager.rescheduleAllNotifications();
+                }
+            } else {
+                // Clear all notifications when disabling
+                if (window.notificationManager) {
+                    window.notificationManager.clearAllNotifications();
+                }
+            }
+            
             saveGameState();
             updateSettingsDisplay();
             showSuccessMessage(`Notifications ${gameState.notifications ? 'enabled' : 'disabled'}!`);
@@ -6779,6 +6888,13 @@
                 // Initialize the complete app with dialogue system
                 initializeApp();
                 
+                // Reschedule notifications for all tasks on app load
+                if (window.notificationManager && gameState.notifications) {
+                    setTimeout(() => {
+                        window.notificationManager.rescheduleAllNotifications();
+                    }, 1500);
+                }
+                
                 // Ensure sprite is loaded after initialization
                 setTimeout(() => {
                     const spritePrefix = localStorage.getItem('heroSpritePrefix');
@@ -6888,6 +7004,7 @@
     <script src="js/battleInit.js"></script>
     <script src="js/questTaskManager.js"></script>
     <script src="js/questGiver.js?v=2"></script>
+    <script src="js/notificationManager.js"></script>
     
     <!-- Hide loading screen after page loads -->
     <script>

@@ -64,7 +64,33 @@ class QuestGiver {
             { id: 'q32', text: 'Complete one task you\'ve been putting off', category: 'Productivity', difficulty: 'Medium', xp: 30, duration: 48 },
             { id: 'q33', text: 'Spend 15 minutes decluttering', category: 'Productivity', difficulty: 'Easy', xp: 20, duration: 24 },
             { id: 'q34', text: 'Review and update your goals', category: 'Productivity', difficulty: 'Medium', xp: 25, duration: 48 },
-            { id: 'q35', text: 'Plan your meals for the next 3 days', category: 'Productivity', difficulty: 'Medium', xp: 25, duration: 48 }
+            { id: 'q35', text: 'Plan your meals for the next 3 days', category: 'Productivity', difficulty: 'Medium', xp: 25, duration: 48 },
+            
+            // Work/Office Quests
+            { id: 'q36', text: 'Organize your desk or workspace', category: 'Work', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q37', text: 'Send a thank you email to a colleague', category: 'Work', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q38', text: 'Take a 5-minute break to stretch at your desk', category: 'Work', difficulty: 'Easy', xp: 10, duration: 24 },
+            { id: 'q39', text: 'Update your calendar for the week ahead', category: 'Work', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q40', text: 'Clear out 10 old emails from your inbox', category: 'Work', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q41', text: 'Review and prioritize your task list', category: 'Work', difficulty: 'Medium', xp: 20, duration: 24 },
+            { id: 'q42', text: 'Attend a meeting fully prepared with notes', category: 'Work', difficulty: 'Medium', xp: 25, duration: 48 },
+            
+            // School/Study Quests
+            { id: 'q43', text: 'Review your class notes for 15 minutes', category: 'School', difficulty: 'Easy', xp: 20, duration: 24 },
+            { id: 'q44', text: 'Organize your study materials or backpack', category: 'School', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q45', text: 'Complete one homework assignment early', category: 'School', difficulty: 'Medium', xp: 30, duration: 48 },
+            { id: 'q46', text: 'Create flashcards for an upcoming test', category: 'School', difficulty: 'Medium', xp: 25, duration: 48 },
+            { id: 'q47', text: 'Ask a question in class or office hours', category: 'School', difficulty: 'Medium', xp: 20, duration: 24 },
+            { id: 'q48', text: 'Study with a classmate or study group', category: 'School', difficulty: 'Medium', xp: 25, duration: 48 },
+            
+            // Gym/Fitness Quests
+            { id: 'q49', text: 'Do a 10-minute warm-up before your workout', category: 'Fitness', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q50', text: 'Try a new exercise or machine at the gym', category: 'Fitness', difficulty: 'Medium', xp: 25, duration: 48 },
+            { id: 'q51', text: 'Complete a full workout session', category: 'Fitness', difficulty: 'Medium', xp: 30, duration: 24 },
+            { id: 'q52', text: 'Do 20 squats during a break', category: 'Fitness', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q53', text: 'Stretch for 10 minutes after exercise', category: 'Fitness', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q54', text: 'Track your workout progress in a journal', category: 'Fitness', difficulty: 'Easy', xp: 15, duration: 24 },
+            { id: 'q55', text: 'Increase weight or reps on one exercise', category: 'Fitness', difficulty: 'Medium', xp: 25, duration: 48 }
         ];
     }
 
@@ -104,7 +130,37 @@ class QuestGiver {
             { id: 'quiz22', question: 'What is the smallest country in the world?', options: ['Monaco', 'Vatican City', 'San Marino', 'Liechtenstein'], correct: 1, xpReward: 15, xpPenalty: 10 },
             { id: 'quiz23', question: 'How many strings does a standard guitar have?', options: ['4', '5', '6', '7'], correct: 2, xpReward: 10, xpPenalty: 5 },
             { id: 'quiz24', question: 'What is the hardest natural substance on Earth?', options: ['Gold', 'Iron', 'Diamond', 'Titanium'], correct: 2, xpReward: 15, xpPenalty: 10 },
-            { id: 'quiz25', question: 'How many colors are in a rainbow?', options: ['5', '6', '7', '8'], correct: 2, xpReward: 10, xpPenalty: 5 }
+            { id: 'quiz25', question: 'How many colors are in a rainbow?', options: ['5', '6', '7', '8'], correct: 2, xpReward: 10, xpPenalty: 5 },
+            
+            // Technology Facts
+            { id: 'quiz26', question: 'What does CPU stand for?', options: ['Central Processing Unit', 'Computer Personal Unit', 'Central Program Utility', 'Core Processing Unit'], correct: 0, xpReward: 15, xpPenalty: 10 },
+            { id: 'quiz27', question: 'Who is known as the father of computers?', options: ['Bill Gates', 'Steve Jobs', 'Charles Babbage', 'Alan Turing'], correct: 2, xpReward: 20, xpPenalty: 10 },
+            { id: 'quiz28', question: 'What year was Google founded?', options: ['1996', '1998', '2000', '2002'], correct: 1, xpReward: 15, xpPenalty: 10 },
+            { id: 'quiz29', question: 'What does HTTP stand for?', options: ['HyperText Transfer Protocol', 'High Transfer Text Protocol', 'HyperText Transmission Process', 'Home Tool Transfer Protocol'], correct: 0, xpReward: 15, xpPenalty: 10 },
+            
+            // Space & Astronomy Facts
+            { id: 'quiz30', question: 'How many moons does Mars have?', options: ['0', '1', '2', '4'], correct: 2, xpReward: 20, xpPenalty: 10 },
+            { id: 'quiz31', question: 'What is the closest star to Earth?', options: ['Alpha Centauri', 'Sirius', 'The Sun', 'Proxima Centauri'], correct: 2, xpReward: 10, xpPenalty: 5 },
+            { id: 'quiz32', question: 'How long does it take for the Moon to orbit Earth?', options: ['24 hours', '7 days', '27.3 days', '365 days'], correct: 2, xpReward: 20, xpPenalty: 10 },
+            { id: 'quiz33', question: 'What is the hottest planet in our solar system?', options: ['Mercury', 'Venus', 'Mars', 'Jupiter'], correct: 1, xpReward: 15, xpPenalty: 10 },
+            
+            // Human Body Facts
+            { id: 'quiz34', question: 'What is the largest organ in the human body?', options: ['Heart', 'Liver', 'Skin', 'Brain'], correct: 2, xpReward: 15, xpPenalty: 10 },
+            { id: 'quiz35', question: 'How many teeth does an adult human have?', options: ['28', '30', '32', '34'], correct: 2, xpReward: 15, xpPenalty: 10 },
+            { id: 'quiz36', question: 'What is the smallest bone in the human body?', options: ['Stapes (in ear)', 'Finger bone', 'Toe bone', 'Nose bone'], correct: 0, xpReward: 20, xpPenalty: 10 },
+            { id: 'quiz37', question: 'How many chambers does the human heart have?', options: ['2', '3', '4', '5'], correct: 2, xpReward: 15, xpPenalty: 10 },
+            
+            // Mathematics Facts
+            { id: 'quiz38', question: 'What is the value of Pi (π) to two decimal places?', options: ['3.12', '3.14', '3.16', '3.18'], correct: 1, xpReward: 10, xpPenalty: 5 },
+            { id: 'quiz39', question: 'What is 12 squared?', options: ['124', '132', '144', '156'], correct: 2, xpReward: 15, xpPenalty: 10 },
+            { id: 'quiz40', question: 'How many degrees are in a circle?', options: ['180', '270', '360', '450'], correct: 2, xpReward: 10, xpPenalty: 5 },
+            { id: 'quiz41', question: 'What is the sum of angles in a triangle?', options: ['90 degrees', '180 degrees', '270 degrees', '360 degrees'], correct: 1, xpReward: 15, xpPenalty: 10 },
+            
+            // World Records & Facts
+            { id: 'quiz42', question: 'What is the tallest mountain in the world?', options: ['K2', 'Mount Kilimanjaro', 'Mount Everest', 'Denali'], correct: 2, xpReward: 10, xpPenalty: 5 },
+            { id: 'quiz43', question: 'What is the deepest ocean trench?', options: ['Mariana Trench', 'Puerto Rico Trench', 'Java Trench', 'Philippine Trench'], correct: 0, xpReward: 20, xpPenalty: 10 },
+            { id: 'quiz44', question: 'What is the largest desert in the world?', options: ['Sahara', 'Arabian', 'Gobi', 'Antarctic'], correct: 3, xpReward: 25, xpPenalty: 15 },
+            { id: 'quiz45', question: 'How many elements are in the periodic table?', options: ['92', '108', '118', '126'], correct: 2, xpReward: 20, xpPenalty: 10 }
         ];
     }
 
@@ -143,6 +199,14 @@ class QuestGiver {
         this.lastQuestTime = Date.now();
         const encounter = this.getRandomEncounter();
         this.activeQuest = encounter;
+        
+        // Track quest offered (only for quests, not quizzes)
+        if (encounter.type === 'quest' && window.gameState) {
+            window.gameState.questTasksOffered = (window.gameState.questTasksOffered || 0) + 1;
+            if (typeof window.saveGameState === 'function') {
+                window.saveGameState();
+            }
+        }
         
         const questGiverUI = document.getElementById('questGiverUI');
         if (!questGiverUI) {
@@ -243,6 +307,14 @@ class QuestGiver {
     // Accept quest
     acceptQuest() {
         if (!this.activeQuest || this.activeQuest.type !== 'quest') return;
+        
+        // Track quest acceptance
+        if (window.gameState) {
+            window.gameState.questTasksAccepted = (window.gameState.questTasksAccepted || 0) + 1;
+            if (typeof window.saveGameState === 'function') {
+                window.saveGameState();
+            }
+        }
 
         // Add quest to quest task manager (separate from regular tasks)
         if (window.questTaskManager) {
@@ -284,6 +356,9 @@ class QuestGiver {
                 return;
             }
             
+            // Track quiz passed
+            window.gameState.questQuizzesPassed = (window.gameState.questQuizzesPassed || 0) + 1;
+            
             if (typeof window.addJerryXP === 'function') {
                 window.addJerryXP(this.activeQuest.xpReward);
                 console.log(`Quiz correct! Added ${this.activeQuest.xpReward} XP. Total: ${window.gameState.jerryXP}`);
@@ -307,6 +382,9 @@ class QuestGiver {
                 this.close();
                 return;
             }
+            
+            // Track quiz failed
+            window.gameState.questQuizzesFailed = (window.gameState.questQuizzesFailed || 0) + 1;
             
             const oldXP = window.gameState.jerryXP || 0;
             window.gameState.jerryXP = Math.max(0, oldXP - this.activeQuest.xpPenalty);
