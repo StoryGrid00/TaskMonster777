@@ -285,7 +285,7 @@ class QuestGiver {
         if (isCorrect) {
             // Award XP
             if (window.gameState) {
-                window.gameState.xp = (window.gameState.xp || 0) + this.activeQuest.xpReward;
+                window.gameState.jerryXP = (window.gameState.jerryXP || 0) + this.activeQuest.xpReward;
                 if (typeof saveGameState === 'function') saveGameState();
                 if (typeof updateUI === 'function') updateUI();
             }
@@ -293,7 +293,7 @@ class QuestGiver {
         } else {
             // Deduct XP
             if (window.gameState) {
-                window.gameState.xp = Math.max(0, (window.gameState.xp || 0) - this.activeQuest.xpPenalty);
+                window.gameState.jerryXP = Math.max(0, (window.gameState.jerryXP || 0) - this.activeQuest.xpPenalty);
                 if (typeof saveGameState === 'function') saveGameState();
                 if (typeof updateUI === 'function') updateUI();
             }
