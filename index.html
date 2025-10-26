@@ -1554,6 +1554,24 @@
         }
 
         /* Shop Items */
+        .owned-badge {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+            text-align: center;
+        }
+        
+        .shop-item-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+        
         .shop-grid {
             display: flex;
             overflow-x: auto;
@@ -2135,8 +2153,62 @@
         border-color: rgba(255, 255, 255, 0.3);
     }
 
-    /* Owned Items Grid */
-    .owned-items-grid {
+        /* Owned Items Grid */
+        .owned-item-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .owned-item-emoji {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        
+        .owned-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .owned-item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .owned-item-quantity {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .use-item-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .use-item-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .use-item-btn.equipped {
+            background: #4CAF50;
+        }
+        
+        .owned-items-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
@@ -2884,7 +2956,7 @@
             🔥 Fireball <span class="item-count" id="fireballCount">(0)</span>
         </button>
         <button id="btnSpark" class="btn-action" onclick="battleManager.playerSpark()" style="display: none;">
-            💥 Spark <span class="item-count" id="sparkCount">(0)</span>
+            ⚡ Spark <span class="item-count" id="sparkCount">(0)</span>
         </button>
         <button id="btnPotion" class="btn-action" onclick="battleManager.playerPotion()">
             🧪 Potion <span class="item-count" id="potionCount">(2)</span>
@@ -3203,14 +3275,51 @@
 
             <!-- Shop Sub-Tab Content -->
             <div id="shopSubTabContent" class="shop-sub-content active">
-                <div class="card">
+                <!-- Consumables Section -->
+                <div class="card" style="margin-bottom: 20px;">
                     <div class="card-header">
-                        <div class="card-title">🛒 Shop</div>
+                        <div class="card-title">🧪 Consumables</div>
+                        <span style="font-size: 12px; color: #666;">Use XP to buy items</span>
                     </div>
                     <div style="padding: 20px;">
-                        <p style="text-align: center; color: #666; margin-bottom: 20px;">Power up your hero with XP!</p>
-                        <div id="shopItemsGrid" class="shop-items-grid">
-                            <!-- Shop items will be rendered here -->
+                        <div id="consumablesShop" class="shop-grid">
+                            <!-- Consumable items will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hats Section -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">🧢 Hats</div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div id="hatsShop" class="shop-grid">
+                            <!-- Hat items will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accessories Section -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">👓 Accessories</div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div id="accessoriesShop" class="shop-grid">
+                            <!-- Accessory items will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paints Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🎨 Paints</div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div id="paintShop" class="shop-grid">
+                            <!-- Paint items will be rendered here -->
                         </div>
                     </div>
                 </div>
@@ -3452,7 +3561,8 @@
             lastDailyChallengeDate: null,
             isDead: false,
             revivalPoints: 0,
-            ownedItems: [],
+            ownedItems: [],  // Legacy - keep for backward compatibility
+            inventory: {},    // New inventory system: { itemId: quantity }
             funFactsUnlocked: false,
             // Battle stats
             battlesWon: 0,
@@ -3577,22 +3687,29 @@
             }
         };
 
-        // Shop Items
+        // Shop Items - Consumable inventory system with XP pricing
         const shopItems = {
-            hats: [
-                { id: 'blue_cap', name: 'Blue Cap', price: 50, emoji: '🧢' },
-                { id: 'top_hat', name: 'Black Top Hat', price: 100, emoji: '🎩' },
-                { id: 'army_helmet', name: 'Army Helmet', price: 200, emoji: '🪖' },
-                { id: 'wizard_hat', name: 'Wizard Hat', price: 400, emoji: '🧙🏾‍♂️' }
+            consumables: [
+                { id: 'health_potion', name: 'Health Potion', price: 40, emoji: '🧪', desc: 'Restore 30 HP in battle', type: 'consumable' },
+                { id: 'energy_drink', name: 'Energy Drink', price: 30, emoji: '⚡', desc: 'Restore 20 energy', type: 'consumable' },
+                { id: 'xp_boost', name: 'XP Boost', price: 50, emoji: '⭐', desc: '2x XP for next task', type: 'consumable' },
+                { id: 'luck_charm', name: 'Luck Charm', price: 60, emoji: '🍀', desc: 'Increase battle rewards', type: 'consumable' },
+                { id: 'time_freeze', name: 'Time Freeze', price: 80, emoji: '⏰', desc: 'Pause task timers for 1 hour', type: 'consumable' }
             ],
-            items: [
-                { id: 'mustache', name: 'Mustache', price: 350, emoji: '👨🏻' },
-                { id: 'glasses', name: 'Glasses', price: 300, emoji: '👓' }
+            hats: [
+                { id: 'blue_cap', name: 'Blue Cap', price: 100, emoji: '🧢', desc: 'Stylish blue cap', type: 'cosmetic' },
+                { id: 'top_hat', name: 'Black Top Hat', price: 200, emoji: '🎩', desc: 'Classy top hat', type: 'cosmetic' },
+                { id: 'army_helmet', name: 'Army Helmet', price: 300, emoji: '🪖', desc: 'Tough army helmet', type: 'cosmetic' },
+                { id: 'wizard_hat', name: 'Wizard Hat', price: 500, emoji: '🧙🏾‍♂️', desc: 'Magical wizard hat', type: 'cosmetic' }
+            ],
+            accessories: [
+                { id: 'mustache', name: 'Mustache', price: 250, emoji: '👨🏻', desc: 'Distinguished mustache', type: 'cosmetic' },
+                { id: 'glasses', name: 'Glasses', price: 200, emoji: '👓', desc: 'Cool glasses', type: 'cosmetic' }
             ],
             paints: [
-                { id: 'buddy_paint', name: 'Buddy Paint', price: 800, emoji: '🎨' },
-                { id: 'rock_star', name: 'Rock Star', price: 1000, emoji: '⭐' },
-                { id: 'makeup', name: 'Makeup', price: 1100, emoji: '💄' }
+                { id: 'buddy_paint', name: 'Buddy Paint', price: 400, emoji: '🎨', desc: 'Colorful buddy paint', type: 'cosmetic' },
+                { id: 'rock_star', name: 'Rock Star', price: 600, emoji: '⭐', desc: 'Rock star paint', type: 'cosmetic' },
+                { id: 'makeup', name: 'Makeup', price: 700, emoji: '💄', desc: 'Glamorous makeup', type: 'cosmetic' }
             ]
         };
 
@@ -3707,6 +3824,18 @@
                 }
                 if (typeof gameState.lastAllTasksDate === 'undefined') {
                     gameState.lastAllTasksDate = null;
+                }
+                
+                // Migration: Initialize inventory system for existing users
+                if (typeof gameState.inventory === 'undefined') {
+                    gameState.inventory = {};
+                    
+                    // Migrate old ownedItems to inventory (cosmetics get quantity 1)
+                    if (gameState.ownedItems && gameState.ownedItems.length > 0) {
+                        gameState.ownedItems.forEach(itemId => {
+                            gameState.inventory[itemId] = 1;
+                        });
+                    }
                 }
             }
             
@@ -5281,8 +5410,9 @@
 
         // Update shop display
         function updateShopDisplay() {
+            updateShopSection('consumablesShop', shopItems.consumables);
             updateShopSection('hatsShop', shopItems.hats);
-            updateShopSection('itemsShop', shopItems.items);
+            updateShopSection('accessoriesShop', shopItems.accessories);
             updateShopSection('paintShop', shopItems.paints);
         }
 
@@ -5291,14 +5421,18 @@
             if (!container) return;
             
             container.innerHTML = items.map(item => {
-                const canAfford = gameState.taskPoints >= item.price;
-                const isOwned = gameState.ownedItems.includes(item.id);
+                const canAfford = gameState.jerryXP >= item.price;
+                const owned = gameState.inventory && gameState.inventory[item.id] ? gameState.inventory[item.id] : 0;
+                const isConsumable = item.type === 'consumable';
                 const isEquipped = (containerId === 'hatsShop' && gameState.currentOutfit.hat === item.id) ||
-                                 (containerId === 'paintShop' && gameState.currentOutfit.paint === item.id);
+                                 (containerId === 'paintShop' && gameState.currentOutfit.paint === item.id) ||
+                                 (containerId === 'accessoriesShop' && (gameState.currentOutfit.glasses === item.id || gameState.currentOutfit.mustache === item.id));
                 
                 let cssClasses = 'shop-item';
-                if (isOwned) {
-                    cssClasses += isEquipped ? ' equipped' : ' owned';
+                if (isEquipped) {
+                    cssClasses += ' equipped';
+                } else if (owned > 0 && !isConsumable) {
+                    cssClasses += ' owned';
                 } else if (canAfford) {
                     cssClasses += ' affordable';
                 } else {
@@ -5306,22 +5440,31 @@
                 }
                 
                 let buttonText;
-                if (isOwned) {
-                    if (isEquipped) {
-                        buttonText = 'Unequip';
-                    } else if (containerId === 'hatsShop' || containerId === 'paintShop') {
-                        buttonText = 'Equip';
-                    } else {
-                        buttonText = 'Owned';
+                let ownedBadge = '';
+                
+                if (isConsumable) {
+                    buttonText = `${item.price} XP`;
+                    if (owned > 0) {
+                        ownedBadge = `<div class="owned-badge">Owned: ${owned}</div>`;
                     }
                 } else {
-                    buttonText = `${item.price} Points`;
+                    if (isEquipped) {
+                        buttonText = 'Equipped';
+                    } else if (owned > 0) {
+                        buttonText = 'Owned';
+                    } else {
+                        buttonText = `${item.price} XP`;
+                    }
                 }
+                
+                const descText = item.desc ? `<div class="shop-item-desc">${item.desc}</div>` : '';
                 
                 return `
                     <div class="${cssClasses}" onclick="buyItem('${item.id}', ${item.price})">
                         ${item.image ? `<img src="${item.image}" class="shop-item-image" alt="${item.name}">` : `<div class="shop-item-emoji">${item.emoji || '❓'}</div>`}
                         <div class="shop-item-name">${item.name}</div>
+                        ${descText}
+                        ${ownedBadge}
                         <div class="shop-item-price">${buttonText}</div>
                     </div>
                 `;
@@ -5720,7 +5863,7 @@
             if (subTabName === 'shop') {
                 updateShopDisplay();
             } else if (subTabName === 'owned') {
-                updateOwnedItemsDisplay();
+                updateOwnedDisplay();
             }
         }
 
@@ -5749,7 +5892,7 @@
             spark: {
                 id: 'spark',
                 name: 'Spark',
-                emoji: '💥',
+                emoji: '⚡',
                 description: 'Electric ranged attack, slightly weaker than fireball (Max: 10)',
                 cost: 80,
                 effect: 'attack',
@@ -5833,7 +5976,66 @@
             });
         }
 
-        // Update owned items display (synced with battleInventory)
+        // Update owned items display (new inventory system)
+        function updateOwnedDisplay() {
+            const grid = document.getElementById('ownedItemsGrid');
+            const countBadge = document.getElementById('ownedItemCount');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            // Get all owned items from inventory manager
+            const ownedItems = window.inventoryManager ? window.inventoryManager.getAllItems() : [];
+            const totalCount = window.inventoryManager ? window.inventoryManager.getTotalItemCount() : 0;
+            
+            if (countBadge) {
+                countBadge.textContent = `${totalCount} item${totalCount !== 1 ? 's' : ''}`;
+            }
+            
+            if (ownedItems.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: #999; grid-column: 1 / -1;">
+                        <p style="font-size: 16px;">🎒 No items yet!</p>
+                        <p style="font-size: 14px; margin-top: 12px;">Buy items from the Shop tab.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render owned items
+            ownedItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'owned-item-card';
+                
+                const isConsumable = item.type === 'consumable';
+                const isEquipped = (item.id === gameState.currentOutfit.hat) || 
+                                 (item.id === gameState.currentOutfit.paint) ||
+                                 (item.id === gameState.currentOutfit.glasses) ||
+                                 (item.id === gameState.currentOutfit.mustache);
+                
+                let buttonHTML = '';
+                if (isConsumable) {
+                    buttonHTML = `<button class="use-item-btn" onclick="useOwnedItem('${item.id}')">Use</button>`;
+                } else if (isEquipped) {
+                    buttonHTML = `<button class="use-item-btn equipped" onclick="toggleEquipItem('${item.id}')">Equipped</button>`;
+                } else {
+                    buttonHTML = `<button class="use-item-btn" onclick="toggleEquipItem('${item.id}')">Equip</button>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="owned-item-emoji">${item.emoji}</div>
+                    <div class="owned-item-info">
+                        <div class="owned-item-name">${item.name}</div>
+                        <div class="owned-item-quantity">Qty: ${item.quantity}</div>
+                    </div>
+                    ${buttonHTML}
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Legacy function for backward compatibility
         function updateOwnedItemsDisplay() {
             const grid = document.getElementById('ownedItemsGrid');
             const countBadge = document.getElementById('ownedItemCount');
@@ -6218,8 +6420,15 @@
             gameState.health = Math.min(100, gameState.health + 10);
             gameState.completedTasks++;
             
-            // Add XP
-            addJerryXP(basePoints * 2);
+            // Add XP (with boost if active)
+            let xpToAdd = basePoints * 2;
+            if (gameState.xpBoostActive) {
+                xpToAdd *= 2;
+                gameState.xpBoostActive = false;  // Consume boost
+                delete gameState.xpBoostExpiry;
+                showSuccessMessage('⭐ XP Boost consumed! 2x XP earned!');
+            }
+            addJerryXP(xpToAdd);
             
             // Track achievement progress before removing task
             if (window.achievementTracker) {
@@ -6396,8 +6605,15 @@
             gameState.health = Math.min(100, gameState.health + 10);
             gameState.completedTasks++;
             
-            // Add XP
-            addJerryXP(basePoints * 2);
+            // Add XP (with boost if active)
+            let xpToAdd = basePoints * 2;
+            if (gameState.xpBoostActive) {
+                xpToAdd *= 2;
+                gameState.xpBoostActive = false;  // Consume boost
+                delete gameState.xpBoostExpiry;
+                showSuccessMessage('⭐ XP Boost consumed! 2x XP earned!');
+            }
+            addJerryXP(xpToAdd);
             
             // Show completion message with random variation
             const randomMsg = getRandomCompletionMessage(true);
@@ -6532,92 +6748,78 @@
             }
         }
 
-        // Shop functions
-        function buyItem(itemId, price) {
-            const isAlreadyOwned = gameState.ownedItems.includes(itemId);
-            const itemName = itemId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        // Shop functions - XP-based consumable system
+        function buyItem(itemId, price, quantity = 1) {
+            // Find item details
+            let item = null;
+            let itemType = null;
             
-            if (isAlreadyOwned && isHat(itemId)) {
-                const currentlyEquipped = gameState.currentOutfit.hat === itemId;
-                gameState.currentOutfit.hat = currentlyEquipped ? '' : itemId;
-                saveGameState();
-                updateUI();
-                
-                const verb = currentlyEquipped ? 'Unequipped' : 'Equipped';
-                showSuccessMessage(`${verb} ${itemName}!`);
-                
-                // Scroll to pet rock when equipping (not unequipping)
-                if (!currentlyEquipped) {
-                    scrollToPetRock();
+            Object.keys(shopItems).forEach(category => {
+                const found = shopItems[category].find(i => i.id === itemId);
+                if (found) {
+                    item = found;
+                    itemType = found.type;
                 }
-                
-                // Show dialogue
-                setTimeout(() => {
-                    const dialogue = getDialogueForContext('equipment', { 
-                        action: currentlyEquipped ? 'unequip' : 'equip', 
-                        itemName: itemName 
-                    });
-                    showSpeechBubble(dialogue);
-                }, 300);
+            });
+            
+            if (!item) {
+                console.error('Item not found:', itemId);
                 return;
             }
             
-            if (isAlreadyOwned && isPaint(itemId)) {
-                const currentlyEquipped = gameState.currentOutfit.paint === itemId;
-                gameState.currentOutfit.paint = currentlyEquipped ? '' : itemId;
-                saveGameState();
-                updateUI();
-                
-                const verb = currentlyEquipped ? 'Unequipped' : 'Equipped';
-                showSuccessMessage(`${verb} ${itemName}!`);
-                
-                // Scroll to pet rock when equipping (not unequipping)
-                if (!currentlyEquipped) {
-                    scrollToPetRock();
+            const itemName = item.name;
+            const totalCost = price * quantity;
+            
+            // Check if user has enough XP
+            if (gameState.jerryXP < totalCost) {
+                const needed = totalCost - gameState.jerryXP;
+                showSuccessMessage(`Need ${needed} more XP to purchase!`);
+                return;
+            }
+            
+            // Deduct XP
+            gameState.jerryXP -= totalCost;
+            
+            // Add to inventory
+            if (!gameState.inventory) {
+                gameState.inventory = {};
+            }
+            
+            if (!gameState.inventory[itemId]) {
+                gameState.inventory[itemId] = 0;
+            }
+            
+            gameState.inventory[itemId] += quantity;
+            
+            // For cosmetics, auto-equip if not already equipped
+            if (itemType === 'cosmetic') {
+                if (isHat(itemId) && !gameState.currentOutfit.hat) {
+                    gameState.currentOutfit.hat = itemId;
+                } else if (isPaint(itemId) && !gameState.currentOutfit.paint) {
+                    gameState.currentOutfit.paint = itemId;
+                } else if ((itemId === 'glasses' || itemId === 'mustache') && !gameState.currentOutfit[itemId === 'glasses' ? 'glasses' : 'mustache']) {
+                    gameState.currentOutfit[itemId === 'glasses' ? 'glasses' : 'mustache'] = itemId;
                 }
-                
-                // Show dialogue
-                setTimeout(() => {
-                    const dialogue = getDialogueForContext('equipment', { 
-                        action: currentlyEquipped ? 'unequip' : 'equip', 
-                        itemName: itemName 
-                    });
-                    showSpeechBubble(dialogue);
-                }, 300);
-                return;
-            }
-
-            if (isAlreadyOwned) {
-                showSuccessMessage(`You already own the ${itemName}!`);
-                return;
             }
             
-            if (gameState.taskPoints < price) {
-                const needed = price - gameState.taskPoints;
-                showSuccessMessage(`Need ${needed} more points to purchase this item!`);
-                return;
-            }
-            
-            gameState.taskPoints -= price;
-            gameState.ownedItems.push(itemId);
-            
-            // Auto-equip hats
-            if (isHat(itemId)) {
-                gameState.currentOutfit.hat = itemId;
-            }
-            
-            // Auto-equip paints
-            if (isPaint(itemId)) {
-                gameState.currentOutfit.paint = itemId;
-            }
-            
-            showSuccessMessage(`Purchased and equipped ${itemName}!`);
+            // Show success message
+            const quantityText = quantity > 1 ? `${quantity}x ` : '';
+            showSuccessMessage(`Purchased ${quantityText}${itemName}!`, `-${totalCost} XP`);
             
             saveGameState();
             updateUI();
+            updateShopDisplay();
+            updateOwnedDisplay();
             
-            // Scroll to pet rock to show the new item
-            scrollToPetRock();
+            // Fire confetti for purchases
+            if (window.fireConfetti) {
+                window.fireConfetti();
+            }
+            
+            // Scroll to pet rock for cosmetics
+            if (itemType === 'cosmetic') {
+                scrollToPetRock();
+            }
             
             // Show dialogue for new purchase
             setTimeout(() => {
@@ -7047,6 +7249,8 @@
     <script src="js/questGiver.js?v=2"></script>
     <script src="js/notificationManager.js"></script>
     <script src="js/achievementTracker.js"></script>
+    <script src="js/inventoryManager.js"></script>
+    <script src="js/itemHelpers.js"></script>
     
     <!-- Hide loading screen after page loads -->
     <script>
