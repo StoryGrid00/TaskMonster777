@@ -1,4 +1,4 @@
-// backgroundManager.js - Manages time-based background switching
+// backgroundManager.js - Manages time-based background switching and custom themes
 
 (function() {
   'use strict';
@@ -14,9 +14,26 @@
     return hour >= 18 || hour < 6;
   }
   
+  function getActiveTheme() {
+    // Check if user has an active custom theme
+    if (window.gameState && window.gameState.activeTheme) {
+      return window.gameState.activeTheme;
+    }
+    return null;
+  }
+  
   function updateBackground() {
-    const isNight = isNightTime();
-    const backgroundUrl = isNight ? backgrounds.night : backgrounds.day;
+    const activeTheme = getActiveTheme();
+    let backgroundUrl;
+    
+    if (activeTheme) {
+      // Use custom theme if active
+      backgroundUrl = activeTheme;
+    } else {
+      // Use default day/night cycle
+      const isNight = isNightTime();
+      backgroundUrl = isNight ? backgrounds.night : backgrounds.day;
+    }
     
     // Update pet-rock-header background
     const petRockHeader = document.querySelector('.pet-rock-header');
@@ -68,5 +85,28 @@
   
   // Initialize immediately
   init();
+  
+  // Expose functions globally for theme system
+  window.applyTheme = function(themeUrl) {
+    if (window.gameState) {
+      window.gameState.activeTheme = themeUrl;
+      if (typeof window.saveGameState === 'function') {
+        window.saveGameState();
+      }
+      updateBackground();
+    }
+  };
+  
+  window.unapplyTheme = function() {
+    if (window.gameState) {
+      window.gameState.activeTheme = null;
+      if (typeof window.saveGameState === 'function') {
+        window.saveGameState();
+      }
+      updateBackground();
+    }
+  };
+  
+  window.refreshBackground = updateBackground;
 })();
 

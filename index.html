@@ -3306,11 +3306,14 @@
             <div id="themesSubTabContent" class="shop-sub-content">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">🎨 Themes</div>
+                        <div class="card-title">🎨 Background Themes</div>
+                        <div class="card-subtitle" id="themesCount">5 themes</div>
                     </div>
-                    <div style="padding: 40px 20px; text-align: center; color: #999;">
-                        <p style="font-size: 16px;">🎨 Themes coming soon!</p>
-                        <p style="font-size: 14px; margin-top: 12px;">Customize your hero's appearance.</p>
+                    <div style="padding: 20px;">
+                        <p style="text-align: center; color: #666; margin-bottom: 20px;">Customize your monster's background!</p>
+                        <div id="themesGrid" class="owned-items-grid">
+                            <!-- Themes will be populated here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3558,7 +3561,10 @@
                 defense_refill: 2
             },
             unlockedBattleItems: ['health_potion', 'attack_refill', 'defense_refill'], // Track which items have ever been unlocked (fireball requires level 10)
-            xp: 0
+            xp: 0,
+            // Theme system
+            ownedThemes: [], // Array of owned theme IDs
+            activeTheme: null // Currently active theme URL
         };
         
         // Expose gameState to window for external scripts
@@ -5793,6 +5799,8 @@
                 updateShopDisplay();
             } else if (subTabName === 'owned') {
                 updateOwnedItemsDisplay();
+            } else if (subTabName === 'themes') {
+                updateThemesDisplay();
             }
         }
 
@@ -7154,6 +7162,7 @@
     
     <!-- Background Manager for time-based backgrounds -->
     <script src="js/backgroundManager.js"></script>
+    <script src="js/themeManager.js"></script>
     
     <!-- Battle System Modules -->
     <script src="js/enemy.js"></script>
