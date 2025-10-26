@@ -79,11 +79,24 @@ function startTestBattle() {
     }
 
     // Create hero data from gameState
+    const level = gameState.jerryLevel || 1;
+    
+    // Level-based attack damage scaling
+    let baseDamage;
+    if (level >= 15) {
+        baseDamage = 13; // Level 15-20
+    } else if (level >= 10) {
+        baseDamage = 10; // Level 10-14
+    } else {
+        baseDamage = 6;  // Level 1-9
+    }
+    
     const heroData = {
         hp: gameState.health || 100,
         maxHP: 100,
-        attack: 10 + (gameState.jerryLevel || 1) * 2,
-        defense: 5 + (gameState.jerryLevel || 1),
+        attack: baseDamage,
+        defense: 5 + level,
+        level: level,
         attackGauge: gameState.battleInventory?.attackGauge || 100,
         defenseGauge: gameState.battleInventory?.defenseGauge || 100
     };

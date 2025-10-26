@@ -2209,10 +2209,11 @@
         }
         
         .owned-items-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-    }
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
 
     .owned-item-card {
         background: rgba(255, 255, 255, 0.05);
@@ -3033,7 +3034,7 @@
                 <!-- Energy Gauge -->
                 <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2);">
                     <div style="font-size: 28px; text-align: center; margin-bottom: 8px;">⚡</div>
-                    <div style="font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">ENERGY</div>
+                    <div style="font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 8px; letter-spacing: 0.5px;">HP</div>
                     <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
                         <div id="energyFill" style="height: 100%; background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%); width: 75%; transition: width 0.3s ease-in-out;"></div>
                     </div>
@@ -3275,51 +3276,14 @@
 
             <!-- Shop Sub-Tab Content -->
             <div id="shopSubTabContent" class="shop-sub-content active">
-                <!-- Consumables Section -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div class="card-header">
-                        <div class="card-title">🧪 Consumables</div>
-                        <span style="font-size: 12px; color: #666;">Use XP to buy items</span>
-                    </div>
-                    <div style="padding: 20px;">
-                        <div id="consumablesShop" class="shop-grid">
-                            <!-- Consumable items will be rendered here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Hats Section -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div class="card-header">
-                        <div class="card-title">🧢 Hats</div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <div id="hatsShop" class="shop-grid">
-                            <!-- Hat items will be rendered here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Accessories Section -->
-                <div class="card" style="margin-bottom: 20px;">
-                    <div class="card-header">
-                        <div class="card-title">👓 Accessories</div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <div id="accessoriesShop" class="shop-grid">
-                            <!-- Accessory items will be rendered here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Paints Section -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">🎨 Paints</div>
+                        <div class="card-title">🛍️ Shop</div>
                     </div>
                     <div style="padding: 20px;">
-                        <div id="paintShop" class="shop-grid">
-                            <!-- Paint items will be rendered here -->
+                        <p style="text-align: center; color: #666; margin-bottom: 20px;">Power up your hero with XP!</p>
+                        <div id="shopItemsGrid" class="shop-items-grid">
+                            <!-- Shop items will be rendered here -->
                         </div>
                     </div>
                 </div>
@@ -3332,7 +3296,7 @@
                         <div class="card-title">🎒 Battle Items</div>
                         <span id="ownedItemCount" class="item-count-badge">0 items</span>
                     </div>
-                    <div id="ownedItemsGrid" class="owned-items-grid" style="padding: 20px;">
+                    <div id="ownedItemsGrid" class="owned-items-grid">
                         <!-- Owned items will be rendered here -->
                     </div>
                 </div>
@@ -3561,8 +3525,7 @@
             lastDailyChallengeDate: null,
             isDead: false,
             revivalPoints: 0,
-            ownedItems: [],  // Legacy - keep for backward compatibility
-            inventory: {},    // New inventory system: { itemId: quantity }
+            ownedItems: [],
             funFactsUnlocked: false,
             // Battle stats
             battlesWon: 0,
@@ -3687,31 +3650,7 @@
             }
         };
 
-        // Shop Items - Consumable inventory system with XP pricing
-        const shopItems = {
-            consumables: [
-                { id: 'health_potion', name: 'Health Potion', price: 40, emoji: '🧪', desc: 'Restore 30 HP in battle', type: 'consumable' },
-                { id: 'energy_drink', name: 'Energy Drink', price: 30, emoji: '⚡', desc: 'Restore 20 energy', type: 'consumable' },
-                { id: 'xp_boost', name: 'XP Boost', price: 50, emoji: '⭐', desc: '2x XP for next task', type: 'consumable' },
-                { id: 'luck_charm', name: 'Luck Charm', price: 60, emoji: '🍀', desc: 'Increase battle rewards', type: 'consumable' },
-                { id: 'time_freeze', name: 'Time Freeze', price: 80, emoji: '⏰', desc: 'Pause task timers for 1 hour', type: 'consumable' }
-            ],
-            hats: [
-                { id: 'blue_cap', name: 'Blue Cap', price: 100, emoji: '🧢', desc: 'Stylish blue cap', type: 'cosmetic' },
-                { id: 'top_hat', name: 'Black Top Hat', price: 200, emoji: '🎩', desc: 'Classy top hat', type: 'cosmetic' },
-                { id: 'army_helmet', name: 'Army Helmet', price: 300, emoji: '🪖', desc: 'Tough army helmet', type: 'cosmetic' },
-                { id: 'wizard_hat', name: 'Wizard Hat', price: 500, emoji: '🧙🏾‍♂️', desc: 'Magical wizard hat', type: 'cosmetic' }
-            ],
-            accessories: [
-                { id: 'mustache', name: 'Mustache', price: 250, emoji: '👨🏻', desc: 'Distinguished mustache', type: 'cosmetic' },
-                { id: 'glasses', name: 'Glasses', price: 200, emoji: '👓', desc: 'Cool glasses', type: 'cosmetic' }
-            ],
-            paints: [
-                { id: 'buddy_paint', name: 'Buddy Paint', price: 400, emoji: '🎨', desc: 'Colorful buddy paint', type: 'cosmetic' },
-                { id: 'rock_star', name: 'Rock Star', price: 600, emoji: '⭐', desc: 'Rock star paint', type: 'cosmetic' },
-                { id: 'makeup', name: 'Makeup', price: 700, emoji: '💄', desc: 'Glamorous makeup', type: 'cosmetic' }
-            ]
-        };
+
 
         // Achievements
         const achievements = [
@@ -3800,6 +3739,11 @@
                     gameState.questTasksOffered = 0;
                 }
                 
+                // Migration: Ensure health is never 0 (fix for existing users)
+                if (!gameState.health || gameState.health === 0) {
+                    gameState.health = 75; // Reset to default
+                }
+                
                 // Migration: Initialize achievement tracking for existing users
                 if (typeof gameState.achievementProgress === 'undefined') {
                     gameState.achievementProgress = {};
@@ -3824,18 +3768,6 @@
                 }
                 if (typeof gameState.lastAllTasksDate === 'undefined') {
                     gameState.lastAllTasksDate = null;
-                }
-                
-                // Migration: Initialize inventory system for existing users
-                if (typeof gameState.inventory === 'undefined') {
-                    gameState.inventory = {};
-                    
-                    // Migrate old ownedItems to inventory (cosmetics get quantity 1)
-                    if (gameState.ownedItems && gameState.ownedItems.length > 0) {
-                        gameState.ownedItems.forEach(itemId => {
-                            gameState.inventory[itemId] = 1;
-                        });
-                    }
                 }
             }
             
@@ -3871,6 +3803,9 @@
         // Check and update energy based on pending/overdue tasks
         function checkAndUpdateEnergy() {
             if (!gameState || !gameState.tasks) return;
+            
+            // Skip if potion was just used to prevent immediate drain
+            if (window.justUsedPotion) return;
             
             const now = Date.now();
             const pendingTasks = gameState.tasks.filter(t => !t.completed && t.dueDate);
@@ -5408,68 +5343,62 @@
             }).join('');
         }
 
-        // Update shop display
+        // Update shop items display
         function updateShopDisplay() {
-            updateShopSection('consumablesShop', shopItems.consumables);
-            updateShopSection('hatsShop', shopItems.hats);
-            updateShopSection('accessoriesShop', shopItems.accessories);
-            updateShopSection('paintShop', shopItems.paints);
+            const grid = document.getElementById('shopItemsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            // Render each battle item as a shop card
+            Object.values(battleItems).forEach(item => {
+                const currentQuantity = gameState.battleInventory[item.id] || 0;
+                const isLocked = item.levelRequired && gameState.jerryLevel < item.levelRequired;
+                const isMaxed = item.maxQuantity && currentQuantity >= item.maxQuantity;
+                const canAfford = (gameState.jerryXP || 0) >= item.cost;
+                
+                const card = document.createElement('div');
+                card.className = 'shop-item-card';
+                
+                // Add locked or maxed styling
+                if (isLocked) {
+                    card.style.opacity = '0.5';
+                    card.style.cursor = 'not-allowed';
+                } else if (isMaxed) {
+                    card.style.opacity = '0.7';
+                }
+                
+                let buttonText = 'Buy Now';
+                let buttonDisabled = '';
+                
+                if (isLocked) {
+                    buttonText = `🔒 Level ${item.levelRequired}`;
+                    buttonDisabled = 'disabled style="opacity: 0.5; cursor: not-allowed;"';
+                } else if (isMaxed) {
+                    buttonText = '✅ Maxed Out';
+                    buttonDisabled = 'disabled style="opacity: 0.5; cursor: not-allowed;"';
+                } else if (!canAfford) {
+                    buttonText = 'Not Enough XP';
+                    buttonDisabled = 'disabled style="opacity: 0.7;"';
+                }
+                
+                const maxQuantityText = item.maxQuantity ? `<div style="font-size: 11px; color: #999; margin-top: 4px;">Max: ${item.maxQuantity}</div>` : '';
+                
+                card.innerHTML = `
+                    <div class="shop-item-emoji">${item.emoji}</div>
+                    <div class="shop-item-name">${item.name}</div>
+                    <div class="shop-item-desc">${item.description}</div>
+                    <div class="shop-item-quantity">Owned: ${currentQuantity}</div>
+                    ${maxQuantityText}
+                    <div class="shop-item-cost">${item.cost} XP</div>
+                    <button class="shop-buy-btn" onclick="buyItem('${item.id}')" ${buttonDisabled}>${buttonText}</button>
+                `;
+                
+                grid.appendChild(card);
+            });
         }
 
-        function updateShopSection(containerId, items) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            container.innerHTML = items.map(item => {
-                const canAfford = gameState.jerryXP >= item.price;
-                const owned = gameState.inventory && gameState.inventory[item.id] ? gameState.inventory[item.id] : 0;
-                const isConsumable = item.type === 'consumable';
-                const isEquipped = (containerId === 'hatsShop' && gameState.currentOutfit.hat === item.id) ||
-                                 (containerId === 'paintShop' && gameState.currentOutfit.paint === item.id) ||
-                                 (containerId === 'accessoriesShop' && (gameState.currentOutfit.glasses === item.id || gameState.currentOutfit.mustache === item.id));
-                
-                let cssClasses = 'shop-item';
-                if (isEquipped) {
-                    cssClasses += ' equipped';
-                } else if (owned > 0 && !isConsumable) {
-                    cssClasses += ' owned';
-                } else if (canAfford) {
-                    cssClasses += ' affordable';
-                } else {
-                    cssClasses += ' expensive';
-                }
-                
-                let buttonText;
-                let ownedBadge = '';
-                
-                if (isConsumable) {
-                    buttonText = `${item.price} XP`;
-                    if (owned > 0) {
-                        ownedBadge = `<div class="owned-badge">Owned: ${owned}</div>`;
-                    }
-                } else {
-                    if (isEquipped) {
-                        buttonText = 'Equipped';
-                    } else if (owned > 0) {
-                        buttonText = 'Owned';
-                    } else {
-                        buttonText = `${item.price} XP`;
-                    }
-                }
-                
-                const descText = item.desc ? `<div class="shop-item-desc">${item.desc}</div>` : '';
-                
-                return `
-                    <div class="${cssClasses}" onclick="buyItem('${item.id}', ${item.price})">
-                        ${item.image ? `<img src="${item.image}" class="shop-item-image" alt="${item.name}">` : `<div class="shop-item-emoji">${item.emoji || '❓'}</div>`}
-                        <div class="shop-item-name">${item.name}</div>
-                        ${descText}
-                        ${ownedBadge}
-                        <div class="shop-item-price">${buttonText}</div>
-                    </div>
-                `;
-            }).join('');
-        }
+
 
         // Update settings display
         function updateSettingsDisplay() {
@@ -5863,7 +5792,7 @@
             if (subTabName === 'shop') {
                 updateShopDisplay();
             } else if (subTabName === 'owned') {
-                updateOwnedDisplay();
+                updateOwnedItemsDisplay();
             }
         }
 
@@ -5905,7 +5834,7 @@
                 name: 'Potion',
                 emoji: '🧪',
                 description: 'Instantly restores 20 HP in battle',
-                cost: 40,
+                cost: 20,
                 effect: 'heal',
                 value: 20
             },
@@ -5968,74 +5897,26 @@
                     <div class="shop-item-description">${item.description}</div>
                     ${quantityDisplay}
                     <div class="shop-item-cost">${item.cost} XP</div>
-                    <button class="buy-now-btn" onclick="buyItem('${item.id}')" ${buttonDisabled}>
+                    <button class="buy-now-btn" data-item-id="${item.id}" ${buttonDisabled}>
                         ${buttonText}
                     </button>
                 `;
+                
+                // Add event listener to button
+                const button = card.querySelector('.buy-now-btn');
+                if (button && !button.disabled) {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        buyItem(item.id);
+                    });
+                }
+                
                 grid.appendChild(card);
             });
         }
 
-        // Update owned items display (new inventory system)
-        function updateOwnedDisplay() {
-            const grid = document.getElementById('ownedItemsGrid');
-            const countBadge = document.getElementById('ownedItemCount');
-            if (!grid) return;
-            
-            grid.innerHTML = '';
-            
-            // Get all owned items from inventory manager
-            const ownedItems = window.inventoryManager ? window.inventoryManager.getAllItems() : [];
-            const totalCount = window.inventoryManager ? window.inventoryManager.getTotalItemCount() : 0;
-            
-            if (countBadge) {
-                countBadge.textContent = `${totalCount} item${totalCount !== 1 ? 's' : ''}`;
-            }
-            
-            if (ownedItems.length === 0) {
-                grid.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px; color: #999; grid-column: 1 / -1;">
-                        <p style="font-size: 16px;">🎒 No items yet!</p>
-                        <p style="font-size: 14px; margin-top: 12px;">Buy items from the Shop tab.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Render owned items
-            ownedItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'owned-item-card';
-                
-                const isConsumable = item.type === 'consumable';
-                const isEquipped = (item.id === gameState.currentOutfit.hat) || 
-                                 (item.id === gameState.currentOutfit.paint) ||
-                                 (item.id === gameState.currentOutfit.glasses) ||
-                                 (item.id === gameState.currentOutfit.mustache);
-                
-                let buttonHTML = '';
-                if (isConsumable) {
-                    buttonHTML = `<button class="use-item-btn" onclick="useOwnedItem('${item.id}')">Use</button>`;
-                } else if (isEquipped) {
-                    buttonHTML = `<button class="use-item-btn equipped" onclick="toggleEquipItem('${item.id}')">Equipped</button>`;
-                } else {
-                    buttonHTML = `<button class="use-item-btn" onclick="toggleEquipItem('${item.id}')">Equip</button>`;
-                }
-                
-                card.innerHTML = `
-                    <div class="owned-item-emoji">${item.emoji}</div>
-                    <div class="owned-item-info">
-                        <div class="owned-item-name">${item.name}</div>
-                        <div class="owned-item-quantity">Qty: ${item.quantity}</div>
-                    </div>
-                    ${buttonHTML}
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-        
-        // Legacy function for backward compatibility
+        // Update owned items display (synced with battleInventory) - matches shop styling
         function updateOwnedItemsDisplay() {
             const grid = document.getElementById('ownedItemsGrid');
             const countBadge = document.getElementById('ownedItemCount');
@@ -6053,7 +5934,7 @@
                 countBadge.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
             }
             
-            // Render each owned battle item
+            // Render each owned battle item using same style as shop
             Object.keys(gameState.battleInventory).forEach(itemId => {
                 const count = gameState.battleInventory[itemId];
                 if (count > 0) {
@@ -6061,19 +5942,17 @@
                     if (!item) return;
                     
                     const card = document.createElement('div');
-                    card.className = 'owned-item-card';
+                    card.className = 'shop-item-card'; // Use same class as shop items
+                    
+                    // Show quantity display
+                    const quantityDisplay = item.maxQuantity ? `<div style="font-size: 12px; color: #999; margin-top: 4px;">${count}/${item.maxQuantity} owned</div>` : `<div style="font-size: 12px; color: #999; margin-top: 4px;">${count} owned</div>`;
+                    
                     card.innerHTML = `
-                        <div class="owned-item-header">
-                            <div class="owned-item-emoji">${item.emoji}</div>
-                            <div class="owned-item-badge">${count}</div>
-                        </div>
-                        <div class="owned-item-name">${item.name}</div>
-                        <div class="status-badge ready">Ready</div>
-                        <div class="owned-item-effect">${item.effect === 'heal' ? '+' + item.value + ' HP' : 
-                                                          item.effect === 'attack' ? 'Ranged Attack' :
-                                                          item.effect === 'defense' ? '+' + item.value + ' Defense' :
-                                                          item.effect === 'attack_gauge' ? '+' + item.value + ' Attack' : ''}</div>
-                        <button class="use-now-btn" onclick="useItemFromShop('${itemId}')">
+                        <div class="shop-item-emoji">${item.emoji}</div>
+                        <div class="shop-item-name">${item.name}</div>
+                        <div class="shop-item-description">${item.description}</div>
+                        ${quantityDisplay}
+                        <button class="buy-now-btn" onclick="useItemFromShop('${itemId}')">
                             Use Now
                         </button>
                     `;
@@ -6084,7 +5963,7 @@
             // Show empty state if no items
             if (totalItems === 0) {
                 grid.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px; color: #999; grid-column: 1 / -1;">
+                    <div style="text-align: center; padding: 40px 20px; color: #999;">
                         <p style="font-size: 16px;">🎒 No items yet!</p>
                         <p style="font-size: 14px; margin-top: 12px;">Buy items from the Shop tab to use in battles.</p>
                     </div>
@@ -6135,7 +6014,7 @@
             
             // Save and update displays
             saveGameState();
-            updateHeroCard();
+            updateUI(); // Update all UI elements including XP
             updateShopDisplay(); // Refresh shop to show updated quantities
             updateOwnedItemsDisplay();
             
@@ -6148,35 +6027,92 @@
         function useItemFromShop(itemId) {
             const item = battleItems[itemId];
             if (!item || !gameState.battleInventory[itemId] || gameState.battleInventory[itemId] <= 0) {
-                alert('Item not available!');
+                alert('⚠️ Item not available!');
                 return;
             }
             
-            // Allow potion to be used outside of battle to heal monster
-            if (itemId === 'health_potion') {
+            // Handle healing items (can be used outside of battle)
+            if (item.effect === 'heal') {
                 // Check if monster needs healing
-                const maxHP = 100; // Monster's max HP
-                const currentHP = gameState.health || maxHP;
+                const maxHP = 100;
+                
+                // Use the SAME logic as updateUI display: gameState.health || 75
+                // This ensures we read the same HP value that's shown to the user
+                const currentHP = gameState.health || 75;
+                
+                console.log('Potion Debug - Before:', {
+                    currentHP: currentHP,
+                    healthType: typeof gameState.health,
+                    healthValue: gameState.health
+                });
                 
                 if (currentHP >= maxHP) {
                     alert('💚 Your monster is already at full health!');
                     return;
                 }
                 
-                // Use potion
-                gameState.battleInventory.health_potion--;
-                const healAmount = 30;
-                gameState.health = Math.min(maxHP, currentHP + healAmount);
+                // Use healing item
+                gameState.battleInventory[itemId]--;
+                const healAmount = Number(item.value);
+                const newHP = Math.min(maxHP, currentHP + healAmount);
+                const actualHealed = newHP - currentHP;
                 
-                // Save and update
+                console.log('Potion Debug - Calculation:', {
+                    healAmount: healAmount,
+                    currentHP: currentHP,
+                    newHP: newHP,
+                    actualHealed: actualHealed
+                });
+                
+                // Set new health as a number (ensure it's never 0 unless actually dead)
+                gameState.health = Number(newHP);
+                
+                // If gameState.health was 0 before, make sure it's now properly set
+                if (gameState.health === 0) {
+                    gameState.health = newHP;
+                }
+                
+                console.log('Potion Debug - After:', {
+                    newHealth: gameState.health,
+                    healthType: typeof gameState.health
+                });
+                
+                // Save immediately to persist the heal
                 saveGameState();
+                
+                // Prevent energy drain from running for 2 seconds after healing
+                window.justUsedPotion = true;
+                setTimeout(() => {
+                    window.justUsedPotion = false;
+                }, 2000);
+                
+                // Update all displays
                 updateOwnedItemsDisplay();
+                updateShopDisplay();
                 updateUI();
                 
-                alert(`🧪 Potion used! Healed ${healAmount} HP.\n\nCurrent HP: ${gameState.health}/${maxHP}`);
-            } else {
-                alert(`🎮 ${item.name} will be available in your next battle!\n\nComplete a task to trigger a battle.`);
+                // Force update the health display
+                const healthFill = document.querySelector('.health-fill');
+                const healthText = document.querySelector('.health-text');
+                if (healthFill) {
+                    healthFill.style.width = `${gameState.health}%`;
+                }
+                if (healthText) {
+                    healthText.textContent = `${Math.round(gameState.health)}/100`;
+                }
+                
+                alert(`${item.emoji} ${item.name} used! Healed ${actualHealed} HP.\n\nBefore: ${currentHP} HP\nAfter: ${gameState.health} HP`);
+                return;
             }
+            
+            // Handle battle items (attack, defense, etc.)
+            if (item.effect === 'attack' || item.effect === 'defense' || item.effect === 'attack_gauge') {
+                alert(`🎮 ${item.name} is ready!\n\nThis item will be automatically available in your next battle.\n\nComplete a task to trigger a battle and use it!`);
+                return;
+            }
+            
+            // Default message for other items
+            alert(`🎮 ${item.name} will be available in your next battle!`);
         }
 
         // Modal functions
@@ -6733,6 +6669,11 @@
             while (gameState.jerryXP >= gameState.jerryXPToNext) {
                 levelUpJerry();
             }
+            
+            // Refresh shop display to update affordability
+            if (typeof updateShopDisplay === 'function') {
+                updateShopDisplay();
+            }
         }
 
         function levelUpJerry() {
@@ -6748,96 +6689,66 @@
             }
         }
 
-        // Shop functions - XP-based consumable system
-        function buyItem(itemId, price, quantity = 1) {
-            // Find item details
-            let item = null;
-            let itemType = null;
+        // Buy item from shop
+        function buyItem(itemId) {
+            const item = battleItems[itemId];
+            if (!item) return;
             
-            Object.keys(shopItems).forEach(category => {
-                const found = shopItems[category].find(i => i.id === itemId);
-                if (found) {
-                    item = found;
-                    itemType = found.type;
-                }
-            });
-            
-            if (!item) {
-                console.error('Item not found:', itemId);
+            // Check level requirement
+            if (item.levelRequired && gameState.jerryLevel < item.levelRequired) {
+                alert(`🔒 ${item.name} unlocks at Level ${item.levelRequired}! Current level: ${gameState.jerryLevel}`);
                 return;
             }
             
-            const itemName = item.name;
-            const totalCost = price * quantity;
+            // Check max quantity (removed - allow unlimited purchases)
+            // if (item.maxQuantity) {
+            //     const currentQuantity = gameState.battleInventory[item.id] || 0;
+            //     if (currentQuantity >= item.maxQuantity) {
+            //         alert(`⚠️ You already have the maximum quantity of ${item.name} (${item.maxQuantity})`);
+            //         return;
+            //     }
+            // }
             
             // Check if user has enough XP
-            if (gameState.jerryXP < totalCost) {
-                const needed = totalCost - gameState.jerryXP;
-                showSuccessMessage(`Need ${needed} more XP to purchase!`);
+            if ((gameState.jerryXP || 0) < item.cost) {
+                alert(`⚠️ Not enough XP! You need ${item.cost} XP but only have ${gameState.jerryXP || 0} XP.`);
                 return;
             }
             
             // Deduct XP
-            gameState.jerryXP -= totalCost;
+            gameState.jerryXP -= item.cost;
             
-            // Add to inventory
-            if (!gameState.inventory) {
-                gameState.inventory = {};
+            // Add item to battle inventory
+            if (!gameState.battleInventory) {
+                gameState.battleInventory = {};
+            }
+            if (!gameState.battleInventory[itemId]) {
+                gameState.battleInventory[itemId] = 0;
             }
             
-            if (!gameState.inventory[itemId]) {
-                gameState.inventory[itemId] = 0;
+            const currentQuantity = gameState.battleInventory[itemId];
+            gameState.battleInventory[itemId]++;
+            
+            // Track that this item has been unlocked (for battle button visibility)
+            if (!gameState.unlockedBattleItems) {
+                gameState.unlockedBattleItems = [];
+            }
+            if (!gameState.unlockedBattleItems.includes(itemId)) {
+                gameState.unlockedBattleItems.push(itemId);
             }
             
-            gameState.inventory[itemId] += quantity;
-            
-            // For cosmetics, auto-equip if not already equipped
-            if (itemType === 'cosmetic') {
-                if (isHat(itemId) && !gameState.currentOutfit.hat) {
-                    gameState.currentOutfit.hat = itemId;
-                } else if (isPaint(itemId) && !gameState.currentOutfit.paint) {
-                    gameState.currentOutfit.paint = itemId;
-                } else if ((itemId === 'glasses' || itemId === 'mustache') && !gameState.currentOutfit[itemId === 'glasses' ? 'glasses' : 'mustache']) {
-                    gameState.currentOutfit[itemId === 'glasses' ? 'glasses' : 'mustache'] = itemId;
-                }
-            }
+            // Save and update displays
+            saveGameState();
+            updateUI(); // Update all UI elements including XP
+            updateShopDisplay(); // Refresh shop to show updated quantities
+            updateOwnedItemsDisplay();
             
             // Show success message
-            const quantityText = quantity > 1 ? `${quantity}x ` : '';
-            showSuccessMessage(`Purchased ${quantityText}${itemName}!`, `-${totalCost} XP`);
-            
-            saveGameState();
-            updateUI();
-            updateShopDisplay();
-            updateOwnedDisplay();
-            
-            // Fire confetti for purchases
-            if (window.fireConfetti) {
-                window.fireConfetti();
-            }
-            
-            // Scroll to pet rock for cosmetics
-            if (itemType === 'cosmetic') {
-                scrollToPetRock();
-            }
-            
-            // Show dialogue for new purchase
-            setTimeout(() => {
-                const dialogue = getDialogueForContext('equipment', { 
-                    action: 'equip', 
-                    itemName: itemName 
-                });
-                showSpeechBubble(dialogue);
-            }, 300);
+            const remaining = item.maxQuantity ? ` (${currentQuantity + 1}/${item.maxQuantity})` : '';
+            alert(`✅ ${item.name} purchased!${remaining} Check the Owned tab to use it.`);
         }
 
-        function isHat(itemId) {
-            return shopItems.hats.some(h => h.id === itemId);
-        }
 
-        function isPaint(itemId) {
-            return shopItems.paints.some(p => p.id === itemId);
-        }
 
         // Smooth scroll to pet rock function
         function scrollToPetRock() {
@@ -6932,6 +6843,11 @@
             const activeTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
             if (activeTab) {
                 activeTab.classList.add('active');
+            }
+            
+            // Refresh shop display when opening shop tab to show current XP
+            if (tabName === 'rockshop' && typeof updateShopDisplay === 'function') {
+                updateShopDisplay();
             }
         }
 
@@ -7249,8 +7165,6 @@
     <script src="js/questGiver.js?v=2"></script>
     <script src="js/notificationManager.js"></script>
     <script src="js/achievementTracker.js"></script>
-    <script src="js/inventoryManager.js"></script>
-    <script src="js/itemHelpers.js"></script>
     
     <!-- Hide loading screen after page loads -->
     <script>
