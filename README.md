@@ -2,7 +2,7 @@
 
 ## 🎮 About
 
-Task Monsters is an engaging RPG-style productivity game featuring a task monster as your virtual companion. Complete tasks, earn XP, unlock achievements, and watch your monster grow stronger!
+Task Monsters is an engaging RPG-style productivity game featuring Jerry the Rock as your virtual companion. Complete tasks, earn XP, unlock achievements, and watch your monster grow stronger!
 
 ## ✨ Features
 
