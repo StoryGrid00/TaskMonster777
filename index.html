@@ -3099,7 +3099,7 @@
                     <div class="stat-label">Battles Won</div>
                 </div>
                 <div class="stat-tile">
-                    <div class="stat-icon">🥊</div>
+                    <div class="stat-icon">💥</div>
                     <div class="stat-value" id="battlesLostDisplay">0</div>
                     <div class="stat-label">Battles Lost</div>
                 </div>
@@ -3462,6 +3462,15 @@
             questQuizzesFailed: 0,
             questTasksAccepted: 0,
             questTasksOffered: 0,
+            // Achievement tracking
+            achievementProgress: {},
+            quickTaskStartTimes: {},
+            sessionTaskCount: 0,
+            sessionStartTime: null,
+            tasksCompletedToday: [],
+            weekendTasksCompleted: 0,
+            allTasksStreakDays: 0,
+            lastAllTasksDate: null,
             currentOutfit: {
                 hat: null,
                 glasses: null,
@@ -3673,6 +3682,32 @@
                 if (typeof gameState.questTasksOffered === 'undefined') {
                     gameState.questTasksOffered = 0;
                 }
+                
+                // Migration: Initialize achievement tracking for existing users
+                if (typeof gameState.achievementProgress === 'undefined') {
+                    gameState.achievementProgress = {};
+                }
+                if (typeof gameState.quickTaskStartTimes === 'undefined') {
+                    gameState.quickTaskStartTimes = {};
+                }
+                if (typeof gameState.sessionTaskCount === 'undefined') {
+                    gameState.sessionTaskCount = 0;
+                }
+                if (typeof gameState.sessionStartTime === 'undefined') {
+                    gameState.sessionStartTime = null;
+                }
+                if (typeof gameState.tasksCompletedToday === 'undefined') {
+                    gameState.tasksCompletedToday = [];
+                }
+                if (typeof gameState.weekendTasksCompleted === 'undefined') {
+                    gameState.weekendTasksCompleted = 0;
+                }
+                if (typeof gameState.allTasksStreakDays === 'undefined') {
+                    gameState.allTasksStreakDays = 0;
+                }
+                if (typeof gameState.lastAllTasksDate === 'undefined') {
+                    gameState.lastAllTasksDate = null;
+                }
             }
             
             // Sync monster name from onboarding if it exists
@@ -3807,23 +3842,16 @@
             const rockLevel = level;
             const nextLevelXP = xpToNext;
             
-            // Count unlocked achievements
+            // Calculate achievements
             let unlockedAchievements = 0;
-            achievements.forEach(achievement => {
-                let isUnlocked = false;
-                switch (achievement.type) {
-                    case 'streak':
-                        isUnlocked = bestStreak >= achievement.requirement;
-                        break;
-                    case 'tasks':
-                        isUnlocked = completedTasks >= achievement.requirement;
-                        break;
-                    case 'level':
-                        isUnlocked = rockLevel >= achievement.requirement;
-                        break;
-                }
-                if (isUnlocked) unlockedAchievements++;
-            });
+            if (window.achievementTracker) {
+                window.achievementTracker.checkAchievements();
+                achievements.forEach(achievement => {
+                    if (window.achievementTracker.isAchievementUnlocked(achievement.id)) {
+                        unlockedAchievements++;
+                    }
+                });
+            }
             
             // Update collapsed stats
             const quickTasksEl = document.getElementById('quickTasksDisplay');
@@ -5153,6 +5181,11 @@
                 gameState.dailyChallengeCompleted = true;
                 gameState.taskPoints += challenge.reward;
                 
+                // Track challenge completion for achievements
+                if (window.achievementTracker) {
+                    window.achievementTracker.trackChallengeComplete();
+                }
+                
                 // Fire confetti first
                 if (window.fireConfetti) {
                     window.fireConfetti();
@@ -5222,24 +5255,14 @@
             const achievementsList = document.getElementById('achievementsList');
             if (!achievementsList) return;
             
+            // Check achievements before displaying
+            if (window.achievementTracker) {
+                window.achievementTracker.checkAchievements();
+            }
+            
             achievementsList.innerHTML = achievements.map(achievement => {
-                let isUnlocked = false;
-                let progress = 0;
-                
-                switch (achievement.type) {
-                    case 'streak':
-                        progress = gameState.bestStreak || 0;
-                        isUnlocked = progress >= achievement.requirement;
-                        break;
-                    case 'tasks':
-                        progress = gameState.completedTasks || 0;
-                        isUnlocked = progress >= achievement.requirement;
-                        break;
-                    case 'level':
-                        progress = gameState.jerryLevel || 1;
-                        isUnlocked = progress >= achievement.requirement;
-                        break;
-                }
+                const isUnlocked = window.achievementTracker ? 
+                    window.achievementTracker.isAchievementUnlocked(achievement.id) : false;
                 
                 return `
                     <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
@@ -6198,6 +6221,12 @@
             // Add XP
             addJerryXP(basePoints * 2);
             
+            // Track achievement progress before removing task
+            if (window.achievementTracker) {
+                window.achievementTracker.trackTaskCompletion(task, false);
+                window.achievementTracker.trackOnTimeTask(task);
+            }
+            
             // Remove task
             gameState.tasks.splice(index, 1);
             
@@ -6328,6 +6357,12 @@
             
             gameState.selectedQuickTasks.push(quickTask);
             gameState.totalTasksCreated += 1;
+            
+            // Track start time for quick task achievement
+            if (window.achievementTracker) {
+                window.achievementTracker.trackQuickTaskStart(taskId);
+            }
+            
             saveGameState();
             updateUI();
             updateQuickTasksDisplay();
@@ -6377,6 +6412,12 @@
                 ...task,
                 completedAt: new Date().toISOString()
             });
+            
+            // Track achievement progress
+            if (window.achievementTracker) {
+                window.achievementTracker.trackQuickTaskComplete(taskId);
+                window.achievementTracker.trackTaskCompletion(task, true);
+            }
             
             // Remove task from pending
             gameState.selectedQuickTasks.splice(taskIndex, 1);
@@ -7005,6 +7046,7 @@
     <script src="js/questTaskManager.js"></script>
     <script src="js/questGiver.js?v=2"></script>
     <script src="js/notificationManager.js"></script>
+    <script src="js/achievementTracker.js"></script>
     
     <!-- Hide loading screen after page loads -->
     <script>
